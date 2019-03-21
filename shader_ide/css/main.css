@@ -51,6 +51,23 @@ SVG Icons - svgicons.sparkk.fr
     stroke-width: 1;
 }
 
+.svg-icon-white {
+    width: 2em;
+    height: 2em;
+    vertical-align: middle;
+}
+
+.svg-icon-white path,
+.svg-icon-white polygon,
+.svg-icon-white rect {
+    fill: white;
+}
+
+.svg-icon-white circle {
+    stroke: white;
+    stroke-width: 1;
+}
+
 .code-icon {
     color: #4691f6;
     font-weight: lighter;
