@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200');
-
-html,
-body {
+html, body {
     height: 100%;
     background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
 }
@@ -40,9 +38,7 @@ SVG Icons - svgicons.sparkk.fr
     vertical-align: middle;
 }
 
-.svg-icon path,
-.svg-icon polygon,
-.svg-icon rect {
+.svg-icon path, .svg-icon polygon, .svg-icon rect {
     fill: #4691f6;
 }
 
@@ -57,9 +53,7 @@ SVG Icons - svgicons.sparkk.fr
     vertical-align: middle;
 }
 
-.svg-icon-white path,
-.svg-icon-white polygon,
-.svg-icon-white rect {
+.svg-icon-white path, .svg-icon-white polygon, .svg-icon-white rect {
     fill: white;
 }
 
@@ -72,6 +66,8 @@ SVG Icons - svgicons.sparkk.fr
     color: #4691f6;
     font-weight: lighter;
     font-size: 2em;
+    width: 2em;
+    height: 2em;
     font-family: 'Source Sans Pro', sans-serif;
     text-transform: none;
 }
@@ -132,4 +128,20 @@ SVG Icons - svgicons.sparkk.fr
 
 #code-editor-row {
     height: 100%;
+}
+
+nav {
+    background-color: #ffffff !important;
+    color: #4691f6;
+    margin-bottom: 3px !important;
+}
+
+.brand-logo {
+    color: #4691f6 !important;
+    font-weight: lighter !important;
+}
+
+form{
+    margin: 0px !important;
+    padding: 0px !important;
 }
