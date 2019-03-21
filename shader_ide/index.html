@@ -1,57 +1,137 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>IDE</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/materialize.min.css">
-    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css">
-    <script src="http://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      media="screen"
+      href="css/materialize.min.css"
+    />
+    <link rel="stylesheet" type="text/css" media="screen" href="css/main.css" />
+    <script
+      src="http://code.jquery.com/jquery-3.3.1.min.js"
+      integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+      integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+      crossorigin="anonymous"
+    ></script>
+    <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css"/>
+
     <script src="js/materialize.min.js"></script>
     <script src="js/main.js"></script>
-</head>
-
-<body>
-    <div class="row">
-        <div class="col s12">
+  </head>
+  <body>
+    <div id="grid">
+      <div class="container-fluid code-editor-selector" id="code-editor">
+        <div class="row">
+          <div class="col s12">
             <ul class="tabs">
-                <li class="tab col s3"><a class="black-text" href="#test1">Test 1</a></li>
-                <li class="tab col s3"><a class="active black-text" href="#test2">Test 2</a></li>
-                <li class="tab col s3"><a class="black-text" href="#test3">Disabled Tab</a></li>
-                <li class="tab col s3"><a class="black-text" href="#test4">Test 4</a></li>
+              <li class="tab col s3">
+                <a class="black-text" href="#test1">Pass 1</a>
+              </li>
+              <li class="tab col s3">
+                <a class="active black-text" href="#test2">Pass 2</a>
+              </li>
+              <li class="tab col s3">
+                <a class="black-text" href="#test3">Pass 3</a>
+              </li>
+              <li class="tab col s3">
+                <a class="black-text" href="#test4">Pass 4</a>
+              </li>
             </ul>
-        </div>
-        <div id="test1" class="col s12">
+          </div>
+          <div id="test1" class="col s12">
             <div class="container-fluid">
-                <div class="row">
-                    <div class="col m12 s12 l2">
-                        <ul class="tabs">
-                            <li class="tab"><a class="black-text" href="#test_inner_1">Tab 1</a></li>
-                            <li class="tab"><a class="black-text" class="active" href="#test_inner_2">Tab 2</a></li>
-                            <li class="tab"><a class="black-text" href="#test_inner_3">Tab 3</a></li>
-                            <li class="tab"><a class="black-text" href="#test_inner_4">Tab 4</a></li>
-                            <li class="tab"><a class="black-text" href="#test_inner_5">Tab 5</a></li>
-                            <li class="tab"><a class="black-text" href="#test_inner_6">Tab 6</a></li>
-                        </ul>
-                    </div>
-                    <div class="col m12 s12 l10">
-                        <div id="test_inner_1" class="col tab-content">Tab 1</div>
-                        <div id="test_inner_2" class="col tab-content">Tab 2</div>
-                        <div id="test_inner_3" class="col tab-content">Tab 3</div>
-                        <div id="test_inner_4" class="col tab-content">Tab 4</div>
-                        <div id="test_inner_5" class="col tab-content">Tab 4</div>
-                        <div id="test_inner_6" class="col tab-content">Tab 4</div>
-                    </div>
+              <div class="row">
+                <div class="col m12 s12 l2">
+                  <ul class="tabs">
+                    <li class="tab">
+                      <a class="black-text" href="#test_inner_1">
+                        <span class="code-icon">{;}</span>
+                      </a>
+                    </li>
+                    <li class="tab">
+                      <a class="black-text" href="#test_inner_2">
+                        <svg class="svg-icon" viewBox="0 0 20 20">
+                          <path
+                            fill="none"
+                            d="M16.382,15.015h0.455h0.457V4.985h-0.457h-0.455V15.015z M16.837,
+                        4.985c1.008,0,1.824-0.816,1.824-1.822c0-1.008-0.816-1.824-1.824-1.824c-1.006,
+                        0-1.822,0.816-1.822,1.824C15.015,4.169,15.831,4.985,16.837,4.985z M16.837,
+                        2.25c0.504,0,0.913,0.409,0.913,0.913c0,0.502-0.409,0.911-0.913,0.911c-0.502,
+                        0-0.911-0.409-0.911-0.911C15.926,2.659,16.335,2.25,16.837,2.25z M15.015,
+                        3.618V3.163V2.706H4.986v0.457v0.455H15.015z M3.162,15.01c-1.007,0-1.823,
+                        0.816-1.823,1.822c0,1.008,0.816,1.824,1.823,1.824s1.824-0.816,1.824-1.824C4.986,
+                        15.831,4.169,15.015,3.162,15.015z M3.162,17.75c-0.503,0-0.911-0.409-0.911-0.913c0-0.502,
+                        0.408-0.911,0.911-0.911c0.504,0,0.912,0.409,0.912,0.911C4.074,17.341,3.666,17.75,3.162,
+                        17.75z M4.986,16.382v0.455v0.457h10.029v-0.457v-0.455H4.986zM16.837,15.015c-1.006,
+                        0-1.822,0.816-1.822,1.822c0,1.008,0.816,1.824,1.822,1.824c1.008,0,1.824-0.816,
+                        1.824-1.824C18.661,15.831,17.845,15.015,16.837,15.015z M16.837,17.75c-0.502,
+                        0-0.911-0.409-0.911-0.913c0-0.502,0.409-0.911,0.911-0.911c0.504,0,0.913,0.409,
+                        0.913,0.911C17.75,17.341,17.341,17.75,16.837,17.75z M3.618,
+                        4.985H3.162H2.707v10.029h0.456h0.456V4.985zM4.986,3.163c0-1.008-0.817-1.824-1.824-1.824S1.339,
+                        2.155,1.339,3.163c0,1.006,0.816,1.822,1.823,1.822S4.986,4.169,4.986,3.163zM3.162,4.074c-0.503,
+                        0-0.911-0.409-0.911-0.911c0-0.504,0.408-0.913,0.911-0.913c0.504,0,0.912,0.409,0.912,0.913C4.074,
+                        3.665,3.666,4.074,3.162,4.074z"
+                          ></path>
+                        </svg>
+                      </a>
+                    </li>
+                    <li class="tab">
+                      <a class="black-text" href="#test_inner_3">
+                        <svg class="svg-icon" viewBox="0 0 20 20">
+                          <path
+                            fill="none"
+                            d="M15.131,8.29c-0.944,0-1.711,0.766-1.711,1.71s0.767,1.711,1.711,1.711s1.71-0.767,
+                        1.71-1.711S16.075,8.29,15.131,8.29 M15.131,10.855c-0.472,0-0.855-0.383-0.855-0.855s0.384-0.855,
+                        0.855-0.855S15.986,9.528,15.986,10S15.603,10.855,15.131,10.855 M12.993,15.131c-0.236,
+                        0-0.428,0.191-0.428,0.427c0,0.237,0.191,0.429,0.428,0.429c0.235,0,0.427-0.191,0.427-0.429C13.42,
+                        15.322,13.229,15.131,12.993,15.131 M4.87,10.855c-0.473,0-0.855,0.383-0.855,0.856c0,
+                        0.471,0.383,0.854,0.855,0.854c0.472,0,0.854-0.384,0.854-0.854C5.724,11.238,5.341,10.855,4.87,
+                        10.855 M8.717,12.565c-0.708,0-1.283,0.574-1.283,1.283c0,0.708,0.574,1.282,1.283,1.282S10,
+                        14.557,10,13.849C10,13.14,9.426,12.565,8.717,12.565M8.717,14.275c-0.236,0-0.427-0.191-0.427-0.427c0-0.236,
+                        0.191-0.429,0.427-0.429s0.427,0.192,0.427,0.429C9.145,14.084,8.953,14.275,8.717,14.275 M11.283,10c-0.236,
+                        0-0.428,0.191-0.428,0.428c0,0.236,0.191,0.427,0.428,0.427c0.235,0,0.427-0.191,0.427-0.427C11.71,10.191,
+                        11.519,10,11.283,10 M10,0.594c-5.195,0-9.406,4.211-9.406,9.406c0,5.195,4.211,9.406,9.406,9.406c5.195,0,
+                        9.406-4.211,9.406-9.406C19.406,4.805,15.195,0.594,10,0.594 M10,18.552c-4.723,0-8.551-3.829-8.551-8.552c0-4.722,
+                        3.828-8.551,8.551-8.551S18.552,5.278,18.552,10C18.552,14.723,14.723,18.552,10,18.552M7.435,4.014c-1.417,0-2.565,
+                        1.149-2.565,2.565c0,1.417,1.148,2.565,2.565,2.565C8.851,9.145,10,7.997,10,6.58C10,5.164,8.851,4.014,7.435,
+                        4.014 M7.435,8.29c-0.944,0-1.71-0.766-1.71-1.71c0-0.945,0.766-1.71,1.71-1.71c0.945,0,1.71,0.765,1.71,1.71C9.145,
+                        7.524,8.379,8.29,7.435,8.29"
+                          ></path>
+                        </svg>
+                      </a>
+                    </li>
+                    <li class="tab">
+                      <a class="black-text" href="#test_inner_4">
+                        <span class="code-icon">Js</span>
+                      </a>
+                    </li>
+                  </ul>
                 </div>
+                <div class="col m12 s12 l10">
+                  <div id="test_inner_1" class="col tab-content">Tab 1</div>
+                  <div id="test_inner_2" class="col tab-content">Tab 2</div>
+                  <div id="test_inner_3" class="col tab-content">Tab 3</div>
+                  <div id="test_inner_4" class="col tab-content">Tab 4</div>
+                </div>
+              </div>
             </div>
+          </div>
+          <div id="test2" class="col s12">Test 2</div>
+          <div id="test3" class="col s12">Test 3</div>
+          <div id="test4" class="col s12">Test 4</div>
         </div>
-        <div id="test2" class="col s12">Test 2</div>
-        <div id="test3" class="col s12">Test 3</div>
-        <div id="test4" class="col s12">Test 4</div>
+      </div>
+      <div id="canvas-holder"></div>
+      <div id="console-holder"></div>
     </div>
-</body>
-
+  </body>
 </html>
