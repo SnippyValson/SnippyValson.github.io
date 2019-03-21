@@ -3,6 +3,7 @@
 html,
 body {
     height: 100%;
+    background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
 }
 
 .tabs {
@@ -61,26 +62,57 @@ SVG Icons - svgicons.sparkk.fr
 #canvas-holder {
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
     border-radius: 2px;
     grid-row: span 2;
+    background: white;
 }
 
 #console-holder {
     width: 100%;
     height: 100%;
-    background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
     border-radius: 2px;
-    margin: 3px;
+    background: white;
 }
 
 #grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 5fr 1fr;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 2fr 1fr;
+    grid-gap: 3px;
     height: 100%;
 }
 
 .code-editor-selector {
     width: 100%;
+    height: 100%;
+    background: white;
+    overflow: hidden;
+}
+
+.canvas-selector {
+    width: 100%;
+}
+
+.console-selector {
+    width: 100%;
+}
+
+.uniform-editor-selector {
+    width: 100%;
+}
+
+.vertex-editor-selector {
+    width: 100%;
+}
+
+.frgment-editor-selector {
+    width: 100%;
+}
+
+.js-editor-selector {
+    width: 100%;
+}
+
+#code-editor-row {
+    height: 100%;
 }
