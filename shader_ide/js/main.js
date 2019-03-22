@@ -4,12 +4,22 @@ var index = 0;
 
 $(document).ready(function () {
 
+  if (window.innerHeight < window.innerWidth) {
+    $(".tabs").css("max-width", $('#code-editor-row').width());
+  }
+
+  setTimeout(() => {}, 1);
+
   $('.tabs').tabs();
 
   $('.code-editor-selector').resizable({
     stop: function (e, ui) {
       editors.forEach((editor) => {
         editor.setSize(null, ui.size.height - 60);
+        if (window.innerHeight < window.innerWidth) {
+          $(".tabs").css("max-width", ui.size.width);
+          console.log(ui.size.width);
+        }
       });
     },
     minHeight: $('#code-editor-row').height(),
@@ -78,6 +88,48 @@ $(document).ready(function () {
   });
 
 });
+
+$(window).on('resize', function () {
+
+  if (window.innerHeight < window.innerWidth) {
+    $(".tabs").css("max-width", $('#code-editor-row').width());
+  } else {
+    $(".tabs").css("max-width", "90vh");
+  }
+
+  setTimeout(() => {}, 1);
+
+  $('.tabs').tabs();
+
+});
+
+$(window).on("orientationchange", function (event) {
+
+  if (window.innerHeight < window.innerWidth) {
+    $(".tabs").css("max-width", $('#code-editor-row').width());
+  } else {
+    $(".tabs").css("max-width", "90vh");
+  }
+
+  setTimeout(() => {}, 1);
+
+  $('.tabs').tabs();
+
+  $('.code-editor-selector').resizable({
+    stop: function (e, ui) {
+      editors.forEach((editor) => {
+        editor.setSize(null, ui.size.height - 60);
+        if (window.innerHeight < window.innerWidth) {
+          $(".tabs").css("max-width", ui.size.width);
+          console.log(ui.size.width);
+        }
+      });
+    },
+    minHeight: $('#code-editor-row').height(),
+    minWidth: $('#code-editor-row').width()
+  });
+});
+
 
 function addEditor(id) {
   $('#pass-tabs').append([getTabMarkup(id)].join(''));

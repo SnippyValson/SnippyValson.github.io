@@ -15,7 +15,7 @@
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
         integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="https://code.jquery.com/ui/1.12.0/themes/smoothness/jquery-ui.css" />
-    <link rel="stylesheet" href="myProjects/webProject/icofont/css/icofont.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
     <script src="js/codemirror.js"></script>
     <script src="js/clike.js"></script>
     <script src="js/javascript.js"></script>
@@ -29,7 +29,7 @@
     <nav>
         <div class="nav-wrapper">
             <a href="#" class="brand-logo right">Forge</a>
-            <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <ul id="nav-mobile" class="left">
                 <li>
                     <a href="#" id="add-pass">
                         <svg class="svg-icon" viewBox="0 0 20 20">
@@ -64,7 +64,7 @@
         <div class="container-fluid code-editor-selector" id="code-editor">
             <div class="row" id="code-editor-row">
                 <div class="col s12">
-                    <ul class="tabs" id="pass-tabs">
+                    <ul class="tabs tabs-fixed-width" id="pass-tabs">
                         <li class="tab col s3" id="tab-1">
                             <a class="black-text" href="#inner-tab-view-1">BUF A</a>
                         </li>
@@ -83,13 +83,13 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col m12 s12 l2">
-                                <ul class="tabs">
-                                    <li class="tab">
+                                <ul class="tabs tabs-vertical">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-1-1">
                                             <span class="code-icon">{;}</span>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-1-2">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path fill="none" d="M16.382,15.015h0.455h0.457V4.985h-0.457h-0.455V15.015z M16.837,
@@ -113,7 +113,7 @@
                                             </svg>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-1-3">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path fill="none" d="M15.131,8.29c-0.944,0-1.711,0.766-1.711,1.71s0.767,1.711,1.711,1.711s1.71-0.767,
@@ -135,12 +135,12 @@
                                             </svg>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-1-4">
                                             <span class="code-icon">Js</span>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-1-5">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path
@@ -152,23 +152,23 @@
                                 </ul>
                             </div>
                             <div class="col m12 s12 l10" id="editor-holder-1">
-                                <div id="inner-tab-1-1" class="col tab-content">
+                                <div id="inner-tab-1-1" class="col tab-content tab-content-vertical">
                                     <textarea class="uniform-editor-selector" id="uniform-editor-1"></textarea>
                                 </div>
-                                <div id="inner-tab-1-2" class="col tab-content">
+                                <div id="inner-tab-1-2" class="col tab-content tab-content-vertical">
                                     <textarea class="vertex-editor-selector" id="vertex-editor-1"></textarea>
                                 </div>
-                                <div id="inner-tab-1-3" class="col tab-content">
+                                <div id="inner-tab-1-3" class="col tab-content tab-content-vertical">
                                     <textarea class="fragment-editor-selector" id="fragment-editor-1"></textarea>
                                 </div>
-                                <div id="inner-tab-1-4" class="col tab-content">
+                                <div id="inner-tab-1-4" class="col tab-content tab-content-vertical">
                                     <textarea class="js-editor-selector" id="js-editor-1"></textarea>
                                 </div>
-                                <div id="inner-tab-1-5" class="col tab-content">
+                                <div id="inner-tab-1-5" class="col tab-content tab-content-vertical">
                                     <form class="col s12">
                                         <div class="row">
                                             <div class="input-field col s6">
-                                                <input placeholder="Order" id="order-1" type="text" class="validate">
+                                                <input id="order-1" type="text" class="validate">
                                                 <label for="order-1">Order of execution</label>
                                             </div>
                                         </div>
@@ -190,13 +190,13 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col m12 s12 l2">
-                                <ul class="tabs">
-                                    <li class="tab">
+                                <ul class="tabs tabs-vertical">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-2-1">
                                             <span class="code-icon">{;}</span>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-2-2">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path fill="none" d="M16.382,15.015h0.455h0.457V4.985h-0.457h-0.455V15.015z M16.837,
@@ -220,7 +220,7 @@
                                             </svg>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-2-3">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path fill="none" d="M15.131,8.29c-0.944,0-1.711,0.766-1.711,1.71s0.767,1.711,1.711,1.711s1.71-0.767,
@@ -242,12 +242,12 @@
                                             </svg>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-2-4">
                                             <span class="code-icon">Js</span>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-2-5">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path
@@ -259,23 +259,23 @@
                                 </ul>
                             </div>
                             <div class="col m12 s12 l10" id="editor-holder-2">
-                                <div id="inner-tab-2-1" class="col tab-content">
+                                <div id="inner-tab-2-1" class="col tab-content tab-content-vertical">
                                     <textarea class="uniform-editor-selector" id="uniform-editor-2"></textarea>
                                 </div>
-                                <div id="inner-tab-2-2" class="col tab-content">
+                                <div id="inner-tab-2-2" class="col tab-content tab-content-vertical">
                                     <textarea class="vertex-editor-selector" id="vertex-editor-2"></textarea>
                                 </div>
-                                <div id="inner-tab-2-3" class="col tab-content">
+                                <div id="inner-tab-2-3" class="col tab-content tab-content-vertical">
                                     <textarea class="fragment-editor-selector" id="fragment-editor-2"></textarea>
                                 </div>
-                                <div id="inner-tab-2-4" class="col tab-content">
+                                <div id="inner-tab-2-4" class="col tab-content tab-content-vertical">
                                     <textarea class="js-editor-selector" id="js-editor-2"></textarea>
                                 </div>
-                                <div id="inner-tab-2-5" class="col tab-content">
+                                <div id="inner-tab-2-5" class="col tab-content-vertical">
                                     <form class="col s12">
                                         <div class="row">
                                             <div class="input-field col s6">
-                                                <input placeholder="Order" id="order-2" type="text" class="validate">
+                                                <input id="order-2" type="text" class="validate">
                                                 <label for="order-2">Order of execution</label>
                                             </div>
                                         </div>
@@ -297,13 +297,13 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col m12 s12 l2">
-                                <ul class="tabs">
-                                    <li class="tab">
+                                <ul class="tabs tabs-vertical">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-3-1">
                                             <span class="code-icon">{;}</span>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-3-2">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path fill="none" d="M16.382,15.015h0.455h0.457V4.985h-0.457h-0.455V15.015z M16.837,
@@ -327,7 +327,7 @@
                                             </svg>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-3-3">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path fill="none" d="M15.131,8.29c-0.944,0-1.711,0.766-1.711,1.71s0.767,1.711,1.711,1.711s1.71-0.767,
@@ -349,12 +349,12 @@
                                             </svg>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-3-4">
                                             <span class="code-icon">Js</span>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-3-5">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path
@@ -366,23 +366,23 @@
                                 </ul>
                             </div>
                             <div class="col m12 s12 l10" id="editor-holder-3">
-                                <div id="inner-tab-3-1" class="col tab-content">
+                                <div id="inner-tab-3-1" class="col tab-content tab-content-vertical">
                                     <textarea class="uniform-editor-selector" id="uniform-editor-3"></textarea>
                                 </div>
-                                <div id="inner-tab-3-2" class="col tab-content">
+                                <div id="inner-tab-3-2" class="col tab-content tab-content-vertical">
                                     <textarea class="vertex-editor-selector" id="vertex-editor-3"></textarea>
                                 </div>
-                                <div id="inner-tab-3-3" class="col tab-content">
+                                <div id="inner-tab-3-3" class="col tab-content tab-content-vertical">
                                     <textarea class="fragment-editor-selector" id="fragment-editor-3"></textarea>
                                 </div>
-                                <div id="inner-tab-3-4" class="col tab-content">
+                                <div id="inner-tab-3-4" class="col tab-content tab-content-vertical">
                                     <textarea class="js-editor-selector" id="js-editor-3"></textarea>
                                 </div>
-                                <div id="inner-tab-3-5" class="col tab-content">
+                                <div id="inner-tab-3-5" class="col tab-content tab-content-vertical">
                                     <form class="col s12">
                                         <div class="row">
                                             <div class="input-field col s6">
-                                                <input placeholder="Order" id="order-3" type="text" class="validate">
+                                                <input id="order-3" type="text" class="validate">
                                                 <label for="order-3">Order of execution</label>
                                             </div>
                                         </div>
@@ -404,13 +404,13 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col m12 s12 l2">
-                                <ul class="tabs">
-                                    <li class="tab">
+                                <ul class="tabs tabs-vertical">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-4-1">
                                             <span class="code-icon">{;}</span>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-4-2">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path fill="none" d="M16.382,15.015h0.455h0.457V4.985h-0.457h-0.455V15.015z M16.837,
@@ -434,7 +434,7 @@
                                             </svg>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-4-3">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path fill="none" d="M15.131,8.29c-0.944,0-1.711,0.766-1.711,1.71s0.767,1.711,1.711,1.711s1.71-0.767,
@@ -456,12 +456,12 @@
                                             </svg>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-4-4">
                                             <span class="code-icon">Js</span>
                                         </a>
                                     </li>
-                                    <li class="tab">
+                                    <li class="tab tab-vertical">
                                         <a class="black-text" href="#inner-tab-4-5">
                                             <svg class="svg-icon" viewBox="0 0 20 20">
                                                 <path
@@ -473,23 +473,23 @@
                                 </ul>
                             </div>
                             <div class="col m12 s12 l10" id="editor-holder-4">
-                                <div id="inner-tab-4-1" class="col tab-content">
+                                <div id="inner-tab-4-1" class="col tab-content tab-content-vertical">
                                     <textarea class="uniform-editor-selector" id="uniform-editor-4"></textarea>
                                 </div>
-                                <div id="inner-tab-4-2" class="col tab-content">
+                                <div id="inner-tab-4-2" class="col tab-content tab-content-vertical">
                                     <textarea class="vertex-editor-selector" id="vertex-editor-4"></textarea>
                                 </div>
-                                <div id="inner-tab-4-3" class="col tab-content">
+                                <div id="inner-tab-4-3" class="col tab-content tab-content-vertical">
                                     <textarea class="fragment-editor-selector" id="fragment-editor-4"></textarea>
                                 </div>
-                                <div id="inner-tab-4-4" class="col tab-content">
+                                <div id="inner-tab-4-4" class="col tab-content tab-content-vertical">
                                     <textarea class="js-editor-selector" id="js-editor-4"></textarea>
                                 </div>
-                                <div id="inner-tab-4-5" class="col tab-content">
+                                <div id="inner-tab-4-5" class="col tab-content tab-content-vertical">
                                     <form class="col s12">
                                         <div class="row">
                                             <div class="input-field col s6">
-                                                <input placeholder="Order" id="order-4" type="text" class="validate">
+                                                <input id="order-4" type="text" class="validate">
                                                 <label for="order-4">Order of execution</label>
                                             </div>
                                         </div>
@@ -509,9 +509,8 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid canvas-selector" id="canvas-holder"></div>
-        <div class="container-fluid console-selector" id="console-holder"></div>
+        <div class="container-fluid canvas-selector hide-on-med-and-down" id="canvas-holder">Canvas</div>
+        <div class="container-fluid console-selector" id="console-holder">Console</div>
     </div>
 </body>
-
 </html>

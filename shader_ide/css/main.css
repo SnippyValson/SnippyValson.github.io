@@ -1,27 +1,29 @@
 @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200');
-html, body {
+
+html,
+body {
     height: 100%;
     background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
 }
 
-.tabs {
-    height: auto;
-    white-space: normal;
-    text-transform: none;
+.tabs-vertical {
+    height: auto !important;
+    white-space: normal !important;
+    text-transform: none !important;
 }
 
-.tab {
-    display: block;
-    width: 100%;
-    border-bottom: 1px solid #f0f0f0;
-    text-transform: none;
+.tab-vertical {
+    display: block !important;
+    width: 100% !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    text-transform: none !important;
 }
 
-.tab-content {
-    height: 100%;
-    width: 100%;
-    background: #fcfcfc;
-    border: 1px solid #f0f0f0;
+.tab-content-vertical {
+    height: 100% !important;
+    width: 100% !important;
+    background: #fcfcfc !important;
+    border: 1px solid #f0f0f0 !important;
 }
 
 .indicator {
@@ -38,7 +40,9 @@ SVG Icons - svgicons.sparkk.fr
     vertical-align: middle;
 }
 
-.svg-icon path, .svg-icon polygon, .svg-icon rect {
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
     fill: #4691f6;
 }
 
@@ -53,7 +57,9 @@ SVG Icons - svgicons.sparkk.fr
     vertical-align: middle;
 }
 
-.svg-icon-white path, .svg-icon-white polygon, .svg-icon-white rect {
+.svg-icon-white path,
+.svg-icon-white polygon,
+.svg-icon-white rect {
     fill: white;
 }
 
@@ -93,6 +99,16 @@ SVG Icons - svgicons.sparkk.fr
     grid-template-rows: 2fr 1fr;
     grid-gap: 3px;
     height: 100%;
+}
+
+@media all and (orientation:portrait) {
+    #grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        max-width: 90vw;
+    }
 }
 
 .code-editor-selector {
@@ -141,7 +157,24 @@ nav {
     font-weight: lighter !important;
 }
 
-form{
+form {
     margin: 0px !important;
     padding: 0px !important;
+}
+
+@media all and (orientation:landscape) {
+    ::-webkit-scrollbar-track {
+        background-color: white;
+    }
+
+    ::-webkit-scrollbar {
+        height: 8px;
+        width: 3px;
+        background-color: white;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-image: linear-gradient(to right, #92fe9d 0%, #00c9ff 100%);
+        border-radius: 5px;
+    }
 }
