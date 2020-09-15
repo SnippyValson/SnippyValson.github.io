@@ -174,3 +174,27 @@ export function getNuemannNeighbours(x, y, matrix, r, c) {
     return (state + 1) % numStates;
   }
   
+  export function fillBackground(context ,color, width, height) {
+    context.beginPath();
+    context.fillStyle = color;
+    context.rect(0,0, width, height);
+    context.fill();
+}
+
+export function drawBooleanState(context, automataState, r, c, bsize, fg, bg) {
+  for(var i = 0; i < r; i++) {
+      for(var j = 0; j < c; j ++) {
+          if(automataState[i][j] == true) {
+              context.beginPath();
+              context.fillStyle = fg;
+              context.rect(bsize * j , bsize * i , bsize, bsize);
+              context.fill();
+          } else {
+              context.beginPath();
+              context.fillStyle = bg;
+              context.rect(bsize * j , bsize * i , bsize , bsize );
+              context.fill();
+          }
+      }
+  }
+}

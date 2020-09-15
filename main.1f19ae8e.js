@@ -202,6 +202,8 @@ exports.getMooreNeighboursWrap = getMooreNeighboursWrap;
 exports.getRandomColor = getRandomColor;
 exports.rand = rand;
 exports.getNextState = getNextState;
+exports.fillBackground = fillBackground;
+exports.drawBooleanState = drawBooleanState;
 exports.Array2D = void 0;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -409,46 +411,189 @@ function rand(min, max) {
 function getNextState(state, numStates) {
   return (state + 1) % numStates;
 }
-},{}],"main.js":[function(require,module,exports) {
+
+function fillBackground(context, color, width, height) {
+  context.beginPath();
+  context.fillStyle = color;
+  context.rect(0, 0, width, height);
+  context.fill();
+}
+
+function drawBooleanState(context, automataState, r, c, bsize, fg, bg) {
+  for (var i = 0; i < r; i++) {
+    for (var j = 0; j < c; j++) {
+      if (automataState[i][j] == true) {
+        context.beginPath();
+        context.fillStyle = fg;
+        context.rect(bsize * j, bsize * i, bsize, bsize);
+        context.fill();
+      } else {
+        context.beginPath();
+        context.fillStyle = bg;
+        context.rect(bsize * j, bsize * i, bsize, bsize);
+        context.fill();
+      }
+    }
+  }
+}
+},{}],"colors.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ColorPalletes = void 0;
+var ColorPalletes = [];
+exports.ColorPalletes = ColorPalletes;
+ColorPalletes.push({
+  background: '#263862',
+  foreground: '#96b0fc'
+});
+ColorPalletes.push({
+  background: '#030f2d',
+  foreground: '#00bcf9'
+});
+ColorPalletes.push({
+  background: '#131314',
+  foreground: '#91b5a4'
+});
+ColorPalletes.push({
+  background: '#140e36',
+  foreground: '#b82941'
+});
+ColorPalletes.push({
+  background: '#2f4650',
+  foreground: '#91eddf'
+});
+},{}],"automata/conwaysGameOfLife.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ConwaysGameOfLife = void 0;
+
+var _uitils = require("./../uitils");
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var ConwaysGameOfLife = /*#__PURE__*/function () {
+  /*
+   *  Initialize the states and randomize it.
+   */
+  function ConwaysGameOfLife(rows, cols, colors) {
+    _classCallCheck(this, ConwaysGameOfLife);
+
+    _defineProperty(this, "state", void 0);
+
+    _defineProperty(this, "tempState", void 0);
+
+    _defineProperty(this, "colors", void 0);
+
+    _defineProperty(this, "size", void 0);
+
+    this.size = {
+      rows: Math.round(rows),
+      cols: Math.round(cols)
+    };
+    this.colors = colors;
+    this.state = (0, _uitils.Array2D)(this.size.rows, this.size.cols);
+    this.tempState = (0, _uitils.Array2D)(this.size.rows, this.size.cols);
+
+    for (var i = 0; i < this.size.rows; i++) {
+      for (var j = 0; j < this.size.cols; j++) {
+        this.state[i][j] = Math.random() >= 0.5;
+      }
+    }
+  }
+
+  _createClass(ConwaysGameOfLife, [{
+    key: "randomize",
+    value: function randomize() {
+      for (var i = 0; i < this.size.rows; i++) {
+        for (var j = 0; j < this.size.cols; j++) {
+          this.state[i][j] = Math.random() >= 0.5;
+          this.tempState[i][j] = false;
+        }
+      }
+    }
+  }, {
+    key: "calculateNextState",
+    value: function calculateNextState() {
+      for (var i = 0; i < this.size.rows; i++) {
+        for (var j = 0; j < this.size.cols; j++) {
+          var neighbours = (0, _uitils.getMooreNeighbours)(i, j, this.state, this.size.rows, this.size.cols);
+          var liveCount = 0;
+          neighbours.forEach(function (neighbour) {
+            if (neighbour) {
+              liveCount++;
+            }
+          });
+
+          if (liveCount < 2 || liveCount > 3) {
+            this.tempState[i][j] = false;
+          } else if (liveCount == 2 || liveCount == 3) {
+            this.tempState[i][j] = this.state[i][j];
+
+            if (liveCount == 3) {
+              this.tempState[i][j] = true;
+            }
+          }
+        }
+      }
+
+      for (var i = 0; i < this.size.rows; i++) {
+        for (var j = 0; j < this.size.cols; j++) {
+          this.state[i][j] = this.tempState[i][j];
+        }
+      }
+    }
+  }, {
+    key: "getCurrentState",
+    value: function getCurrentState() {
+      return this.state;
+    }
+  }, {
+    key: "drawCurrentState",
+    value: function drawCurrentState(context, blockSize) {
+      (0, _uitils.drawBooleanState)(context, this.state, this.size.rows, this.size.cols, blockSize, this.colors[0], this.colors[1]);
+    }
+  }]);
+
+  return ConwaysGameOfLife;
+}();
+
+exports.ConwaysGameOfLife = ConwaysGameOfLife;
+},{"./../uitils":"uitils.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 require("./main.css");
 
 var _uitils = require("./uitils.js");
 
+var _colors = require("./colors");
+
+var _conwaysGameOfLife = require("./automata/conwaysGameOfLife.js");
+
 var background = document.getElementById('background-canvas');
 var backgroundContext = background.getContext("2d");
 var greeting = document.getElementById('greeting');
 var animationRequest = undefined;
 var numDivs = 100;
-var conwayColorPalletes = [];
-conwayColorPalletes.push({
-  background: '#263862',
-  foreground: '#96b0fc'
-});
-conwayColorPalletes.push({
-  background: '#030f2d',
-  foreground: '#00bcf9'
-});
-conwayColorPalletes.push({
-  background: '#131314',
-  foreground: '#91b5a4'
-});
-conwayColorPalletes.push({
-  background: '#140e36',
-  foreground: '#b82941'
-});
-conwayColorPalletes.push({
-  background: '#2f4650',
-  foreground: '#91eddf'
-});
-var conwayColorIndex = Math.floor(Math.random() * conwayColorPalletes.length) + 0;
-console.log(conwayColorIndex);
+var ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
+console.log(ColorIndex);
+var automaton;
 
-function initBackground() {
-  greeting.style.background = conwayColorPalletes[conwayColorIndex].background;
-  greeting.style.color = conwayColorPalletes[conwayColorIndex].foreground;
-  greeting.style.borderColor = conwayColorPalletes[conwayColorIndex].foreground;
+function initBackgroundAnimation() {
+  greeting.style.background = _colors.ColorPalletes[ColorIndex].background;
+  greeting.style.color = _colors.ColorPalletes[ColorIndex].foreground;
+  greeting.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
 
   if (animationRequest != undefined) {
     window.cancelAnimationFrame(animationRequest);
@@ -458,10 +603,7 @@ function initBackground() {
   var height = document.body.clientHeight;
   background.width = width;
   background.height = height;
-  backgroundContext.beginPath();
-  backgroundContext.fillStyle = conwayColorPalletes[conwayColorIndex].background;
-  backgroundContext.rect(0, 0, width, height);
-  backgroundContext.fill();
+  (0, _uitils.fillBackground)(backgroundContext, _colors.ColorPalletes[ColorIndex].background, width, height);
   var blockSize = 0;
   var rows = 0;
   var cols = 0;
@@ -484,99 +626,33 @@ function initBackground() {
     cols = width / blockSize;
   }
 
-  var state = [];
-  var tempState = [];
-
-  for (var i = 0; i < rows; i++) {
-    state[i] = [];
-    tempState[i] = [];
-  }
-
-  for (var i = 0; i < rows; i++) {
-    for (var j = 0; j < cols; j++) {
-      state[i][j] = Math.random() >= 0.5;
-    }
-  }
-
-  for (var i = 0; i < rows; i++) {
-    for (var j = 0; j < cols; j++) {
-      if (state[i][j] == true) {
-        backgroundContext.beginPath();
-        backgroundContext.fillStyle = conwayColorPalletes[conwayColorIndex].foreground;
-        backgroundContext.rect(blockSize * j, blockSize * i, blockSize, blockSize);
-        backgroundContext.fill();
-      } else {
-        backgroundContext.beginPath();
-        backgroundContext.fillStyle = conwayColorPalletes[conwayColorIndex].background;
-        backgroundContext.rect(blockSize * j, blockSize * i, blockSize, blockSize);
-        backgroundContext.fill();
-      }
-    }
-  }
+  automaton = new _conwaysGameOfLife.ConwaysGameOfLife(rows, cols, [_colors.ColorPalletes[ColorIndex].foreground, _colors.ColorPalletes[ColorIndex].background]);
+  automaton.drawCurrentState(backgroundContext, blockSize);
 
   function live() {
-    for (var i = 0; i < rows; i++) {
-      for (var j = 0; j < cols; j++) {
-        var neighbours = (0, _uitils.getMooreNeighbours)(i, j, state, rows, cols);
-        var liveCount = 0;
-        neighbours.forEach(function (neighbour) {
-          if (neighbour) {
-            liveCount++;
-          }
-        });
-
-        if (liveCount < 2 || liveCount > 3) {
-          tempState[i][j] = false;
-        } else if (liveCount == 2 || liveCount == 3) {
-          tempState[i][j] = state[i][j];
-
-          if (liveCount == 3) {
-            tempState[i][j] = true;
-          }
-        }
-      }
-    }
-
-    for (var i = 0; i < rows; i++) {
-      for (var j = 0; j < cols; j++) {
-        state[i][j] = tempState[i][j];
-      }
-    }
-
-    backgroundContext.beginPath();
-    backgroundContext.fillStyle = conwayColorPalletes[conwayColorIndex].background;
-    backgroundContext.rect(0, 0, width, height);
-    backgroundContext.fill();
-
-    for (var i = 0; i < rows; i++) {
-      for (var j = 0; j < cols; j++) {
-        if (state[i][j] == true) {
-          backgroundContext.beginPath();
-          backgroundContext.fillStyle = conwayColorPalletes[conwayColorIndex].foreground;
-          backgroundContext.rect(blockSize * j, blockSize * i, blockSize, blockSize);
-          backgroundContext.fill();
-        } else {
-          backgroundContext.beginPath();
-          backgroundContext.fillStyle = conwayColorPalletes[conwayColorIndex].background;
-          backgroundContext.rect(blockSize * j, blockSize * i, blockSize, blockSize);
-          backgroundContext.fill();
-        }
-      }
-    }
-
+    (0, _uitils.fillBackground)(backgroundContext, _colors.ColorPalletes[ColorIndex].background, width, height);
+    automaton.calculateNextState();
+    automaton.drawCurrentState(backgroundContext, blockSize);
     animationRequest = window.requestAnimationFrame(live);
   }
 
   animationRequest = window.requestAnimationFrame(live);
 }
 
-initBackground();
+initBackgroundAnimation();
 window.onresize = handleResize;
 
 function handleResize() {
-  initBackground();
+  initBackgroundAnimation();
 }
-},{"./main.css":"main.css","./uitils.js":"uitils.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+window.onGreetingClicked = onGreetingClicked;
+
+function onGreetingClicked() {
+  ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
+  initBackgroundAnimation();
+}
+},{"./main.css":"main.css","./uitils.js":"uitils.js","./colors":"colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
