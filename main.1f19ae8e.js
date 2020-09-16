@@ -189,7 +189,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"uitils.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/uitils.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -441,10 +441,11 @@ function drawBooleanState(context, automataState, r, c, bsize, fg, bg) {
 function drawBlock(context, x, y, blockSize, color) {
   context.beginPath();
   context.fillStyle = color;
+  context.lineWidth = 0;
   context.rect(blockSize * y, blockSize * x, blockSize, blockSize);
   context.fill();
 }
-},{}],"colors.js":[function(require,module,exports) {
+},{}],"libs/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -481,7 +482,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ConwaysGameOfLife = void 0;
 
-var _uitils = require("./../uitils");
+var _uitils = require("../libs/uitils.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -590,14 +591,14 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
 }();
 
 exports.ConwaysGameOfLife = ConwaysGameOfLife;
-},{"./../uitils":"uitils.js"}],"main.js":[function(require,module,exports) {
+},{"../libs/uitils.js":"libs/uitils.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 require("./main.css");
 
-var _uitils = require("./uitils.js");
+var _uitils = require("./libs/uitils.js");
 
-var _colors = require("./colors");
+var _colors = require("./libs/colors.js");
 
 var _conwaysGameOfLife = require("./automata/conwaysGameOfLife.js");
 
@@ -646,6 +647,7 @@ function initBackgroundAnimation() {
     cols = width / blockSize;
   }
 
+  blockSize = Math.round(blockSize);
   automaton = new _conwaysGameOfLife.ConwaysGameOfLife(rows, cols, [_colors.ColorPalletes[ColorIndex].foreground, _colors.ColorPalletes[ColorIndex].background], backgroundContext, blockSize);
   automaton.drawCurrentState();
 
@@ -670,7 +672,7 @@ function onGreetingClicked() {
   ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
   initBackgroundAnimation();
 }
-},{"./main.css":"main.css","./uitils.js":"uitils.js","./colors":"colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/colors.js":"libs/colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -698,7 +700,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52440" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56986" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

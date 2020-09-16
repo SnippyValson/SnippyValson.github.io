@@ -202,6 +202,7 @@ export function drawBooleanState(context, automataState, r, c, bsize, fg, bg) {
 export function drawBlock(context, x, y, blockSize, color) {
   context.beginPath();
   context.fillStyle = color;
+  context.lineWidth = 0; 
   context.rect(blockSize * y , blockSize * x , blockSize, blockSize);
   context.fill();
 }

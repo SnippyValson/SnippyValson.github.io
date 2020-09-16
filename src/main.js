@@ -1,6 +1,6 @@
 import './main.css'
-import  { fillBackground } from './uitils.js'
-import { ColorPalletes } from './colors'
+import  { fillBackground } from './libs/uitils.js'
+import { ColorPalletes } from './libs/colors.js'
 import { ConwaysGameOfLife } from './automata/conwaysGameOfLife.js'
 
 var background = document.getElementById('background-canvas');
@@ -42,6 +42,7 @@ function initBackgroundAnimation() {
         blockSize = height / rows;
         cols =  width / blockSize;
     }
+    blockSize = Math.round(blockSize);
     automaton = new ConwaysGameOfLife(rows, cols, [ColorPalletes[ColorIndex].foreground, ColorPalletes[ColorIndex].background], backgroundContext, blockSize);
     automaton.drawCurrentState();
     function live(){

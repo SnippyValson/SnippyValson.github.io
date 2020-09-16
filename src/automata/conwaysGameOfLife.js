@@ -1,4 +1,4 @@
-import { Array2D, getMooreNeighbours, drawBooleanState, drawBlock } from './../uitils'
+import { Array2D, getMooreNeighbours, drawBooleanState, drawBlock } from '../libs/uitils.js'
 
 export class ConwaysGameOfLife {
     
@@ -65,7 +65,7 @@ export class ConwaysGameOfLife {
             for(var j = 0; j < this.size.cols; j ++) {
                 this.state[i][j] = this.tempState[i][j];
             }
-        }
+        }    
     }
 
     getCurrentState() {
