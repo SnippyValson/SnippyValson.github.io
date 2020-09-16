@@ -5,7 +5,7 @@ export class CyclicCellularAutomata extends Automaton {
 
     constructor(rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood) {
         console.log(threshold);
-        super(rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood)
+        super(rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood);
     }
 
     calculateAndDrawNextState() {

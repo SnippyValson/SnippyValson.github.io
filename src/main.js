@@ -8,8 +8,9 @@ var background = document.getElementById('background-canvas');
 var backgroundContext = background.getContext("2d");
 var greeting = document.getElementById('greeting');
 var info = document.getElementById('info');
+var fpsInfo = document.getElementById('fps');
 var animationRequest  = undefined;
-var numDivs = 200;
+var numDivs = 150;
 var ColorIndex = Math.floor(Math.random() * ColorPalletes.length) + 0;
 console.log(ColorIndex);
 var automaton;
@@ -23,6 +24,9 @@ function initBackgroundAnimation() {
     info.style.background = ColorPalletes[ColorIndex].background;
     info.style.color = ColorPalletes[ColorIndex].foreground;
     info.style.borderColor = ColorPalletes[ColorIndex].foreground;
+    fpsInfo.style.background = ColorPalletes[ColorIndex].background;
+    fpsInfo.style.color = ColorPalletes[ColorIndex].foreground;
+    fpsInfo.style.borderColor = ColorPalletes[ColorIndex].foreground;
     if(animationRequest != undefined) {
         window.cancelAnimationFrame(animationRequest);
     }   
@@ -69,11 +73,22 @@ function initBackgroundAnimation() {
     automaton.drawCurrentState();
     var t1 = Date.now();
     var t2 = Date.now();
+    var ft1 = Date.now();
+    var ft2 = Date.now();
+    var fps = 0;
     function live(){
         t2 = Date.now();
-        if(t2 - t1 >= 50) {
+        ft2 = Date.now();
+        if(t2 - t1 >= 1000 / 30) {
+            t1 = Date.now() - ((t2 - t1) % (1000 / 30));
+            fps++;
             automaton.calculateAndDrawNextState();
-            t1 = Date.now();
+        }
+        if(ft2 - ft1 >= 1000)
+        {
+            ft1 = Date.now() - ((ft2- ft1) % 1000);
+            fpsInfo.innerHTML = `${fps} fps`;
+            fps = 0;
         }
         animationRequest = window.requestAnimationFrame(live);
     }

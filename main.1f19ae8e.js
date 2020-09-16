@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,12 +184,12 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/uitils.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/uitils.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -728,8 +728,9 @@ var background = document.getElementById('background-canvas');
 var backgroundContext = background.getContext("2d");
 var greeting = document.getElementById('greeting');
 var info = document.getElementById('info');
+var fpsInfo = document.getElementById('fps');
 var animationRequest = undefined;
-var numDivs = 200;
+var numDivs = 150;
 var ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
 console.log(ColorIndex);
 var automaton;
@@ -742,6 +743,9 @@ function initBackgroundAnimation() {
   info.style.background = _colors.ColorPalletes[ColorIndex].background;
   info.style.color = _colors.ColorPalletes[ColorIndex].foreground;
   info.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
+  fpsInfo.style.background = _colors.ColorPalletes[ColorIndex].background;
+  fpsInfo.style.color = _colors.ColorPalletes[ColorIndex].foreground;
+  fpsInfo.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
 
   if (animationRequest != undefined) {
     window.cancelAnimationFrame(animationRequest);
@@ -818,13 +822,24 @@ function initBackgroundAnimation() {
   automaton.drawCurrentState();
   var t1 = Date.now();
   var t2 = Date.now();
+  var ft1 = Date.now();
+  var ft2 = Date.now();
+  var fps = 0;
 
   function live() {
     t2 = Date.now();
+    ft2 = Date.now();
 
-    if (t2 - t1 >= 50) {
+    if (t2 - t1 >= 1000 / 30) {
+      t1 = Date.now() - (t2 - t1) % (1000 / 30);
+      fps++;
       automaton.calculateAndDrawNextState();
-      t1 = Date.now();
+    }
+
+    if (ft2 - ft1 >= 1000) {
+      ft1 = Date.now() - (ft2 - ft1) % 1000;
+      fpsInfo.innerHTML = "".concat(fps, " fps");
+      fps = 0;
     }
 
     animationRequest = window.requestAnimationFrame(live);
@@ -846,7 +861,7 @@ function onGreetingClicked() {
   ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
   initBackgroundAnimation();
 }
-},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/colors.js":"libs/colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js","./automata/cyclicCellularAutomata":"automata/cyclicCellularAutomata.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/colors.js":"libs/colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js","./automata/cyclicCellularAutomata":"automata/cyclicCellularAutomata.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -874,7 +889,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50573" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53527" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -1050,5 +1065,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
 //# sourceMappingURL=/main.1f19ae8e.js.map
