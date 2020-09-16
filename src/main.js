@@ -1,5 +1,5 @@
 import './main.css'
-import  { getMooreNeighbours, fillBackground, drawBooleanState } from './uitils.js'
+import  { fillBackground } from './uitils.js'
 import { ColorPalletes } from './colors'
 import { ConwaysGameOfLife } from './automata/conwaysGameOfLife.js'
 
@@ -42,12 +42,10 @@ function initBackgroundAnimation() {
         blockSize = height / rows;
         cols =  width / blockSize;
     }
-    automaton = new ConwaysGameOfLife(rows, cols, [ColorPalletes[ColorIndex].foreground, ColorPalletes[ColorIndex].background]);
-    automaton.drawCurrentState(backgroundContext, blockSize);
+    automaton = new ConwaysGameOfLife(rows, cols, [ColorPalletes[ColorIndex].foreground, ColorPalletes[ColorIndex].background], backgroundContext, blockSize);
+    automaton.drawCurrentState();
     function live(){
-        fillBackground(backgroundContext, ColorPalletes[ColorIndex].background, width, height);
-        automaton.calculateNextState();
-        automaton.drawCurrentState(backgroundContext, blockSize);
+        automaton.calculateAndDrawNextState();
         animationRequest = window.requestAnimationFrame(live);
     }
     animationRequest = window.requestAnimationFrame(live);

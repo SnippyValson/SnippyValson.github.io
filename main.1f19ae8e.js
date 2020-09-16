@@ -204,6 +204,7 @@ exports.rand = rand;
 exports.getNextState = getNextState;
 exports.fillBackground = fillBackground;
 exports.drawBooleanState = drawBooleanState;
+exports.drawBlock = drawBlock;
 exports.Array2D = void 0;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -436,6 +437,13 @@ function drawBooleanState(context, automataState, r, c, bsize, fg, bg) {
     }
   }
 }
+
+function drawBlock(context, x, y, blockSize, color) {
+  context.beginPath();
+  context.fillStyle = color;
+  context.rect(blockSize * y, blockSize * x, blockSize, blockSize);
+  context.fill();
+}
 },{}],"colors.js":[function(require,module,exports) {
 "use strict";
 
@@ -487,7 +495,7 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
   /*
    *  Initialize the states and randomize it.
    */
-  function ConwaysGameOfLife(rows, cols, colors) {
+  function ConwaysGameOfLife(rows, cols, colors, context, blocksize) {
     _classCallCheck(this, ConwaysGameOfLife);
 
     _defineProperty(this, "state", void 0);
@@ -498,6 +506,10 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
 
     _defineProperty(this, "size", void 0);
 
+    _defineProperty(this, "drawingContext", void 0);
+
+    _defineProperty(this, "blockSize", void 0);
+
     this.size = {
       rows: Math.round(rows),
       cols: Math.round(cols)
@@ -505,6 +517,8 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
     this.colors = colors;
     this.state = (0, _uitils.Array2D)(this.size.rows, this.size.cols);
     this.tempState = (0, _uitils.Array2D)(this.size.rows, this.size.cols);
+    this.drawingContext = context;
+    this.blockSize = blocksize;
 
     for (var i = 0; i < this.size.rows; i++) {
       for (var j = 0; j < this.size.cols; j++) {
@@ -524,8 +538,8 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "calculateNextState",
-    value: function calculateNextState() {
+    key: "calculateAndDrawNextState",
+    value: function calculateAndDrawNextState() {
       for (var i = 0; i < this.size.rows; i++) {
         for (var j = 0; j < this.size.cols; j++) {
           var neighbours = (0, _uitils.getMooreNeighbours)(i, j, this.state, this.size.rows, this.size.cols);
@@ -537,12 +551,18 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
           });
 
           if (liveCount < 2 || liveCount > 3) {
-            this.tempState[i][j] = false;
+            if (this.state[i][j]) {
+              this.tempState[i][j] = false;
+              (0, _uitils.drawBlock)(this.drawingContext, i, j, this.blockSize, this.colors[1]);
+            }
           } else if (liveCount == 2 || liveCount == 3) {
             this.tempState[i][j] = this.state[i][j];
 
             if (liveCount == 3) {
-              this.tempState[i][j] = true;
+              if (!this.state[i][j]) {
+                this.tempState[i][j] = true;
+                (0, _uitils.drawBlock)(this.drawingContext, i, j, this.blockSize, this.colors[0]);
+              }
             }
           }
         }
@@ -561,8 +581,8 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
     }
   }, {
     key: "drawCurrentState",
-    value: function drawCurrentState(context, blockSize) {
-      (0, _uitils.drawBooleanState)(context, this.state, this.size.rows, this.size.cols, blockSize, this.colors[0], this.colors[1]);
+    value: function drawCurrentState() {
+      (0, _uitils.drawBooleanState)(this.drawingContext, this.state, this.size.rows, this.size.cols, this.blockSize, this.colors[0], this.colors[1]);
     }
   }]);
 
@@ -626,13 +646,11 @@ function initBackgroundAnimation() {
     cols = width / blockSize;
   }
 
-  automaton = new _conwaysGameOfLife.ConwaysGameOfLife(rows, cols, [_colors.ColorPalletes[ColorIndex].foreground, _colors.ColorPalletes[ColorIndex].background]);
-  automaton.drawCurrentState(backgroundContext, blockSize);
+  automaton = new _conwaysGameOfLife.ConwaysGameOfLife(rows, cols, [_colors.ColorPalletes[ColorIndex].foreground, _colors.ColorPalletes[ColorIndex].background], backgroundContext, blockSize);
+  automaton.drawCurrentState();
 
   function live() {
-    (0, _uitils.fillBackground)(backgroundContext, _colors.ColorPalletes[ColorIndex].background, width, height);
-    automaton.calculateNextState();
-    automaton.drawCurrentState(backgroundContext, blockSize);
+    automaton.calculateAndDrawNextState();
     animationRequest = window.requestAnimationFrame(live);
   }
 
@@ -680,7 +698,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55453" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52440" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
