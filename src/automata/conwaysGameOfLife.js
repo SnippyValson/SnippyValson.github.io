@@ -1,44 +1,16 @@
-import { Array2D, getMooreNeighbours, drawBooleanState, drawBlock } from '../libs/uitils.js'
+import { drawBlock } from '../libs/uitils.js'
+import { Automaton } from './automaton.js';
 
-export class ConwaysGameOfLife {
+export class ConwaysGameOfLife extends Automaton {
     
-    state;
-    tempState;
-    colors;
-    size;
-    drawingContext;
-    blockSize;
-
-    /*
-     *  Initialize the states and randomize it.
-     */
-    constructor(rows, cols, colors, context, blocksize) {
-        this.size = { rows : Math.round(rows), cols : Math.round(cols) };
-        this.colors = colors;
-        this.state =  Array2D(this.size.rows, this.size.cols);
-        this.tempState = Array2D(this.size.rows, this.size.cols);
-        this.drawingContext = context;
-        this.blockSize = blocksize;
-        for(var i = 0 ; i < this.size.rows; i ++) {
-            for(var j = 0; j < this.size.cols; j ++) {
-                this.state[i][j] = Math.random() >= 0.5;
-            }
-        }
-    }
-
-    randomize() {
-        for(var i = 0 ; i < this.size.rows; i ++) {
-            for(var j = 0; j < this.size.cols; j ++) {
-                this.state[i][j] = Math.random() >= 0.5;
-                this.tempState[i][j] = false;
-            }
-        }
+    constructor(rows, cols, colors, context, blocksize, numStates, neighbourhood) {
+        super(rows, cols, colors, context, blocksize, numStates, 0 , 0, neighbourhood);
     }
 
     calculateAndDrawNextState() {
         for(var i = 0; i < this.size.rows; i++) {
             for(var j = 0; j < this.size.cols; j ++) {
-                var neighbours = getMooreNeighbours(i, j, this.state, this.size.rows, this.size.cols);
+                var neighbours = this.neighbourhood(i, j, this.state, this.size.rows, this.size.cols);
                 var liveCount = 0;
                 neighbours.forEach(neighbour => {
                     if(neighbour) {
@@ -46,16 +18,16 @@ export class ConwaysGameOfLife {
                     }
                 });
                 if(liveCount < 2 || liveCount > 3){
-                    if(this.state[i][j]) {
-                        this.tempState[i][j] = false;
-                        drawBlock(this.drawingContext, i, j, this.blockSize, this.colors[1]);
+                    if(this.state[i][j] == 1) {
+                        this.tempState[i][j] = 0;
+                        drawBlock(this.drawingContext, i, j, this.blockSize, this.colors[0]);
                     }
                 } else if( liveCount == 2 || liveCount == 3) {
                     this.tempState[i][j] = this.state[i][j];
                     if(liveCount == 3) {
-                        if(!this.state[i][j]) {
-                            this.tempState[i][j] = true;
-                            drawBlock(this.drawingContext, i, j, this.blockSize, this.colors[0]);
+                        if(this.state[i][j] == 0) {
+                            this.tempState[i][j] = 1;
+                            drawBlock(this.drawingContext, i, j, this.blockSize, this.colors[1]);
                        }
                     }
                 }
@@ -66,13 +38,5 @@ export class ConwaysGameOfLife {
                 this.state[i][j] = this.tempState[i][j];
             }
         }    
-    }
-
-    getCurrentState() {
-        return this.state;
-    }
-
-    drawCurrentState() {
-        drawBooleanState(this.drawingContext, this.state, this.size.rows, this.size.cols, this.blockSize, this.colors[0], this.colors[1]);
     }
 }

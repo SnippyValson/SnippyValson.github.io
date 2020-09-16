@@ -203,8 +203,9 @@ exports.getRandomColor = getRandomColor;
 exports.rand = rand;
 exports.getNextState = getNextState;
 exports.fillBackground = fillBackground;
-exports.drawBooleanState = drawBooleanState;
+exports.drawState = drawState;
 exports.drawBlock = drawBlock;
+exports.getGradientStops = getGradientStops;
 exports.Array2D = void 0;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -223,53 +224,20 @@ function getNuemannNeighbours(x, y, matrix, r, c) {
   var i = x;
   var j = y;
   var neigbours = [];
-  /* First row. */
 
-  if (i === 0) {
-    /* First element of first row. */
-    if (j === 0) {
-      neigbours.push(matrix[i][j + 1]);
-      neigbours.push(matrix[i + 1][j]);
-      /* Last element of the first row.*/
-    } else if (j === c - 1) {
-      neigbours.push(matrix[i + 1][j]);
-      neigbours.push(matrix[i][j - 1]);
-    } else {
-      neigbours.push(matrix[i][j + 1]);
-      neigbours.push(matrix[i + 1][j]);
-      neigbours.push(matrix[i][j - 1]);
-    }
-    /* Last row. */
-
-  } else if (i === r - 1) {
-    /* First element of last row. */
-    if (j === 0) {
-      neigbours.push(matrix[i - 1][j]);
-      neigbours.push(matrix[i][j + 1]);
-      /* Last element of the last row.*/
-    } else if (j === c - 1) {
-      neigbours.push(matrix[i - 1][j]);
-      neigbours.push(matrix[i][j - 1]);
-    } else {
-      neigbours.push(matrix[i - 1][j]);
-      neigbours.push(matrix[i][j + 1]);
-      neigbours.push(matrix[i][j - 1]);
-    }
-    /* First column */
-
-  } else if (j === 0) {
+  if (i - 1 >= 0) {
     neigbours.push(matrix[i - 1][j]);
+  }
+
+  if (j + 1 < c) {
     neigbours.push(matrix[i][j + 1]);
+  }
+
+  if (i + 1 < r) {
     neigbours.push(matrix[i + 1][j]);
-    /* Last column */
-  } else if (j === c - 1) {
-    neigbours.push(matrix[i + 1][j]);
-    neigbours.push(matrix[i + 1][j]);
-    neigbours.push(matrix[i][j - 1]);
-  } else {
-    neigbours.push(matrix[i - 1][j]);
-    neigbours.push(matrix[i][j + 1]);
-    neigbours.push(matrix[i + 1][j]);
+  }
+
+  if (j - 1 >= 0) {
     neigbours.push(matrix[i][j - 1]);
   }
 
@@ -280,45 +248,20 @@ function getCrossNeighbours(x, y, matrix, r, c) {
   var i = x;
   var j = y;
   var neigbours = [];
-  /* First row. */
 
-  if (i === 0) {
-    /* First element of first row. */
-    if (j === 0) {
-      neigbours.push(matrix[i + 1][j + 1]);
-      /* Last element of the first row.*/
-    } else if (j === c - 1) {
-      neigbours.push(matrix[i + 1][j - 1]);
-    } else {
-      neigbours.push(matrix[i + 1][j + 1]);
-      neigbours.push(matrix[i + 1][j - 1]);
-    }
-    /* Last row. */
-
-  } else if (i === r - 1) {
-    /* First element of last row. */
-    if (j === 0) {
-      neigbours.push(matrix[i - 1][j + 1]);
-      /* Last element of the last row.*/
-    } else if (j === c - 1) {
-      neigbours.push(matrix[i - 1][j - 1]);
-    } else {
-      neigbours.push(matrix[i - 1][j - 1]);
-      neigbours.push(matrix[i - 1][j + 1]);
-    }
-    /* First column */
-
-  } else if (j === 0) {
-    neigbours.push(matrix[i - 1][j + 1]);
-    neigbours.push(matrix[i + 1][j + 1]);
-    /* Last column */
-  } else if (j === c - 1) {
+  if (i - 1 >= 0 && j - 1 >= 0) {
     neigbours.push(matrix[i - 1][j - 1]);
-    neigbours.push(matrix[i + 1][j - 1]);
-  } else {
-    neigbours.push(matrix[i - 1][j - 1]);
+  }
+
+  if (i - 1 >= 0 && j + 1 < c) {
     neigbours.push(matrix[i - 1][j + 1]);
+  }
+
+  if (i + 1 < r && j + 1 < c) {
     neigbours.push(matrix[i + 1][j + 1]);
+  }
+
+  if (i + 1 < r && j - 1 >= 0) {
     neigbours.push(matrix[i + 1][j - 1]);
   }
 
@@ -420,20 +363,10 @@ function fillBackground(context, color, width, height) {
   context.fill();
 }
 
-function drawBooleanState(context, automataState, r, c, bsize, fg, bg) {
+function drawState(context, automataState, r, c, bsize, colors) {
   for (var i = 0; i < r; i++) {
     for (var j = 0; j < c; j++) {
-      if (automataState[i][j] == true) {
-        context.beginPath();
-        context.fillStyle = fg;
-        context.rect(bsize * j, bsize * i, bsize, bsize);
-        context.fill();
-      } else {
-        context.beginPath();
-        context.fillStyle = bg;
-        context.rect(bsize * j, bsize * i, bsize, bsize);
-        context.fill();
-      }
+      drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
     }
   }
 }
@@ -444,6 +377,51 @@ function drawBlock(context, x, y, blockSize, color) {
   context.lineWidth = 0;
   context.rect(blockSize * y, blockSize * x, blockSize, blockSize);
   context.fill();
+}
+
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+function getGradientStops(startColor, endColor, numStops) {
+  var startRGB = hexToRgb(startColor);
+  var endRGB = hexToRgb(endColor);
+  var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
+  var gStep = Math.floor(Math.abs(startRGB.g - endRGB.g) / numStops);
+  var bStep = Math.floor(Math.abs(startRGB.b - endRGB.b) / numStops);
+  var colors = [];
+  colors.push(hexToRgb(startColor));
+  var s = colors[colors.length - 1];
+
+  for (var i = 0; i < numStops; i++) {
+    var c = {
+      r: s.r + rStep,
+      g: s.g + gStep,
+      b: s.b + bStep
+    };
+    colors.push(c);
+    s = colors[colors.length - 1];
+  }
+
+  colors.push(hexToRgb(endColor));
+  colors = colors.map(function (c) {
+    return rgbToHex(c.r, c.g, c.b);
+  });
+  return colors;
 }
 },{}],"libs/colors.js":[function(require,module,exports) {
 "use strict";
@@ -474,15 +452,15 @@ ColorPalletes.push({
   background: '#2f4650',
   foreground: '#91eddf'
 });
-},{}],"automata/conwaysGameOfLife.js":[function(require,module,exports) {
+},{}],"automata/automaton.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.ConwaysGameOfLife = void 0;
+exports.Automaton = void 0;
 
-var _uitils = require("../libs/uitils.js");
+var _uitils = require("./../libs/uitils");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -492,58 +470,128 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var ConwaysGameOfLife = /*#__PURE__*/function () {
-  /*
-   *  Initialize the states and randomize it.
-   */
-  function ConwaysGameOfLife(rows, cols, colors, context, blocksize) {
-    _classCallCheck(this, ConwaysGameOfLife);
-
-    _defineProperty(this, "state", void 0);
-
-    _defineProperty(this, "tempState", void 0);
-
-    _defineProperty(this, "colors", void 0);
+var Automaton = /*#__PURE__*/function () {
+  function Automaton(rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood) {
+    _classCallCheck(this, Automaton);
 
     _defineProperty(this, "size", void 0);
 
     _defineProperty(this, "drawingContext", void 0);
 
+    _defineProperty(this, "colors", void 0);
+
+    _defineProperty(this, "numStates", void 0);
+
+    _defineProperty(this, "range", void 0);
+
+    _defineProperty(this, "threshold", void 0);
+
     _defineProperty(this, "blockSize", void 0);
+
+    _defineProperty(this, "state", void 0);
+
+    _defineProperty(this, "tempState", void 0);
+
+    _defineProperty(this, "neighbourhood", void 0);
 
     this.size = {
       rows: Math.round(rows),
       cols: Math.round(cols)
     };
+    this.drawingContext = context;
     this.colors = colors;
+    this.numStates = numStates;
+    this.range = range;
+    this.threshold = threshold;
+    this.blockSize = blockSize;
     this.state = (0, _uitils.Array2D)(this.size.rows, this.size.cols);
     this.tempState = (0, _uitils.Array2D)(this.size.rows, this.size.cols);
-    this.drawingContext = context;
-    this.blockSize = blocksize;
+    this.neighbourhood = neighbourhood;
 
     for (var i = 0; i < this.size.rows; i++) {
       for (var j = 0; j < this.size.cols; j++) {
-        this.state[i][j] = Math.random() >= 0.5;
+        this.state[i][j] = Math.floor(Math.random() * numStates);
       }
     }
   }
 
-  _createClass(ConwaysGameOfLife, [{
+  _createClass(Automaton, [{
     key: "randomize",
     value: function randomize() {
       for (var i = 0; i < this.size.rows; i++) {
         for (var j = 0; j < this.size.cols; j++) {
-          this.state[i][j] = Math.random() >= 0.5;
-          this.tempState[i][j] = false;
+          this.state[i][j] = Math.floor(Math.random() * numStates);
+          this.tempState[i][j] = 0;
         }
       }
     }
   }, {
+    key: "getCurrentState",
+    value: function getCurrentState() {
+      return this.state;
+    }
+  }, {
+    key: "drawCurrentState",
+    value: function drawCurrentState() {
+      (0, _uitils.drawState)(this.drawingContext, this.state, this.size.rows, this.size.cols, this.blockSize, this.colors);
+    }
+  }]);
+
+  return Automaton;
+}();
+
+exports.Automaton = Automaton;
+},{"./../libs/uitils":"libs/uitils.js"}],"automata/conwaysGameOfLife.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ConwaysGameOfLife = void 0;
+
+var _uitils = require("../libs/uitils.js");
+
+var _automaton = require("./automaton.js");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var ConwaysGameOfLife = /*#__PURE__*/function (_Automaton) {
+  _inherits(ConwaysGameOfLife, _Automaton);
+
+  var _super = _createSuper(ConwaysGameOfLife);
+
+  function ConwaysGameOfLife(rows, cols, colors, context, blocksize, numStates, neighbourhood) {
+    _classCallCheck(this, ConwaysGameOfLife);
+
+    return _super.call(this, rows, cols, colors, context, blocksize, numStates, 0, 0, neighbourhood);
+  }
+
+  _createClass(ConwaysGameOfLife, [{
     key: "calculateAndDrawNextState",
     value: function calculateAndDrawNextState() {
       for (var i = 0; i < this.size.rows; i++) {
         for (var j = 0; j < this.size.cols; j++) {
-          var neighbours = (0, _uitils.getMooreNeighbours)(i, j, this.state, this.size.rows, this.size.cols);
+          var neighbours = this.neighbourhood(i, j, this.state, this.size.rows, this.size.cols);
           var liveCount = 0;
           neighbours.forEach(function (neighbour) {
             if (neighbour) {
@@ -552,17 +600,17 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
           });
 
           if (liveCount < 2 || liveCount > 3) {
-            if (this.state[i][j]) {
-              this.tempState[i][j] = false;
-              (0, _uitils.drawBlock)(this.drawingContext, i, j, this.blockSize, this.colors[1]);
+            if (this.state[i][j] == 1) {
+              this.tempState[i][j] = 0;
+              (0, _uitils.drawBlock)(this.drawingContext, i, j, this.blockSize, this.colors[0]);
             }
           } else if (liveCount == 2 || liveCount == 3) {
             this.tempState[i][j] = this.state[i][j];
 
             if (liveCount == 3) {
-              if (!this.state[i][j]) {
-                this.tempState[i][j] = true;
-                (0, _uitils.drawBlock)(this.drawingContext, i, j, this.blockSize, this.colors[0]);
+              if (this.state[i][j] == 0) {
+                this.tempState[i][j] = 1;
+                (0, _uitils.drawBlock)(this.drawingContext, i, j, this.blockSize, this.colors[1]);
               }
             }
           }
@@ -575,23 +623,95 @@ var ConwaysGameOfLife = /*#__PURE__*/function () {
         }
       }
     }
-  }, {
-    key: "getCurrentState",
-    value: function getCurrentState() {
-      return this.state;
-    }
-  }, {
-    key: "drawCurrentState",
-    value: function drawCurrentState() {
-      (0, _uitils.drawBooleanState)(this.drawingContext, this.state, this.size.rows, this.size.cols, this.blockSize, this.colors[0], this.colors[1]);
-    }
   }]);
 
   return ConwaysGameOfLife;
-}();
+}(_automaton.Automaton);
 
 exports.ConwaysGameOfLife = ConwaysGameOfLife;
-},{"../libs/uitils.js":"libs/uitils.js"}],"main.js":[function(require,module,exports) {
+},{"../libs/uitils.js":"libs/uitils.js","./automaton.js":"automata/automaton.js"}],"automata/cyclicCellularAutomata.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CyclicCellularAutomata = void 0;
+
+var _uitils = require("./../libs/uitils.js");
+
+var _automaton = require("./automaton.js");
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var CyclicCellularAutomata = /*#__PURE__*/function (_Automaton) {
+  _inherits(CyclicCellularAutomata, _Automaton);
+
+  var _super = _createSuper(CyclicCellularAutomata);
+
+  function CyclicCellularAutomata(rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood) {
+    _classCallCheck(this, CyclicCellularAutomata);
+
+    console.log(threshold);
+    return _super.call(this, rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood);
+  }
+
+  _createClass(CyclicCellularAutomata, [{
+    key: "calculateAndDrawNextState",
+    value: function calculateAndDrawNextState() {
+      var _this = this;
+
+      for (var i = 0; i < this.size.rows; i++) {
+        for (var j = 0; j < this.size.cols; j++) {
+          var neighbours = this.neighbourhood(i, j, this.state, this.size.rows, this.size.cols);
+          var liveCount = 0;
+          neighbours.forEach(function (neighbour) {
+            if (neighbour === (0, _uitils.getNextState)(_this.state[i][j], _this.numStates)) {
+              liveCount++;
+            }
+          });
+
+          if (liveCount >= this.threshold) {
+            this.tempState[i][j] = (0, _uitils.getNextState)(this.state[i][j], this.numStates);
+            (0, _uitils.drawBlock)(this.drawingContext, i, j, this.blockSize, this.colors[this.tempState[i][j]]);
+          } else {
+            this.tempState[i][j] = this.state[i][j];
+          }
+        }
+      }
+
+      for (var i = 0; i < this.size.rows; i++) {
+        for (var j = 0; j < this.size.cols; j++) {
+          this.state[i][j] = this.tempState[i][j];
+        }
+      }
+    }
+  }]);
+
+  return CyclicCellularAutomata;
+}(_automaton.Automaton);
+
+exports.CyclicCellularAutomata = CyclicCellularAutomata;
+},{"./../libs/uitils.js":"libs/uitils.js","./automaton.js":"automata/automaton.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 require("./main.css");
@@ -602,19 +722,26 @@ var _colors = require("./libs/colors.js");
 
 var _conwaysGameOfLife = require("./automata/conwaysGameOfLife.js");
 
+var _cyclicCellularAutomata = require("./automata/cyclicCellularAutomata");
+
 var background = document.getElementById('background-canvas');
 var backgroundContext = background.getContext("2d");
 var greeting = document.getElementById('greeting');
+var info = document.getElementById('info');
 var animationRequest = undefined;
-var numDivs = 100;
+var numDivs = 200;
 var ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
 console.log(ColorIndex);
 var automaton;
+var automata = [];
 
 function initBackgroundAnimation() {
   greeting.style.background = _colors.ColorPalletes[ColorIndex].background;
   greeting.style.color = _colors.ColorPalletes[ColorIndex].foreground;
   greeting.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
+  info.style.background = _colors.ColorPalletes[ColorIndex].background;
+  info.style.color = _colors.ColorPalletes[ColorIndex].foreground;
+  info.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
 
   if (animationRequest != undefined) {
     window.cancelAnimationFrame(animationRequest);
@@ -648,11 +775,58 @@ function initBackgroundAnimation() {
   }
 
   blockSize = Math.round(blockSize);
-  automaton = new _conwaysGameOfLife.ConwaysGameOfLife(rows, cols, [_colors.ColorPalletes[ColorIndex].foreground, _colors.ColorPalletes[ColorIndex].background], backgroundContext, blockSize);
+  automata = [];
+  automata.push({
+    description: "Conway's game of life",
+    rule: undefined,
+    automaton: new _conwaysGameOfLife.ConwaysGameOfLife(rows, cols, [_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground], backgroundContext, blockSize, 2, _uitils.getMooreNeighbours)
+  });
+  automata.push({
+    description: "Cyclic cellular automaton",
+    rule: "R1/T1/C16/NM",
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getMooreNeighbours)
+  });
+  automata.push({
+    description: "Cyclic cellular automaton",
+    rule: "R1/T1/C16/NN",
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getNuemannNeighbours)
+  });
+  automata.push({
+    description: "Cyclic cellular automaton",
+    rule: "R1/T1/C16/NC",
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getCrossNeighbours)
+  });
+  automata.push({
+    description: "Cyclic cellular automaton",
+    rule: "R1/T3/C4/NM",
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 2), backgroundContext, blockSize, 4, 1, 3, _uitils.getMooreNeighbours)
+  });
+  automata.push({
+    description: "Cyclic cellular automaton",
+    rule: "R1/T3/C3/NM",
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 1), backgroundContext, blockSize, 3, 1, 3, _uitils.getMooreNeighbours)
+  });
+  var index = Math.floor(Math.random() * automata.length);
+  automaton = automata[index].automaton;
+
+  if (automata[index].rule != undefined) {
+    info.innerHTML = "".concat(automata[index].description, ", Rule : ").concat(automata[index].rule);
+  } else {
+    info.innerHTML = "".concat(automata[index].description);
+  }
+
   automaton.drawCurrentState();
+  var t1 = Date.now();
+  var t2 = Date.now();
 
   function live() {
-    automaton.calculateAndDrawNextState();
+    t2 = Date.now();
+
+    if (t2 - t1 >= 50) {
+      automaton.calculateAndDrawNextState();
+      t1 = Date.now();
+    }
+
     animationRequest = window.requestAnimationFrame(live);
   }
 
@@ -672,7 +846,7 @@ function onGreetingClicked() {
   ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
   initBackgroundAnimation();
 }
-},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/colors.js":"libs/colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/colors.js":"libs/colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js","./automata/cyclicCellularAutomata":"automata/cyclicCellularAutomata.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -700,7 +874,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56986" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50573" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

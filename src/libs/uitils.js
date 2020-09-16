@@ -2,50 +2,16 @@ export function getNuemannNeighbours(x, y, matrix, r, c) {
     var i = x;
     var j = y;
     var neigbours = [];
-    /* First row. */
-    if (i === 0) {
-      /* First element of first row. */
-      if (j === 0) {
-        neigbours.push(matrix[i][j + 1]);
-        neigbours.push(matrix[i + 1][j]);
-        /* Last element of the first row.*/
-      } else if (j === c - 1) {
-        neigbours.push(matrix[i + 1][j]);
-        neigbours.push(matrix[i][j - 1]);
-      } else {
-        neigbours.push(matrix[i][j + 1]);
-        neigbours.push(matrix[i + 1][j]);
-        neigbours.push(matrix[i][j - 1]);
-      }
-      /* Last row. */
-    } else if (i === r - 1) {
-      /* First element of last row. */
-      if (j === 0) {
-        neigbours.push(matrix[i - 1][j]);
-        neigbours.push(matrix[i][j + 1]);
-        /* Last element of the last row.*/
-      } else if (j === c - 1) {
-        neigbours.push(matrix[i - 1][j]);
-        neigbours.push(matrix[i][j - 1]);
-      } else {
-        neigbours.push(matrix[i - 1][j]);
-        neigbours.push(matrix[i][j + 1]);
-        neigbours.push(matrix[i][j - 1]);
-      }
-      /* First column */
-    } else if (j === 0) {
+    if(i-1 >= 0) {
       neigbours.push(matrix[i - 1][j]);
+    }
+    if(j+1 < c) {
       neigbours.push(matrix[i][j + 1]);
+    }
+    if(i+1 < r ) {
       neigbours.push(matrix[i + 1][j]);
-      /* Last column */
-    } else if (j === c - 1) {
-      neigbours.push(matrix[i + 1][j]);
-      neigbours.push(matrix[i + 1][j]);
-      neigbours.push(matrix[i][j - 1]);
-    } else {
-      neigbours.push(matrix[i - 1][j]);
-      neigbours.push(matrix[i][j + 1]);
-      neigbours.push(matrix[i + 1][j]);
+    }
+    if(j-1 >=0) {
       neigbours.push(matrix[i][j - 1]);
     }
     return neigbours;
@@ -55,42 +21,16 @@ export function getNuemannNeighbours(x, y, matrix, r, c) {
     var i = x;
     var j = y;
     var neigbours = [];
-    /* First row. */
-    if (i === 0) {
-      /* First element of first row. */
-      if (j === 0) {
-        neigbours.push(matrix[i + 1][j + 1]);
-        /* Last element of the first row.*/
-      } else if (j === c - 1) {
-        neigbours.push(matrix[i + 1][j - 1]);
-      } else {
-        neigbours.push(matrix[i + 1][j + 1]);
-        neigbours.push(matrix[i + 1][j - 1]);
-      }
-      /* Last row. */
-    } else if (i === r - 1) {
-      /* First element of last row. */
-      if (j === 0) {
-        neigbours.push(matrix[i - 1][j + 1]);
-        /* Last element of the last row.*/
-      } else if (j === c - 1) {
-        neigbours.push(matrix[i - 1][j - 1]);
-      } else {
-        neigbours.push(matrix[i - 1][j - 1]);
-        neigbours.push(matrix[i - 1][j + 1]);
-      }
-      /* First column */
-    } else if (j === 0) {
-      neigbours.push(matrix[i - 1][j + 1]);
-      neigbours.push(matrix[i + 1][j + 1]);
-      /* Last column */
-    } else if (j === c - 1) {
+    if(i-1 >= 0 && j-1 >= 0) {
       neigbours.push(matrix[i - 1][j - 1]);
-      neigbours.push(matrix[i + 1][j - 1]);
-    } else {
-      neigbours.push(matrix[i - 1][j - 1]);
+    }
+    if(i-1 >= 0 && j+1 < c) {
       neigbours.push(matrix[i - 1][j + 1]);
+    }
+    if(i+1 < r && j+1 < c) {
       neigbours.push(matrix[i + 1][j + 1]);
+    }
+    if(i+1 < r && j-1 >=0) {
       neigbours.push(matrix[i + 1][j - 1]);
     }
     return neigbours;
@@ -181,20 +121,10 @@ export function getNuemannNeighbours(x, y, matrix, r, c) {
     context.fill();
 }
 
-export function drawBooleanState(context, automataState, r, c, bsize, fg, bg) {
+export function drawState(context, automataState, r, c, bsize, colors) {
   for(var i = 0; i < r; i++) {
       for(var j = 0; j < c; j ++) {
-          if(automataState[i][j] == true) {
-              context.beginPath();
-              context.fillStyle = fg;
-              context.rect(bsize * j , bsize * i , bsize, bsize);
-              context.fill();
-          } else {
-              context.beginPath();
-              context.fillStyle = bg;
-              context.rect(bsize * j , bsize * i , bsize , bsize );
-              context.fill();
-          }
+          drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
       }
   }
 }
@@ -205,4 +135,41 @@ export function drawBlock(context, x, y, blockSize, color) {
   context.lineWidth = 0; 
   context.rect(blockSize * y , blockSize * x , blockSize, blockSize);
   context.fill();
+}
+
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+export function getGradientStops(startColor, endColor, numStops) {
+  var startRGB = hexToRgb(startColor);
+  var endRGB = hexToRgb(endColor);
+  var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
+  var gStep = Math.floor(Math.abs(startRGB.g - endRGB.g) / numStops);
+  var bStep = Math.floor(Math.abs(startRGB.b - endRGB.b) / numStops);
+  var colors = [];
+  colors.push(hexToRgb(startColor));
+  var s = colors[colors.length - 1];
+  for(var i = 0; i < numStops; i++){
+    var c = { r: s.r + rStep, g: s.g + gStep, b: s.b+ bStep };
+    colors.push(c);
+    s = colors[colors.length - 1];
+  }
+  colors.push(hexToRgb(endColor))
+  colors = colors.map(c=> rgbToHex(c.r, c.g, c.b));
+  return colors;
 }
