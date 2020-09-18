@@ -6,27 +6,21 @@ import { CyclicCellularAutomata } from './automata/cyclicCellularAutomata';
 
 var background = document.getElementById('background-canvas');
 var backgroundContext = background.getContext("2d");
-var greeting = document.getElementById('greeting');
 var info = document.getElementById('info');
 var fpsInfo = document.getElementById('fps');
 var animationRequest  = undefined;
 var numDivs = 150;
+var prevColorIndex = 0;
 var ColorIndex = Math.floor(Math.random() * ColorPalletes.length) + 0;
+var prevAutomatonIndex =0;
+var automatonIndex = 0;
 console.log(ColorIndex);
 var automaton;
 var automata = [];
 
 
 function initBackgroundAnimation() {
-    greeting.style.background = ColorPalletes[ColorIndex].background;
-    greeting.style.color = ColorPalletes[ColorIndex].foreground;
-    greeting.style.borderColor = ColorPalletes[ColorIndex].foreground;
-    info.style.background = ColorPalletes[ColorIndex].background;
-    info.style.color = ColorPalletes[ColorIndex].foreground;
-    info.style.borderColor = ColorPalletes[ColorIndex].foreground;
-    fpsInfo.style.background = ColorPalletes[ColorIndex].background;
-    fpsInfo.style.color = ColorPalletes[ColorIndex].foreground;
-    fpsInfo.style.borderColor = ColorPalletes[ColorIndex].foreground;
+    applyStyle();
     if(animationRequest != undefined) {
         window.cancelAnimationFrame(animationRequest);
     }   
@@ -63,12 +57,15 @@ function initBackgroundAnimation() {
     automata.push( { description : "Cyclic cellular automaton", rule : "R1/T3/C4/NM", automaton : new CyclicCellularAutomata(rows, cols, getGradientStops(ColorPalletes[ColorIndex].background, ColorPalletes[ColorIndex].foreground, 2), backgroundContext, blockSize, 4, 1, 3, getMooreNeighbours) });
     automata.push( { description : "Cyclic cellular automaton", rule : "R1/T3/C3/NM", automaton : new CyclicCellularAutomata(rows, cols, getGradientStops(ColorPalletes[ColorIndex].background, ColorPalletes[ColorIndex].foreground, 1), backgroundContext, blockSize, 3, 1, 3, getMooreNeighbours) });
 
-    var index = Math.floor( Math.random() * automata.length);
-    automaton = automata[index].automaton;
-    if(automata[index].rule != undefined) {
-        info.innerHTML = `${automata[index].description}, Rule : ${automata[index].rule}`;
+    while(automatonIndex == prevAutomatonIndex) {
+         automatonIndex = Math.floor( Math.random() * automata.length);
+    }
+    prevAutomatonIndex = automatonIndex;
+    automaton = automata[automatonIndex].automaton;
+    if(automata[automatonIndex].rule != undefined) {
+        info.innerHTML = `${automata[automatonIndex].description}, Rule : ${automata[automatonIndex].rule}`;
     } else {
-        info.innerHTML = `${automata[index].description}`;
+        info.innerHTML = `${automata[automatonIndex].description}`;
     }
     automaton.drawCurrentState();
     var t1 = Date.now();
@@ -104,6 +101,74 @@ function handleResize() {
 
 window.onGreetingClicked = onGreetingClicked;
 function onGreetingClicked(){
-    ColorIndex = Math.floor(Math.random() * ColorPalletes.length) + 0;
+    while(ColorIndex == prevColorIndex) {
+         ColorIndex = Math.floor(Math.random() * ColorPalletes.length) + 0;
+    }
+    prevColorIndex = ColorIndex;
     initBackgroundAnimation();
+}
+
+window.showWorks = showWorks;
+function showWorks(event) {
+    var works = document.getElementById("works");
+    if(works.classList.contains("fade-out"))
+    {
+        works.classList.remove("fade-out");
+        works.classList.add("fade-in");
+    }
+    event.stopPropagation();
+}
+
+window.closeWorks = closeWorks;
+function closeWorks(event) {
+    console.log(event);
+    var works = document.getElementById("works");
+    if(works.classList.contains("fade-in"))
+    {
+        works.classList.remove("fade-in");
+        works.classList.add("fade-out");
+    }
+    event.stopPropagation();
+}
+
+function applyStyle() {
+
+    var pixelDivs = document.getElementsByClassName("pixel-div");
+    for(let pd of pixelDivs) {
+        pd.style.background = ColorPalletes[ColorIndex].background;
+        pd.style.color = ColorPalletes[ColorIndex].foreground;
+        pd.style.borderColor = ColorPalletes[ColorIndex].foreground;
+    }
+
+    var pixelButtons = document.getElementsByClassName("pixel-button");
+    for(let pb of pixelButtons) {
+        
+        pb.style.background = ColorPalletes[ColorIndex].background;
+        pb.style.color = ColorPalletes[ColorIndex].foreground;
+        pb.style.borderColor = ColorPalletes[ColorIndex].foreground;
+        
+        pb.onmouseover = undefined;
+        pb.onmouseover = function () {
+            pb.style.background = ColorPalletes[ColorIndex].foreground;
+            pb.style.color = ColorPalletes[ColorIndex].background;
+        };
+        
+        pb.onmouseout = undefined;
+        pb.onmouseout = function () {
+            pb.style.background = ColorPalletes[ColorIndex].background;
+            pb.style.color = ColorPalletes[ColorIndex].foreground;
+        };
+        
+        pb.onmousedown = undefined;
+        pb.onmousedown = function () {
+            pb.style.background = ColorPalletes[ColorIndex].background;
+            pb.style.color = ColorPalletes[ColorIndex].foreground;
+        };
+        
+        pb.onmouseup = undefined;
+        pb.onmouseup = function () {
+            pb.style.background = ColorPalletes[ColorIndex].foreground;
+            pb.style.color = ColorPalletes[ColorIndex].background;
+        };
+    }
 }

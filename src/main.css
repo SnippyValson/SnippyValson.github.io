@@ -7,42 +7,82 @@ body {
     height: 100vh;
 }
 
+.center-h-container {
+    width: 100%;
+    text-align: center;
+}
+
 .center-div {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 32px;
     position: absolute;
     left: 50%;
     top: 50%;
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    border: 2px solid #96b0fc;
-    color: #96b0fc;
-    background: #263862;
     padding: 25px;
 }
 
 .bottom-left {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 16px;
     position: absolute;
     left: 10px;
     top: calc(100vh - 80px);
-    border: 2px solid #96b0fc;
-    color: #96b0fc;
-    background: #263862;
     padding: 25px;
 }
 
 .bottom-right {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 16px;
     position: absolute;
     left: calc(100vw - 160px);
     top: calc(100vh - 80px);
-    border: 2px solid #96b0fc;
-    color: #96b0fc;
-    background: #263862;
     padding: 25px;
+}
+
+.top-right {
+    float: right;
+}
+
+.pixel-div {
+    border: 2px solid;
+}
+
+.pixel-text-big {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 32px;
+}
+
+.pixel-text-medium {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+}
+
+.pixel-button {
+    border: 2px solid;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    padding: 20px;
+}
+
+.pixel-button:active {
+    outline: none;
+}
+
+.pixel-button:focus {
+    outline: none;
+}
+
+.pixel-dialog {
+    min-width: 500px;
+    min-height: 500px;
+}
+
+.fade-in {
+    opacity: 1;
+    transition: 0.2s opacity;
+    z-index: 1;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: 0.2s opacity;
+    z-index: -1;
 }
 
 .unselectable {

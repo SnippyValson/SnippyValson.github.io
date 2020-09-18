@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,12 +184,12 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/uitils.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/uitils.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -724,28 +724,28 @@ var _conwaysGameOfLife = require("./automata/conwaysGameOfLife.js");
 
 var _cyclicCellularAutomata = require("./automata/cyclicCellularAutomata");
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 var background = document.getElementById('background-canvas');
 var backgroundContext = background.getContext("2d");
-var greeting = document.getElementById('greeting');
 var info = document.getElementById('info');
 var fpsInfo = document.getElementById('fps');
 var animationRequest = undefined;
 var numDivs = 150;
+var prevColorIndex = 0;
 var ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
+var prevAutomatonIndex = 0;
+var automatonIndex = 0;
 console.log(ColorIndex);
 var automaton;
 var automata = [];
 
 function initBackgroundAnimation() {
-  greeting.style.background = _colors.ColorPalletes[ColorIndex].background;
-  greeting.style.color = _colors.ColorPalletes[ColorIndex].foreground;
-  greeting.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
-  info.style.background = _colors.ColorPalletes[ColorIndex].background;
-  info.style.color = _colors.ColorPalletes[ColorIndex].foreground;
-  info.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
-  fpsInfo.style.background = _colors.ColorPalletes[ColorIndex].background;
-  fpsInfo.style.color = _colors.ColorPalletes[ColorIndex].foreground;
-  fpsInfo.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
+  applyStyle();
 
   if (animationRequest != undefined) {
     window.cancelAnimationFrame(animationRequest);
@@ -810,13 +810,18 @@ function initBackgroundAnimation() {
     rule: "R1/T3/C3/NM",
     automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 1), backgroundContext, blockSize, 3, 1, 3, _uitils.getMooreNeighbours)
   });
-  var index = Math.floor(Math.random() * automata.length);
-  automaton = automata[index].automaton;
 
-  if (automata[index].rule != undefined) {
-    info.innerHTML = "".concat(automata[index].description, ", Rule : ").concat(automata[index].rule);
+  while (automatonIndex == prevAutomatonIndex) {
+    automatonIndex = Math.floor(Math.random() * automata.length);
+  }
+
+  prevAutomatonIndex = automatonIndex;
+  automaton = automata[automatonIndex].automaton;
+
+  if (automata[automatonIndex].rule != undefined) {
+    info.innerHTML = "".concat(automata[automatonIndex].description, ", Rule : ").concat(automata[automatonIndex].rule);
   } else {
-    info.innerHTML = "".concat(automata[index].description);
+    info.innerHTML = "".concat(automata[automatonIndex].description);
   }
 
   automaton.drawCurrentState();
@@ -858,10 +863,110 @@ function handleResize() {
 window.onGreetingClicked = onGreetingClicked;
 
 function onGreetingClicked() {
-  ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
+  while (ColorIndex == prevColorIndex) {
+    ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
+  }
+
+  prevColorIndex = ColorIndex;
   initBackgroundAnimation();
 }
-},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/colors.js":"libs/colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js","./automata/cyclicCellularAutomata":"automata/cyclicCellularAutomata.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+window.showWorks = showWorks;
+
+function showWorks(event) {
+  var works = document.getElementById("works");
+
+  if (works.classList.contains("fade-out")) {
+    works.classList.remove("fade-out");
+    works.classList.add("fade-in");
+  }
+
+  event.stopPropagation();
+}
+
+window.closeWorks = closeWorks;
+
+function closeWorks(event) {
+  console.log(event);
+  var works = document.getElementById("works");
+
+  if (works.classList.contains("fade-in")) {
+    works.classList.remove("fade-in");
+    works.classList.add("fade-out");
+  }
+
+  event.stopPropagation();
+}
+
+function applyStyle() {
+  var pixelDivs = document.getElementsByClassName("pixel-div");
+
+  var _iterator = _createForOfIteratorHelper(pixelDivs),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var pd = _step.value;
+      pd.style.background = _colors.ColorPalletes[ColorIndex].background;
+      pd.style.color = _colors.ColorPalletes[ColorIndex].foreground;
+      pd.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  var pixelButtons = document.getElementsByClassName("pixel-button");
+
+  var _iterator2 = _createForOfIteratorHelper(pixelButtons),
+      _step2;
+
+  try {
+    var _loop = function _loop() {
+      var pb = _step2.value;
+      pb.style.background = _colors.ColorPalletes[ColorIndex].background;
+      pb.style.color = _colors.ColorPalletes[ColorIndex].foreground;
+      pb.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
+      pb.onmouseover = undefined;
+
+      pb.onmouseover = function () {
+        pb.style.background = _colors.ColorPalletes[ColorIndex].foreground;
+        pb.style.color = _colors.ColorPalletes[ColorIndex].background;
+      };
+
+      pb.onmouseout = undefined;
+
+      pb.onmouseout = function () {
+        pb.style.background = _colors.ColorPalletes[ColorIndex].background;
+        pb.style.color = _colors.ColorPalletes[ColorIndex].foreground;
+      };
+
+      pb.onmousedown = undefined;
+
+      pb.onmousedown = function () {
+        pb.style.background = _colors.ColorPalletes[ColorIndex].background;
+        pb.style.color = _colors.ColorPalletes[ColorIndex].foreground;
+      };
+
+      pb.onmouseup = undefined;
+
+      pb.onmouseup = function () {
+        pb.style.background = _colors.ColorPalletes[ColorIndex].foreground;
+        pb.style.color = _colors.ColorPalletes[ColorIndex].background;
+      };
+    };
+
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      _loop();
+    }
+  } catch (err) {
+    _iterator2.e(err);
+  } finally {
+    _iterator2.f();
+  }
+}
+},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/colors.js":"libs/colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js","./automata/cyclicCellularAutomata":"automata/cyclicCellularAutomata.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -889,7 +994,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53527" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50573" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -1065,5 +1170,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
+},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.js"], null)
 //# sourceMappingURL=/main.1f19ae8e.js.map
