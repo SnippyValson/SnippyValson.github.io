@@ -452,7 +452,213 @@ ColorPalletes.push({
   background: '#2f4650',
   foreground: '#91eddf'
 });
-},{}],"automata/automaton.js":[function(require,module,exports) {
+},{}],"libs/style.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Style = void 0;
+
+var _colors = require("./colors.js");
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Style = /*#__PURE__*/function () {
+  function Style() {
+    _classCallCheck(this, Style);
+
+    _defineProperty(this, "colorIndex", void 0);
+
+    _defineProperty(this, "prevColorIndex", void 0);
+
+    this.colorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
+  }
+
+  _createClass(Style, [{
+    key: "getCurrentPallet",
+    value: function getCurrentPallet() {
+      return _colors.ColorPalletes[this.colorIndex];
+    }
+  }, {
+    key: "calculateNextPallet",
+    value: function calculateNextPallet() {
+      while (this.colorIndex == this.prevColorIndex) {
+        this.colorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
+      }
+
+      this.prevColorIndex = this.colorIndex;
+    }
+  }, {
+    key: "applyStyle",
+    value: function applyStyle() {
+      var _this = this;
+
+      var pixelDivs = document.getElementsByClassName("pixel-div");
+
+      var _iterator = _createForOfIteratorHelper(pixelDivs),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var pd = _step.value;
+          pd.style.background = _colors.ColorPalletes[this.colorIndex].background;
+          pd.style.color = _colors.ColorPalletes[this.colorIndex].foreground;
+          pd.style.borderColor = _colors.ColorPalletes[this.colorIndex].foreground;
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      var pixelBodies = document.getElementsByClassName("pixel-body");
+
+      var _iterator2 = _createForOfIteratorHelper(pixelBodies),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var pbd = _step2.value;
+          pbd.style.background = _colors.ColorPalletes[this.colorIndex].background;
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+
+      var pixelInputs = document.getElementsByClassName("pixel-input");
+
+      if (pixelInputs.length > 0) {
+        var _iterator3 = _createForOfIteratorHelper(pixelInputs),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var pi = _step3.value;
+            pi.style.backgroundColor = _colors.ColorPalletes[this.colorIndex].background;
+            pi.style.color = _colors.ColorPalletes[this.colorIndex].foreground;
+            pi.style.borderColor = _colors.ColorPalletes[this.colorIndex].foreground;
+          }
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+      }
+
+      var pixelTextm = document.getElementsByClassName("pixel-text-medium");
+
+      if (pixelTextm.length > 0) {
+        var _iterator4 = _createForOfIteratorHelper(pixelTextm),
+            _step4;
+
+        try {
+          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+            var pt = _step4.value;
+            pt.style.backgroundColor = _colors.ColorPalletes[this.colorIndex].background;
+            pt.style.color = _colors.ColorPalletes[this.colorIndex].foreground;
+            pt.style.borderColor = _colors.ColorPalletes[this.colorIndex].foreground;
+          }
+        } catch (err) {
+          _iterator4.e(err);
+        } finally {
+          _iterator4.f();
+        }
+      }
+
+      var pixelTexts = document.getElementsByClassName("pixel-text-small");
+
+      if (pixelTexts.length > 0) {
+        var _iterator5 = _createForOfIteratorHelper(pixelTexts),
+            _step5;
+
+        try {
+          for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+            var _pt = _step5.value;
+            _pt.style.backgroundColor = _colors.ColorPalletes[this.colorIndex].background;
+            _pt.style.color = _colors.ColorPalletes[this.colorIndex].foreground;
+            _pt.style.borderColor = _colors.ColorPalletes[this.colorIndex].foreground;
+          }
+        } catch (err) {
+          _iterator5.e(err);
+        } finally {
+          _iterator5.f();
+        }
+      }
+
+      var pixelButtons = document.getElementsByClassName("pixel-button");
+
+      var _iterator6 = _createForOfIteratorHelper(pixelButtons),
+          _step6;
+
+      try {
+        var _loop = function _loop() {
+          var pb = _step6.value;
+          pb.style.background = _colors.ColorPalletes[_this.colorIndex].background;
+          pb.style.color = _colors.ColorPalletes[_this.colorIndex].foreground;
+          pb.style.borderColor = _colors.ColorPalletes[_this.colorIndex].foreground;
+          colorIndex = _this.colorIndex;
+          pb.onmouseover = undefined;
+
+          pb.onmouseover = function () {
+            pb.style.background = _colors.ColorPalletes[colorIndex].foreground;
+            pb.style.color = _colors.ColorPalletes[colorIndex].background;
+          };
+
+          pb.onmouseout = undefined;
+
+          pb.onmouseout = function () {
+            pb.style.background = _colors.ColorPalletes[colorIndex].background;
+            pb.style.color = _colors.ColorPalletes[colorIndex].foreground;
+          };
+
+          pb.onmousedown = undefined;
+
+          pb.onmousedown = function () {
+            pb.style.background = _colors.ColorPalletes[colorIndex].background;
+            pb.style.color = _colors.ColorPalletes[colorIndex].foreground;
+          };
+
+          pb.onmouseup = undefined;
+
+          pb.onmouseup = function () {
+            pb.style.background = _colors.ColorPalletes[colorIndex].foreground;
+            pb.style.color = _colors.ColorPalletes[colorIndex].background;
+          };
+        };
+
+        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+          var colorIndex;
+
+          _loop();
+        }
+      } catch (err) {
+        _iterator6.e(err);
+      } finally {
+        _iterator6.f();
+      }
+    }
+  }]);
+
+  return Style;
+}();
+
+exports.Style = Style;
+},{"./colors.js":"libs/colors.js"}],"automata/automaton.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -718,17 +924,11 @@ require("./main.css");
 
 var _uitils = require("./libs/uitils.js");
 
-var _colors = require("./libs/colors.js");
+var _style = require("./libs/style");
 
 var _conwaysGameOfLife = require("./automata/conwaysGameOfLife.js");
 
 var _cyclicCellularAutomata = require("./automata/cyclicCellularAutomata");
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var background = document.getElementById('background-canvas');
 var backgroundContext = background.getContext("2d");
@@ -736,16 +936,14 @@ var info = document.getElementById('info');
 var fpsInfo = document.getElementById('fps');
 var animationRequest = undefined;
 var numDivs = 150;
-var prevColorIndex = 0;
-var ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
 var prevAutomatonIndex = 0;
 var automatonIndex = 0;
-console.log(ColorIndex);
 var automaton;
 var automata = [];
+var style = new _style.Style();
 
 function initBackgroundAnimation() {
-  applyStyle();
+  style.applyStyle();
 
   if (animationRequest != undefined) {
     window.cancelAnimationFrame(animationRequest);
@@ -755,7 +953,7 @@ function initBackgroundAnimation() {
   var height = document.body.clientHeight;
   background.width = width;
   background.height = height;
-  (0, _uitils.fillBackground)(backgroundContext, _colors.ColorPalletes[ColorIndex].background, width, height);
+  (0, _uitils.fillBackground)(backgroundContext, style.getCurrentPallet().background, width, height);
   var blockSize = 0;
   var rows = 0;
   var cols = 0;
@@ -783,32 +981,32 @@ function initBackgroundAnimation() {
   automata.push({
     description: "Conway's game of life",
     rule: undefined,
-    automaton: new _conwaysGameOfLife.ConwaysGameOfLife(rows, cols, [_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground], backgroundContext, blockSize, 2, _uitils.getMooreNeighbours)
+    automaton: new _conwaysGameOfLife.ConwaysGameOfLife(rows, cols, [style.getCurrentPallet().background, style.getCurrentPallet().foreground], backgroundContext, blockSize, 2, _uitils.getMooreNeighbours)
   });
   automata.push({
     description: "Cyclic cellular automaton",
     rule: "R1/T1/C16/NM",
-    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getMooreNeighbours)
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getMooreNeighbours)
   });
   automata.push({
     description: "Cyclic cellular automaton",
     rule: "R1/T1/C16/NN",
-    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getNuemannNeighbours)
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getNuemannNeighbours)
   });
   automata.push({
     description: "Cyclic cellular automaton",
     rule: "R1/T1/C16/NC",
-    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getCrossNeighbours)
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, 14), backgroundContext, blockSize, 16, 1, 1, _uitils.getCrossNeighbours)
   });
   automata.push({
     description: "Cyclic cellular automaton",
     rule: "R1/T3/C4/NM",
-    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 2), backgroundContext, blockSize, 4, 1, 3, _uitils.getMooreNeighbours)
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, 2), backgroundContext, blockSize, 4, 1, 3, _uitils.getMooreNeighbours)
   });
   automata.push({
     description: "Cyclic cellular automaton",
     rule: "R1/T3/C3/NM",
-    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(_colors.ColorPalletes[ColorIndex].background, _colors.ColorPalletes[ColorIndex].foreground, 1), backgroundContext, blockSize, 3, 1, 3, _uitils.getMooreNeighbours)
+    automaton: new _cyclicCellularAutomata.CyclicCellularAutomata(rows, cols, (0, _uitils.getGradientStops)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, 1), backgroundContext, blockSize, 3, 1, 3, _uitils.getMooreNeighbours)
   });
 
   while (automatonIndex == prevAutomatonIndex) {
@@ -863,11 +1061,7 @@ function handleResize() {
 window.onGreetingClicked = onGreetingClicked;
 
 function onGreetingClicked() {
-  while (ColorIndex == prevColorIndex) {
-    ColorIndex = Math.floor(Math.random() * _colors.ColorPalletes.length) + 0;
-  }
-
-  prevColorIndex = ColorIndex;
+  style.calculateNextPallet();
   initBackgroundAnimation();
 }
 
@@ -897,76 +1091,7 @@ function closeWorks(event) {
 
   event.stopPropagation();
 }
-
-function applyStyle() {
-  var pixelDivs = document.getElementsByClassName("pixel-div");
-
-  var _iterator = _createForOfIteratorHelper(pixelDivs),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var pd = _step.value;
-      pd.style.background = _colors.ColorPalletes[ColorIndex].background;
-      pd.style.color = _colors.ColorPalletes[ColorIndex].foreground;
-      pd.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  var pixelButtons = document.getElementsByClassName("pixel-button");
-
-  var _iterator2 = _createForOfIteratorHelper(pixelButtons),
-      _step2;
-
-  try {
-    var _loop = function _loop() {
-      var pb = _step2.value;
-      pb.style.background = _colors.ColorPalletes[ColorIndex].background;
-      pb.style.color = _colors.ColorPalletes[ColorIndex].foreground;
-      pb.style.borderColor = _colors.ColorPalletes[ColorIndex].foreground;
-      pb.onmouseover = undefined;
-
-      pb.onmouseover = function () {
-        pb.style.background = _colors.ColorPalletes[ColorIndex].foreground;
-        pb.style.color = _colors.ColorPalletes[ColorIndex].background;
-      };
-
-      pb.onmouseout = undefined;
-
-      pb.onmouseout = function () {
-        pb.style.background = _colors.ColorPalletes[ColorIndex].background;
-        pb.style.color = _colors.ColorPalletes[ColorIndex].foreground;
-      };
-
-      pb.onmousedown = undefined;
-
-      pb.onmousedown = function () {
-        pb.style.background = _colors.ColorPalletes[ColorIndex].background;
-        pb.style.color = _colors.ColorPalletes[ColorIndex].foreground;
-      };
-
-      pb.onmouseup = undefined;
-
-      pb.onmouseup = function () {
-        pb.style.background = _colors.ColorPalletes[ColorIndex].foreground;
-        pb.style.color = _colors.ColorPalletes[ColorIndex].background;
-      };
-    };
-
-    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-      _loop();
-    }
-  } catch (err) {
-    _iterator2.e(err);
-  } finally {
-    _iterator2.f();
-  }
-}
-},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/colors.js":"libs/colors.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js","./automata/cyclicCellularAutomata":"automata/cyclicCellularAutomata.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./main.css":"main.css","./libs/uitils.js":"libs/uitils.js","./libs/style":"libs/style.js","./automata/conwaysGameOfLife.js":"automata/conwaysGameOfLife.js","./automata/cyclicCellularAutomata":"automata/cyclicCellularAutomata.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -994,7 +1119,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50573" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62758" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

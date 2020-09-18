@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-body {
+.pixel-body {
     padding: 0;
     margin: 0;
     width: 100vw;
@@ -53,6 +53,12 @@ body {
     font-size: 16px;
 }
 
+.pixel-text-small {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 12px;
+}
+
+
 .pixel-button {
     border: 2px solid;
     font-family: 'Press Start 2P', cursive;
@@ -71,6 +77,15 @@ body {
 .pixel-dialog {
     min-width: 500px;
     min-height: 500px;
+}
+
+.pixel-input {
+    height: 30px;
+    border: 2px solid;
+}
+
+.pixel-input:focus {
+    outline: none;
 }
 
 .fade-in {

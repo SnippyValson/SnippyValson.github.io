@@ -9,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "gpu.js": "^2.10.1"
+    "colors.js": "^1.2.4",
+    "gpu.js": "^2.10.1",
+    "three": "^0.120.1",
+    "three-orbit-controls": "^82.1.0",
+    "three.js": "^0.77.1"
   }
 }

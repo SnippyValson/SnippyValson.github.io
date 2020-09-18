@@ -1,0 +1,26 @@
+#threeview {
+    margin: 0;
+    width: calc(100vw - 300px);
+    height: calc(100vh - 300px);
+    padding: 0px;
+    background: rgb(34,17,80);
+    background: linear-gradient(185deg, rgba(34,17,80,1) 8%, rgba(205,100,165,1) 100%);
+}
+
+.top-bar {
+    position: absolute;
+    top: 50px;
+    left: 125px;
+}
+
+#fps-label {
+    margin-left: 50px;
+}
+
+#update-button {
+    margin-left: 50px;
+}
+
+#info-label {
+    margin-left: 20px;
+}

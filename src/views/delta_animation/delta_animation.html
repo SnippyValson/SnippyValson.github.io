@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body class="pixel-body">
+    <div class="top-bar">
+        <a class="pixel-button" href="./../../index.html">Home</a>
+        <label class="pixel-text-medium" id="fps-label">FPS : </label>
+        <input class="pixel-input pixel-text-medium" id="fps-input" value="60"/>
+        <button class="pixel-button" id="update-button" onclick="onUpdateClicked()">Update</button>
+        <label class="pixel-text-small" id="info-label">Note : On the left is the frame controlled animation, on the right time cntrolled animation.</label>
+    </div>
+    <div class="center-div pixel-div">
+        <div id="threeview"></div>
+    </div>
+    <div class="bottom-right unselectable pixel-div pixel-text-medium" id="fps">    
+    </div>
+    <script src="delta_animation.js"></script>
+</body>
+</html>
