@@ -17,6 +17,10 @@
     margin-left: 50px;
 }
 
+#fps-input {
+    padding-left: 10px;
+}
+
 #update-button {
     margin-left: 50px;
 }
