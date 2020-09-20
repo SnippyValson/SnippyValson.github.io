@@ -1,139 +1,138 @@
 export function getNuemannNeighbours(x, y, matrix, r, c) {
-    var i = x;
-    var j = y;
-    var neigbours = [];
-    if(i-1 >= 0) {
-      neigbours.push(matrix[i - 1][j]);
-    }
-    if(j+1 < c) {
-      neigbours.push(matrix[i][j + 1]);
-    }
-    if(i+1 < r ) {
-      neigbours.push(matrix[i + 1][j]);
-    }
-    if(j-1 >=0) {
-      neigbours.push(matrix[i][j - 1]);
-    }
-    return neigbours;
+  var i = x;
+  var j = y;
+  var neigbours = [];
+  if (i - 1 >= 0) {
+    neigbours.push(matrix[i - 1][j]);
   }
-  
-  export function getCrossNeighbours(x, y, matrix, r, c) {
-    var i = x;
-    var j = y;
-    var neigbours = [];
-    if(i-1 >= 0 && j-1 >= 0) {
+  if (j + 1 < c) {
+    neigbours.push(matrix[i][j + 1]);
+  }
+  if (i + 1 < r) {
+    neigbours.push(matrix[i + 1][j]);
+  }
+  if (j - 1 >= 0) {
+    neigbours.push(matrix[i][j - 1]);
+  }
+  return neigbours;
+}
+
+export function getCrossNeighbours(x, y, matrix, r, c) {
+  var i = x;
+  var j = y;
+  var neigbours = [];
+  if (i - 1 >= 0 && j - 1 >= 0) {
+    neigbours.push(matrix[i - 1][j - 1]);
+  }
+  if (i - 1 >= 0 && j + 1 < c) {
+    neigbours.push(matrix[i - 1][j + 1]);
+  }
+  if (i + 1 < r && j + 1 < c) {
+    neigbours.push(matrix[i + 1][j + 1]);
+  }
+  if (i + 1 < r && j - 1 >= 0) {
+    neigbours.push(matrix[i + 1][j - 1]);
+  }
+  return neigbours;
+}
+
+export function getMooreNeighbours(x, y, matrix, r, c) {
+  var i = x;
+  var j = y;
+  var neigbours = [];
+  try {
+    if (i - 1 >= 0 && j - 1 >= 0) {
       neigbours.push(matrix[i - 1][j - 1]);
     }
-    if(i-1 >= 0 && j+1 < c) {
+    if (i - 1 >= 0) {
+      neigbours.push(matrix[i - 1][j]);
+    }
+    if (i - 1 >= 0 && j + 1 < c) {
       neigbours.push(matrix[i - 1][j + 1]);
     }
-    if(i+1 < r && j+1 < c) {
+    if (j + 1 < c) {
+      neigbours.push(matrix[i][j + 1]);
+    }
+    if (i + 1 < r && j + 1 < c) {
       neigbours.push(matrix[i + 1][j + 1]);
     }
-    if(i+1 < r && j-1 >=0) {
+    if (i + 1 < r) {
+      neigbours.push(matrix[i + 1][j]);
+    }
+    if (i + 1 < r && j - 1 >= 0) {
       neigbours.push(matrix[i + 1][j - 1]);
     }
-    return neigbours;
-  }
-  
-  export function getMooreNeighbours(x, y, matrix, r, c) {
-    var i = x;
-    var j = y;
-    var neigbours = [];
-    try{
-        if(i-1 >= 0 && j-1 >= 0) {
-            neigbours.push(matrix[i - 1][j - 1]);
-        }
-        if(i-1 >= 0) {
-            neigbours.push(matrix[i - 1][j]);
-        }
-        if(i-1 >= 0 && j+1 < c) {
-            neigbours.push(matrix[i - 1][j + 1]);
-        }
-        if(j+1 < c) {
-            neigbours.push(matrix[i][j + 1]);
-        }
-        if(i+1 < r && j+1 < c) {
-            neigbours.push(matrix[i + 1][j + 1]);
-        }
-        if(i+1 < r ) {
-            neigbours.push(matrix[i + 1][j]);
-        }
-        if(i+1 < r && j-1 >=0) {
-            neigbours.push(matrix[i + 1][j - 1]);
-        }
-        if(j-1 >=0) {
-            neigbours.push(matrix[i][j - 1]);
-        }
-    } catch(e){
+    if (j - 1 >= 0) {
+      neigbours.push(matrix[i][j - 1]);
+    }
+  } catch (e) {
 
-    }
-    return neigbours;
   }
-  
-  export function getMooreNeighboursWrap(x, y, matrix, r, c) {
-    var i = x;
-    var j = y;
-    var neigbours = [];
-    try{
-        neigbours.push(matrix[(i - 1 + r) % r][(j - 1 + c) % c]);
-        neigbours.push(matrix[(i - 1 + r) % r][j]);
-        neigbours.push(matrix[(i - 1 + r) % r][(j + 1 + c) % c]);
-        neigbours.push(matrix[i][(j + 1 + c) % c]);
-        neigbours.push(matrix[(i + 1 + r) % r][(j + 1 + c) % c]);
-        neigbours.push(matrix[(i + 1 + r) % r][j]);
-        neigbours.push(matrix[(i + 1 + r) % r][(j - 1 + c) % c]);
-        neigbours.push(matrix[i][(j - 1 + c) % c]);
-    }
-    catch(e) {
+  return neigbours;
+}
 
-    }
-    return neigbours;
-  }
+export function getMooreNeighboursWrap(x, y, matrix, r, c) {
+  var i = x;
+  var j = y;
+  var neigbours = [];
+  try {
+    neigbours.push(matrix[(i - 1 + r) % r][(j - 1 + c) % c]);
+    neigbours.push(matrix[(i - 1 + r) % r][j]);
+    neigbours.push(matrix[(i - 1 + r) % r][(j + 1 + c) % c]);
+    neigbours.push(matrix[i][(j + 1 + c) % c]);
+    neigbours.push(matrix[(i + 1 + r) % r][(j + 1 + c) % c]);
+    neigbours.push(matrix[(i + 1 + r) % r][j]);
+    neigbours.push(matrix[(i + 1 + r) % r][(j - 1 + c) % c]);
+    neigbours.push(matrix[i][(j - 1 + c) % c]);
+  } catch (e) {
 
-  export function getRandomColor() {
-    var letters = "0123456789ABCDEF";
-    var color = "#";
-    for (var i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
   }
-  
-  export let Array2D = (r, c) => [...Array(r)].map((x) => Array(c).fill(0));
-  
-  export function rand(min, max) {
-    return (
-      (Math.floor(Math.pow(10, 14) * Math.random() * Math.random()) %
-        (max - min + 1)) +
-      min
-    );
+  return neigbours;
+}
+
+export function getRandomColor() {
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
   }
-  
-  export function getNextState(state, numStates) {
-    return (state + 1) % numStates;
-  }
-  
-  export function fillBackground(context ,color, width, height) {
-    context.beginPath();
-    context.fillStyle = color;
-    context.rect(0,0, width, height);
-    context.fill();
+  return color;
+}
+
+export let Array2D = (r, c) => [...Array(r)].map((x) => Array(c).fill(0));
+
+export function rand(min, max) {
+  return (
+    (Math.floor(Math.pow(10, 14) * Math.random() * Math.random()) %
+      (max - min + 1)) +
+    min
+  );
+}
+
+export function getNextState(state, numStates) {
+  return (state + 1) % numStates;
+}
+
+export function fillBackground(context, color, width, height) {
+  context.beginPath();
+  context.fillStyle = color;
+  context.rect(0, 0, width, height);
+  context.fill();
 }
 
 export function drawState(context, automataState, r, c, bsize, colors) {
-  for(var i = 0; i < r; i++) {
-      for(var j = 0; j < c; j ++) {
-          drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
-      }
+  for (var i = 0; i < r; i++) {
+    for (var j = 0; j < c; j++) {
+      drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
+    }
   }
 }
 
 export function drawBlock(context, x, y, blockSize, color) {
   context.beginPath();
   context.fillStyle = color;
-  context.lineWidth = 0; 
-  context.rect(blockSize * y , blockSize * x , blockSize, blockSize);
+  context.lineWidth = 0;
+  context.rect(blockSize * y, blockSize * x, blockSize, blockSize);
   context.fill();
 }
 
@@ -164,12 +163,16 @@ export function getGradientStops(startColor, endColor, numStops) {
   var colors = [];
   colors.push(hexToRgb(startColor));
   var s = colors[colors.length - 1];
-  for(var i = 0; i < numStops; i++){
-    var c = { r: s.r + rStep, g: s.g + gStep, b: s.b+ bStep };
+  for (var i = 0; i < numStops; i++) {
+    var c = {
+      r: s.r + rStep,
+      g: s.g + gStep,
+      b: s.b + bStep
+    };
     colors.push(c);
     s = colors[colors.length - 1];
   }
   colors.push(hexToRgb(endColor))
-  colors = colors.map(c=> rgbToHex(c.r, c.g, c.b));
+  colors = colors.map(c => rgbToHex(c.r, c.g, c.b));
   return colors;
 }

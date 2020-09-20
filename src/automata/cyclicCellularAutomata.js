@@ -26,11 +26,9 @@ export class CyclicCellularAutomata extends Automaton {
                     this.tempState[i][j] = this.state[i][j];
                 }
             }
-        }
-        for(var i = 0; i < this.size.rows; i++) {
-            for(var j = 0; j < this.size.cols; j ++) {
-                this.state[i][j] = this.tempState[i][j];
-            }
-        }    
+        } 
+        var t = this.tempState;
+        this.tempState = this.state;
+        this.state = t;
     }
 }

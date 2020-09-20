@@ -1,8 +1,12 @@
 import "./../../main.css";
 import "./delta_animation.css";
-import { Style } from "../../libs/style";
+import {
+  Style
+} from "../../libs/style";
 import * as THREE from "three";
-import { PointLightHelper } from "three";
+import {
+  PointLightHelper
+} from "three";
 
 var style = new Style();
 console.log(style);
@@ -18,7 +22,9 @@ var viewAngle = 45;
 var aspect = sceneWidth / sceneHeight;
 var near = 0.1;
 var far = 10000;
-var renderer = new THREE.WebGLRenderer({ alpha: true });
+var renderer = new THREE.WebGLRenderer({
+  alpha: true
+});
 renderer.setClearColor("black", 0.0);
 var camera = new THREE.PerspectiveCamera(viewAngle, aspect, near, far);
 camera.position.z = 5;
@@ -75,8 +81,8 @@ const light3 = new THREE.PointLight(0xff00ff, 1, 0, 0);
 light3.position.set(0, 0, 0);
 scene.add(light3);
 
-var light4 = new THREE.HemisphereLight( 0xff00ff, 0x00ffff, 1 );
-scene.add( light4 );
+var light4 = new THREE.HemisphereLight(0xff00ff, 0x00ffff, 1);
+scene.add(light4);
 
 var fps = 0;
 var speedT1 = Date.now();
@@ -118,8 +124,9 @@ function animate() {
 }
 
 window.onUpdateClicked = onUpdateClicked;
+
 function onUpdateClicked() {
-    var newFps = document.getElementById("fps-input").value;
-    console.log(newFps);
-    frameRate = parseFloat(newFps);
+  var newFps = document.getElementById("fps-input").value;
+  console.log(newFps);
+  frameRate = parseFloat(newFps);
 }

@@ -17,6 +17,7 @@ export class ConwaysGameOfLife extends Automaton {
                         liveCount ++;
                     }
                 });
+                this.tempState[i][j] = this.state[i][j];
                 if(liveCount < 2 || liveCount > 3){
                     if(this.state[i][j] == 1) {
                         this.tempState[i][j] = 0;
@@ -33,10 +34,8 @@ export class ConwaysGameOfLife extends Automaton {
                 }
             }
         }
-        for(var i = 0; i < this.size.rows; i++) {
-            for(var j = 0; j < this.size.cols; j ++) {
-                this.state[i][j] = this.tempState[i][j];
-            }
-        }    
+        var t = this.tempState;
+        this.tempState = this.state;
+        this.state = t;  
     }
 }
