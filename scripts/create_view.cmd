@@ -16,5 +16,7 @@ echo     Body Text>> "%1.html"
 echo     ^<script src="%1.js"^>^</script^>>> "%1.html"
 echo ^</body^>>> "%1.html"
 echo ^</html^>>> "%1.html"
+echo import "./../../main.css";> "%1.js"
 echo import "./%1.css";>> "%1.js"
+echo import { Style } from "../../libs/style";>> 
 EXIT /B 0
