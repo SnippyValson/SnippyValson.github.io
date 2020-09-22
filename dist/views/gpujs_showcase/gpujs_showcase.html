@@ -8,20 +8,14 @@
 <body class="pixel-body">
     <div id="top-bar">
         <a class="pixel-button" href="/index.html">Home</a>
+        <button class="pixel-button" id="start-button" onclick="onStartClicked()">Start</button>
     </div>
     <div class="pixel-div" id="side-panel">
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
-        <button class="pixel-button list-button"> Square Cycles </button>
+        <button class="pixel-button list-button" onclick="onItemClicked('square-cycles')"> CCA - R1/T1/C16/NM </button>
+        <button class="pixel-button list-button" onclick="onItemClicked('nuemann-cycles')"> CCA - R1/T1/C16/NN </button>
+        <button class="pixel-button list-button" onclick="onItemClicked('cross-cycles')"> CCA - R1/T1/C16/NC </button>
+        <button class="pixel-button list-button" onclick="onItemClicked('cca-r1t3c4nm')"> CCA - R1/T3/C4/NM </button>
+        <button class="pixel-button list-button" onclick="onItemClicked('cca-r1t3c3nm')"> CCA - R1/T3/C3/NM </button>
     </div>
     <div class="pixel-div" id="renderer-panel">
         <canvas id="renderer-outlet"></canvas>

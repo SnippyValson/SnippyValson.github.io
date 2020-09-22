@@ -206,6 +206,8 @@ exports.fillBackground = fillBackground;
 exports.drawState = drawState;
 exports.drawBlock = drawBlock;
 exports.getGradientStops = getGradientStops;
+exports.getGradientStopsRgb = getGradientStopsRgb;
+exports.rgbToInt = rgbToInt;
 exports.Array2D = void 0;
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -422,6 +424,37 @@ function getGradientStops(startColor, endColor, numStops) {
     return rgbToHex(c.r, c.g, c.b);
   });
   return colors;
+}
+
+function getGradientStopsRgb(startColor, endColor, numStops) {
+  var startRGB = hexToRgb(startColor);
+  var endRGB = hexToRgb(endColor);
+  var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
+  var gStep = Math.floor(Math.abs(startRGB.g - endRGB.g) / numStops);
+  var bStep = Math.floor(Math.abs(startRGB.b - endRGB.b) / numStops);
+  var colors = [];
+  colors.push(hexToRgb(startColor));
+  var s = colors[colors.length - 1];
+
+  for (var i = 0; i < numStops; i++) {
+    var c = {
+      r: s.r + rStep,
+      g: s.g + gStep,
+      b: s.b + bStep
+    };
+    colors.push(c);
+    s = colors[colors.length - 1];
+  }
+
+  colors.push(hexToRgb(endColor));
+  return colors;
+}
+
+function rgbToInt(rgb) {
+  var rgbInt = rgb.r;
+  rgbInt = (rgbInt << 8) + rgb.g;
+  rgbInt = (rgbInt << 8) + rgb.b;
+  return rgbInt;
 }
 },{}],"libs/colors.js":[function(require,module,exports) {
 "use strict";
@@ -1116,7 +1149,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55581" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63155" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

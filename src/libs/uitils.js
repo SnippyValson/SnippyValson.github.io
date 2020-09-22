@@ -176,3 +176,32 @@ export function getGradientStops(startColor, endColor, numStops) {
   colors = colors.map(c => rgbToHex(c.r, c.g, c.b));
   return colors;
 }
+
+export function getGradientStopsRgb(startColor, endColor, numStops) {
+  var startRGB = hexToRgb(startColor);
+  var endRGB = hexToRgb(endColor);
+  var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
+  var gStep = Math.floor(Math.abs(startRGB.g - endRGB.g) / numStops);
+  var bStep = Math.floor(Math.abs(startRGB.b - endRGB.b) / numStops);
+  var colors = [];
+  colors.push(hexToRgb(startColor));
+  var s = colors[colors.length - 1];
+  for (var i = 0; i < numStops; i++) {
+    var c = {
+      r: s.r + rStep,
+      g: s.g + gStep,
+      b: s.b + bStep
+    };
+    colors.push(c);
+    s = colors[colors.length - 1];
+  }
+  colors.push(hexToRgb(endColor))
+  return colors;
+}
+
+export function rgbToInt(rgb) {
+  var rgbInt = rgb.r;
+  rgbInt = (rgbInt << 8) + rgb.g;
+  rgbInt = (rgbInt << 8) + rgb.b;
+  return rgbInt;
+}

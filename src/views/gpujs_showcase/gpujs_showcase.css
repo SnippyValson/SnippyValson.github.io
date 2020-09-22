@@ -1,5 +1,5 @@
 :root {
-    --side-panel-with : 25vw;
+    --side-panel-with : 360px;
     --top-bar-height : 50px;
 }
 
@@ -9,7 +9,6 @@
     margin: 5px;
     position: relative;
     float: left;
-    overflow-y: scroll;
 }
 
 #renderer-panel {
@@ -23,12 +22,19 @@
 
 #top-bar {
     height: var(--top-bar-height);
-    padding-top: 35px;
+    padding-top: 25px;
+    padding-bottom: 10px;
     padding-left: 5px;
 }
 
 .list-button {
     display: block;
     margin-top: 5px;
+    margin-left: 5px;
+    min-width: 350px;
+    max-width: 350px;
+}
+
+#start-button {
     margin-left: 5px;
 }
