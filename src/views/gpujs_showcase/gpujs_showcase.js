@@ -7,9 +7,11 @@ import { Array2D, getGradientStopsRgb } from "./../../libs/uitils.js";
 var animationHandle;
 var animationAction;
 var rendererOutlet = document.getElementById("renderer-panel");
-var rendererSize = 750;
-var gpuAutomataState = Array2D(rendererSize, rendererSize);
-var gpuTempState = Array2D(rendererSize, rendererSize);
+var rendererSize = 1335;//Math.min(rendererOutlet.clientHeight, rendererOutlet.clientWidth) - 10;
+var rendererWidth = rendererOutlet.clientWidth - 20;
+var rendererHeight = rendererOutlet.clientHeight - 20;
+var gpuAutomataState = Array2D(rendererHeight, rendererWidth);
+var gpuTempState = Array2D(rendererHeight, rendererWidth);
 var automatonThreshold = 1;
 var automatonNumStates = 16;
 var style = new Style();
@@ -187,7 +189,7 @@ function getRenderer() {
         );
       }
     })
-    .setOutput([rendererSize, rendererSize])
+    .setOutput([rendererWidth, rendererHeight])
     .setGraphical(true)
     .setConstants(constants);
   var rendererCanvas = rndrr.canvas;
@@ -208,8 +210,8 @@ function getMooreProcess() {
     .createKernel(function (stateMatrix) {
       var i = this.thread.y;
       var j = this.thread.x;
-      var r = this.constants.rendererSize;
-      var c = this.constants.rendererSize;
+      var r = this.constants.rendererHeight;
+      var c = this.constants.rendererWidth;
       var count = 0;
       var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
       count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState);
@@ -219,9 +221,10 @@ function getMooreProcess() {
         return stateMatrix[i][j];
       }
     })
-    .setOutput([rendererSize, rendererSize])
+    .setOutput([rendererWidth, rendererHeight])
     .setConstants({
-      rendererSize: rendererSize,
+      rendererWidth: rendererWidth,
+      rendererHeight: rendererHeight,
       threshold: automatonThreshold,
       numStates: automatonNumStates,
     })
@@ -234,8 +237,8 @@ function getGameOfLifeProcess() {
     .createKernel(function (stateMatrix) {
       var i = this.thread.y;
       var j = this.thread.x;
-      var r = this.constants.rendererSize;
-      var c = this.constants.rendererSize;
+      var r = this.constants.rendererWidth;
+      var c = this.constants.rendererHeight;
       var count = 0;
       count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1);
       var newState = stateMatrix[i][j];
@@ -249,9 +252,10 @@ function getGameOfLifeProcess() {
       }
       return newState;
     })
-    .setOutput([rendererSize, rendererSize])
+    .setOutput([rendererWidth, rendererHeight])
     .setConstants({
-      rendererSize: rendererSize,
+      rendererWidth: rendererWidth,
+      rendererHeight: rendererHeight
     })
     .setFunctions([checkMooreNeighbourhood]);
 }
@@ -262,8 +266,8 @@ function getNueMannProcess() {
     .createKernel(function (stateMatrix) {
       var i = this.thread.y;
       var j = this.thread.x;
-      var r = this.constants.rendererSize;
-      var c = this.constants.rendererSize;
+      var r = this.constants.rendererWidth;
+      var c = this.constants.rendererHeight;
       var count = 0;
       var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
       count = checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState);
@@ -273,9 +277,10 @@ function getNueMannProcess() {
         return stateMatrix[i][j];
       }
     })
-    .setOutput([rendererSize, rendererSize])
+    .setOutput([rendererWidth, rendererHeight])
     .setConstants({
-      rendererSize: rendererSize,
+      rendererWidth: rendererWidth,
+      rendererHeight: rendererHeight,
       threshold: automatonThreshold,
       numStates: automatonNumStates,
     })
@@ -288,8 +293,8 @@ function getCrossProcess() {
     .createKernel(function (stateMatrix) {
       var i = this.thread.y;
       var j = this.thread.x;
-      var r = this.constants.rendererSize;
-      var c = this.constants.rendererSize;
+      var r = this.constants.rendererWidth;
+      var c = this.constants.rendererHeight;
       var count = 0;
       var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
       count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState);
@@ -299,9 +304,10 @@ function getCrossProcess() {
         return stateMatrix[i][j];
       }
     })
-    .setOutput([rendererSize, rendererSize])
+    .setOutput([rendererWidth, rendererHeight])
     .setConstants({
-      rendererSize: rendererSize,
+      rendererWidth: rendererWidth,
+      rendererHeight: rendererHeight,
       threshold: automatonThreshold,
       numStates: automatonNumStates,
     })
@@ -404,8 +410,8 @@ function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState) {
 }
 
 function resetState() {
-  for (var i = 0; i < rendererSize; i++) {
-    for (var j = 0; j < rendererSize; j++) {
+  for (var i = 0; i < rendererHeight; i++) {
+    for (var j = 0; j < rendererWidth; j++) {
       var state = Math.floor(Math.random() * automatonNumStates);
       gpuAutomataState[i][j] = state;
     }

@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,17 +184,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/gpujs_showcase/gpujs_showcase.css":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/gpujs_showcase/gpujs_showcase.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/colors.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24528,9 +24528,12 @@ var _uitils = require("./../../libs/uitils.js");
 var animationHandle;
 var animationAction;
 var rendererOutlet = document.getElementById("renderer-panel");
-var rendererSize = 750;
-var gpuAutomataState = (0, _uitils.Array2D)(rendererSize, rendererSize);
-var gpuTempState = (0, _uitils.Array2D)(rendererSize, rendererSize);
+var rendererSize = 1335; //Math.min(rendererOutlet.clientHeight, rendererOutlet.clientWidth) - 10;
+
+var rendererWidth = rendererOutlet.clientWidth - 20;
+var rendererHeight = rendererOutlet.clientHeight - 20;
+var gpuAutomataState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
+var gpuTempState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
 var automatonThreshold = 1;
 var automatonNumStates = 16;
 var style = new _style.Style();
@@ -24645,7 +24648,7 @@ function getRenderer() {
     } else if (stateMatrix[this.thread.x][this.thread.y] === 15) {
       this.color(this.constants.color15r, this.constants.color15g, this.constants.color15b);
     }
-  }).setOutput([rendererSize, rendererSize]).setGraphical(true).setConstants(constants);
+  }).setOutput([rendererWidth, rendererHeight]).setGraphical(true).setConstants(constants);
   var rendererCanvas = rndrr.canvas;
   rendererOutlet.innerHTML = "";
   rendererOutlet.appendChild(rndrr.canvas);
@@ -24660,8 +24663,8 @@ function getMooreProcess() {
   return gpu.createKernel(function (stateMatrix) {
     var i = this.thread.y;
     var j = this.thread.x;
-    var r = this.constants.rendererSize;
-    var c = this.constants.rendererSize;
+    var r = this.constants.rendererHeight;
+    var c = this.constants.rendererWidth;
     var count = 0;
     var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
     count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState);
@@ -24671,8 +24674,9 @@ function getMooreProcess() {
     } else {
       return stateMatrix[i][j];
     }
-  }).setOutput([rendererSize, rendererSize]).setConstants({
-    rendererSize: rendererSize,
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererWidth,
+    rendererHeight: rendererHeight,
     threshold: automatonThreshold,
     numStates: automatonNumStates
   }).setFunctions([checkMooreNeighbourhood]);
@@ -24684,8 +24688,8 @@ function getGameOfLifeProcess() {
   return gpu.createKernel(function (stateMatrix) {
     var i = this.thread.y;
     var j = this.thread.x;
-    var r = this.constants.rendererSize;
-    var c = this.constants.rendererSize;
+    var r = this.constants.rendererWidth;
+    var c = this.constants.rendererHeight;
     var count = 0;
     count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1);
     var newState = stateMatrix[i][j];
@@ -24701,8 +24705,9 @@ function getGameOfLifeProcess() {
     }
 
     return newState;
-  }).setOutput([rendererSize, rendererSize]).setConstants({
-    rendererSize: rendererSize
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererWidth,
+    rendererHeight: rendererHeight
   }).setFunctions([checkMooreNeighbourhood]);
 }
 
@@ -24712,8 +24717,8 @@ function getNueMannProcess() {
   return gpu.createKernel(function (stateMatrix) {
     var i = this.thread.y;
     var j = this.thread.x;
-    var r = this.constants.rendererSize;
-    var c = this.constants.rendererSize;
+    var r = this.constants.rendererWidth;
+    var c = this.constants.rendererHeight;
     var count = 0;
     var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
     count = checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState);
@@ -24723,8 +24728,9 @@ function getNueMannProcess() {
     } else {
       return stateMatrix[i][j];
     }
-  }).setOutput([rendererSize, rendererSize]).setConstants({
-    rendererSize: rendererSize,
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererWidth,
+    rendererHeight: rendererHeight,
     threshold: automatonThreshold,
     numStates: automatonNumStates
   }).setFunctions([checkNuemannNeighbourhood]);
@@ -24736,8 +24742,8 @@ function getCrossProcess() {
   return gpu.createKernel(function (stateMatrix) {
     var i = this.thread.y;
     var j = this.thread.x;
-    var r = this.constants.rendererSize;
-    var c = this.constants.rendererSize;
+    var r = this.constants.rendererWidth;
+    var c = this.constants.rendererHeight;
     var count = 0;
     var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
     count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState);
@@ -24747,8 +24753,9 @@ function getCrossProcess() {
     } else {
       return stateMatrix[i][j];
     }
-  }).setOutput([rendererSize, rendererSize]).setConstants({
-    rendererSize: rendererSize,
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererWidth,
+    rendererHeight: rendererHeight,
     threshold: automatonThreshold,
     numStates: automatonNumStates
   }).setFunctions([checkCrossNeighbourhood]);
@@ -24869,8 +24876,8 @@ function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState) {
 }
 
 function resetState() {
-  for (var i = 0; i < rendererSize; i++) {
-    for (var j = 0; j < rendererSize; j++) {
+  for (var i = 0; i < rendererHeight; i++) {
+    for (var j = 0; j < rendererWidth; j++) {
       var state = Math.floor(Math.random() * automatonNumStates);
       gpuAutomataState[i][j] = state;
     }
@@ -24988,7 +24995,7 @@ function onStartClicked() {
 
   animationHandle = requestAnimationFrame(animate);
 }
-},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../libs/style":"libs/style.js","gpu.js":"node_modules/gpu.js/dist/gpu-browser.js","./../../libs/uitils.js":"libs/uitils.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../libs/style":"libs/style.js","gpu.js":"node_modules/gpu.js/dist/gpu-browser.js","./../../libs/uitils.js":"libs/uitils.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -25016,7 +25023,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58555" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52596" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -25192,5 +25199,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/gpujs_showcase/gpujs_showcase.js"], null)
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/gpujs_showcase/gpujs_showcase.js"], null)
 //# sourceMappingURL=/gpujs_showcase.76dcdb6b.js.map
