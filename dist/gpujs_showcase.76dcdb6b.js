@@ -24678,6 +24678,34 @@ function getMooreProcess() {
   }).setFunctions([checkMooreNeighbourhood]);
 }
 
+var processGameOfLife = getGameOfLifeProcess();
+
+function getGameOfLifeProcess() {
+  return gpu.createKernel(function (stateMatrix) {
+    var i = this.thread.y;
+    var j = this.thread.x;
+    var r = this.constants.rendererSize;
+    var c = this.constants.rendererSize;
+    var count = 0;
+    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1);
+    var newState = stateMatrix[i][j];
+
+    if (count < 2 || count > 3) {
+      newState = 0;
+    } else if (count == 2 || count == 3) {
+      newState = stateMatrix[i][j];
+
+      if (count == 3) {
+        newState = 1;
+      }
+    }
+
+    return newState;
+  }).setOutput([rendererSize, rendererSize]).setConstants({
+    rendererSize: rendererSize
+  }).setFunctions([checkMooreNeighbourhood]);
+}
+
 var processNuemann = getNueMannProcess();
 
 function getNueMannProcess() {
@@ -24851,6 +24879,9 @@ function resetState() {
 
 resetState();
 renderer(gpuAutomataState);
+/* Reposition the renderer canvas after rendring it once. */
+
+renderer = getRenderer();
 
 function renderAndSwap() {
   renderer(gpuTempState);
@@ -24871,6 +24902,11 @@ function drawCrossCycles() {
 
 function drawNuewMannCycles() {
   gpuTempState = processNuemann(gpuAutomataState);
+  renderAndSwap();
+}
+
+function drawGameOfLife() {
+  gpuTempState = processGameOfLife(gpuAutomataState);
   renderAndSwap();
 }
 
@@ -24901,18 +24937,14 @@ function onItemClicked(item) {
       animationAction = drawNuewMannCycles;
       automatonNumStates = 16;
       automatonThreshold = 1;
-      processNuemann.setConstants({
-        rendererSize: rendererSize,
-        threshold: automatonThreshold,
-        numStates: automatonNumStates
-      });
+      processNuemann = getNueMannProcess();
       break;
 
     case "cross-cycles":
       animationAction = drawCrossCycles;
       automatonNumStates = 16;
       automatonThreshold = 1;
-      processMoore = getMooreProcess();
+      processCross = getCrossProcess();
       break;
 
     case "cca-r1t3c4nm":
@@ -24927,6 +24959,14 @@ function onItemClicked(item) {
       automatonNumStates = 3;
       automatonThreshold = 3;
       processMoore = getMooreProcess();
+      break;
+
+    case "game-of-life":
+      animationAction = drawGameOfLife;
+      automatonNumStates = 2;
+      automatonThreshold = 3;
+      processMoore = getGameOfLifeProcess();
+      break;
 
     default:
       break;
@@ -24976,7 +25016,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63155" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58555" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
