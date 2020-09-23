@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,17 +184,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/gpujs_showcase/gpujs_showcase.css":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/gpujs_showcase/gpujs_showcase.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/colors.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24528,10 +24528,8 @@ var _uitils = require("./../../libs/uitils.js");
 var animationHandle;
 var animationAction;
 var rendererOutlet = document.getElementById("renderer-panel");
-var rendererSize = 1335; //Math.min(rendererOutlet.clientHeight, rendererOutlet.clientWidth) - 10;
-
-var rendererWidth = rendererOutlet.clientWidth - 20;
 var rendererHeight = rendererOutlet.clientHeight - 20;
+var rendererWidth = rendererOutlet.clientWidth - 20;
 var gpuAutomataState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
 var gpuTempState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
 var automatonThreshold = 1;
@@ -24541,11 +24539,13 @@ style.applyStyle();
 var gpu = new _gpu.GPU();
 var constants;
 var colors;
+var t1 = Date.now();
+var t2 = Date.now();
+var numPoints = rendererHeight * rendererWidth;
 getColors();
 
 function getColors() {
   colors = (0, _uitils.getGradientStopsRgb)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, automatonNumStates - 2);
-  console.table(16 - colors.length);
 
   if (colors.length < 16) {
     var length = colors.length;
@@ -24615,41 +24615,46 @@ var renderer = getRenderer();
 
 function getRenderer() {
   var rndrr = gpu.createKernel(function (stateMatrix) {
-    if (stateMatrix[this.thread.x][this.thread.y] === 0) {
+    var i = this.thread.y;
+    var j = this.thread.x;
+
+    if (stateMatrix[i][j] === 0) {
       this.color(this.constants.color0r, this.constants.color0g, this.constants.color0b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 1) {
+    } else if (stateMatrix[i][j] === 1) {
       this.color(this.constants.color1r, this.constants.color1g, this.constants.color1b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 2) {
+    } else if (stateMatrix[i][j] === 2) {
       this.color(this.constants.color2r, this.constants.color2g, this.constants.color2b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 3) {
+    } else if (stateMatrix[i][j] === 3) {
       this.color(this.constants.color3r, this.constants.color3g, this.constants.color3b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 4) {
+    } else if (stateMatrix[i][j] === 4) {
       this.color(this.constants.color4r, this.constants.color4g, this.constants.color4b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 5) {
+    } else if (stateMatrix[i][j] === 5) {
       this.color(this.constants.color5r, this.constants.color5g, this.constants.color5b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 6) {
+    } else if (stateMatrix[i][j] === 6) {
       this.color(this.constants.color6r, this.constants.color6g, this.constants.color6b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 7) {
+    } else if (stateMatrix[i][j] === 7) {
       this.color(this.constants.color7r, this.constants.color7g, this.constants.color7b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 8) {
+    } else if (stateMatrix[i][j] === 8) {
       this.color(this.constants.color8r, this.constants.color8g, this.constants.color8b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 9) {
+    } else if (stateMatrix[i][j] === 9) {
       this.color(this.constants.color9r, this.constants.color9g, this.constants.color9b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 10) {
+    } else if (stateMatrix[i][j] === 10) {
       this.color(this.constants.color10r, this.constants.color10g, this.constants.color10b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 11) {
+    } else if (stateMatrix[i][j] === 11) {
       this.color(this.constants.color11r, this.constants.color11g, this.constants.color11b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 12) {
+    } else if (stateMatrix[i][j] === 12) {
       this.color(this.constants.color12r, this.constants.color12g, this.constants.color12b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 13) {
+    } else if (stateMatrix[i][j] === 13) {
       this.color(this.constants.color13r, this.constants.color13g, this.constants.color13b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 14) {
+    } else if (stateMatrix[i][j] === 14) {
       this.color(this.constants.color14r, this.constants.color14g, this.constants.color14b);
-    } else if (stateMatrix[this.thread.x][this.thread.y] === 15) {
+    } else if (stateMatrix[i][j] === 15) {
       this.color(this.constants.color15r, this.constants.color15g, this.constants.color15b);
     }
   }).setOutput([rendererWidth, rendererHeight]).setGraphical(true).setConstants(constants);
   var rendererCanvas = rndrr.canvas;
+  console.log(gpuAutomataState.length + " " + gpuAutomataState[0].length);
+  console.log(rendererCanvas.width + " " + rendererCanvas.height);
   rendererOutlet.innerHTML = "";
   rendererOutlet.appendChild(rndrr.canvas);
   rendererCanvas.style.marginTop = "".concat((rendererOutlet.clientHeight - rendererCanvas.clientHeight) / 2, "px");
@@ -24706,8 +24711,8 @@ function getGameOfLifeProcess() {
 
     return newState;
   }).setOutput([rendererWidth, rendererHeight]).setConstants({
-    rendererWidth: rendererWidth,
-    rendererHeight: rendererHeight
+    rendererWidth: rendererHeight,
+    rendererHeight: rendererWidth
   }).setFunctions([checkMooreNeighbourhood]);
 }
 
@@ -24729,8 +24734,8 @@ function getNueMannProcess() {
       return stateMatrix[i][j];
     }
   }).setOutput([rendererWidth, rendererHeight]).setConstants({
-    rendererWidth: rendererWidth,
-    rendererHeight: rendererHeight,
+    rendererWidth: rendererHeight,
+    rendererHeight: rendererWidth,
     threshold: automatonThreshold,
     numStates: automatonNumStates
   }).setFunctions([checkNuemannNeighbourhood]);
@@ -24754,8 +24759,8 @@ function getCrossProcess() {
       return stateMatrix[i][j];
     }
   }).setOutput([rendererWidth, rendererHeight]).setConstants({
-    rendererWidth: rendererWidth,
-    rendererHeight: rendererHeight,
+    rendererWidth: rendererHeight,
+    rendererHeight: rendererWidth,
     threshold: automatonThreshold,
     numStates: automatonNumStates
   }).setFunctions([checkCrossNeighbourhood]);
@@ -24917,7 +24922,23 @@ function drawGameOfLife() {
   renderAndSwap();
 }
 
+t1 = Date.now();
+var fps_t1 = Date.now();
+var fps_t2 = Date.now();
+var delay = 0;
+
 function animate() {
+  t2 = Date.now();
+  fps_t2 = Date.now();
+
+  if (fps_t2 - fps_t1 >= 1000) {
+    delay = t2 - t1;
+    fps_t1 = fps_t2;
+  }
+
+  t1 = t2;
+  document.getElementById("info-label").innerHTML = "Processed & plotted ".concat(numPoints, " points ").concat(Math.round(1000 / delay), " times/second. [").concat(Math.round(numPoints * Math.round(1000 / delay)), " points/second.] Phew!!!");
+
   if (animationAction) {
     animationAction();
   }
@@ -24980,7 +25001,6 @@ function onItemClicked(item) {
   }
 
   getColors();
-  console.table(constants);
   renderer = getRenderer();
   resetState();
   renderer(gpuAutomataState);
@@ -24995,7 +25015,7 @@ function onStartClicked() {
 
   animationHandle = requestAnimationFrame(animate);
 }
-},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../libs/style":"libs/style.js","gpu.js":"node_modules/gpu.js/dist/gpu-browser.js","./../../libs/uitils.js":"libs/uitils.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../libs/style":"libs/style.js","gpu.js":"node_modules/gpu.js/dist/gpu-browser.js","./../../libs/uitils.js":"libs/uitils.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -25023,7 +25043,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52596" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58555" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -25199,5 +25219,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/gpujs_showcase/gpujs_showcase.js"], null)
+},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/gpujs_showcase/gpujs_showcase.js"], null)
 //# sourceMappingURL=/gpujs_showcase.76dcdb6b.js.map

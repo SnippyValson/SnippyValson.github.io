@@ -7,9 +7,8 @@ import { Array2D, getGradientStopsRgb } from "./../../libs/uitils.js";
 var animationHandle;
 var animationAction;
 var rendererOutlet = document.getElementById("renderer-panel");
-var rendererSize = 1335;//Math.min(rendererOutlet.clientHeight, rendererOutlet.clientWidth) - 10;
-var rendererWidth = rendererOutlet.clientWidth - 20;
 var rendererHeight = rendererOutlet.clientHeight - 20;
+var rendererWidth = rendererOutlet.clientWidth - 20;
 var gpuAutomataState = Array2D(rendererHeight, rendererWidth);
 var gpuTempState = Array2D(rendererHeight, rendererWidth);
 var automatonThreshold = 1;
@@ -19,6 +18,9 @@ style.applyStyle();
 var gpu = new GPU();
 var constants;
 var colors;
+var t1 = Date.now();
+var t2 = Date.now();
+var numPoints = rendererHeight * rendererWidth;
 
 getColors();
 
@@ -28,7 +30,6 @@ function getColors() {
     style.getCurrentPallet().foreground,
     automatonNumStates - 2
   );
-  console.table(16 - colors.length);
   if (colors.length < 16) {
     var length = colors.length;
     for (var i = 0; i < 16 - length; i++) {
@@ -91,97 +92,99 @@ var renderer = getRenderer();
 function getRenderer() {
   var rndrr = gpu
     .createKernel(function (stateMatrix) {
-      if (stateMatrix[this.thread.x][this.thread.y] === 0) {
+      var i = this.thread.y;
+      var j = this.thread.x;
+      if (stateMatrix[i][j] === 0) {
         this.color(
           this.constants.color0r,
           this.constants.color0g,
           this.constants.color0b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 1) {
+      } else if (stateMatrix[i][j] === 1) {
         this.color(
           this.constants.color1r,
           this.constants.color1g,
           this.constants.color1b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 2) {
+      } else if (stateMatrix[i][j] === 2) {
         this.color(
           this.constants.color2r,
           this.constants.color2g,
           this.constants.color2b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 3) {
+      } else if (stateMatrix[i][j] === 3) {
         this.color(
           this.constants.color3r,
           this.constants.color3g,
           this.constants.color3b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 4) {
+      } else if (stateMatrix[i][j] === 4) {
         this.color(
           this.constants.color4r,
           this.constants.color4g,
           this.constants.color4b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 5) {
+      } else if (stateMatrix[i][j] === 5) {
         this.color(
           this.constants.color5r,
           this.constants.color5g,
           this.constants.color5b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 6) {
+      } else if (stateMatrix[i][j] === 6) {
         this.color(
           this.constants.color6r,
           this.constants.color6g,
           this.constants.color6b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 7) {
+      } else if (stateMatrix[i][j] === 7) {
         this.color(
           this.constants.color7r,
           this.constants.color7g,
           this.constants.color7b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 8) {
+      } else if (stateMatrix[i][j] === 8) {
         this.color(
           this.constants.color8r,
           this.constants.color8g,
           this.constants.color8b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 9) {
+      } else if (stateMatrix[i][j] === 9) {
         this.color(
           this.constants.color9r,
           this.constants.color9g,
           this.constants.color9b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 10) {
+      } else if (stateMatrix[i][j] === 10) {
         this.color(
           this.constants.color10r,
           this.constants.color10g,
           this.constants.color10b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 11) {
+      } else if (stateMatrix[i][j] === 11) {
         this.color(
           this.constants.color11r,
           this.constants.color11g,
           this.constants.color11b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 12) {
+      } else if (stateMatrix[i][j] === 12) {
         this.color(
           this.constants.color12r,
           this.constants.color12g,
           this.constants.color12b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 13) {
+      } else if (stateMatrix[i][j] === 13) {
         this.color(
           this.constants.color13r,
           this.constants.color13g,
           this.constants.color13b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 14) {
+      } else if (stateMatrix[i][j] === 14) {
         this.color(
           this.constants.color14r,
           this.constants.color14g,
           this.constants.color14b
         );
-      } else if (stateMatrix[this.thread.x][this.thread.y] === 15) {
+      } else if (stateMatrix[i][j] === 15) {
         this.color(
           this.constants.color15r,
           this.constants.color15g,
@@ -193,6 +196,8 @@ function getRenderer() {
     .setGraphical(true)
     .setConstants(constants);
   var rendererCanvas = rndrr.canvas;
+  console.log(gpuAutomataState.length + " " + gpuAutomataState[0].length);
+  console.log(rendererCanvas.width + " " + rendererCanvas.height);
   rendererOutlet.innerHTML = "";
   rendererOutlet.appendChild(rndrr.canvas);
   rendererCanvas.style.marginTop = `${
@@ -246,7 +251,7 @@ function getGameOfLifeProcess() {
         newState = 0;
       } else if (count == 2 || count == 3) {
         newState = stateMatrix[i][j];
-        if(count == 3){
+        if (count == 3) {
           newState = 1;
         }
       }
@@ -254,8 +259,8 @@ function getGameOfLifeProcess() {
     })
     .setOutput([rendererWidth, rendererHeight])
     .setConstants({
-      rendererWidth: rendererWidth,
-      rendererHeight: rendererHeight
+      rendererWidth: rendererHeight,
+      rendererHeight: rendererWidth,
     })
     .setFunctions([checkMooreNeighbourhood]);
 }
@@ -279,8 +284,8 @@ function getNueMannProcess() {
     })
     .setOutput([rendererWidth, rendererHeight])
     .setConstants({
-      rendererWidth: rendererWidth,
-      rendererHeight: rendererHeight,
+      rendererWidth: rendererHeight,
+      rendererHeight: rendererWidth,
       threshold: automatonThreshold,
       numStates: automatonNumStates,
     })
@@ -306,8 +311,8 @@ function getCrossProcess() {
     })
     .setOutput([rendererWidth, rendererHeight])
     .setConstants({
-      rendererWidth: rendererWidth,
-      rendererHeight: rendererHeight,
+      rendererWidth: rendererHeight,
+      rendererHeight: rendererWidth,
       threshold: automatonThreshold,
       numStates: automatonNumStates,
     })
@@ -450,7 +455,23 @@ function drawGameOfLife() {
   renderAndSwap();
 }
 
+t1 = Date.now();
+var fps_t1 = Date.now();
+var fps_t2 = Date.now();
+var delay = 0;
 function animate() {
+  t2 = Date.now();
+  fps_t2 = Date.now();
+  if (fps_t2 - fps_t1 >= 1000) {
+    delay = t2 - t1;
+    fps_t1 = fps_t2;
+  }
+  t1 = t2;
+  document.getElementById(
+    "info-label"
+  ).innerHTML = `Processed & plotted ${numPoints} points ${
+    Math.round(1000/delay)
+  } times/second. [${Math.round(numPoints * Math.round(1000/delay))} points/second.] Phew!!!`;
   if (animationAction) {
     animationAction();
   }
@@ -503,7 +524,6 @@ function onItemClicked(item) {
       break;
   }
   getColors();
-  console.table(constants);
   renderer = getRenderer();
   resetState();
   renderer(gpuAutomataState);
