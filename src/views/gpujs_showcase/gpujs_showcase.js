@@ -34,7 +34,11 @@ function getColors() {
   if (colors.length < 16) {
     var length = colors.length;
     for (var i = 0; i < 16 - length; i++) {
-      colors.push({ r: 0, g: 0, b: 0 });
+      colors.push({
+        r: 0,
+        g: 0,
+        b: 0,
+      });
     }
   }
   constants = {
@@ -90,6 +94,7 @@ function getColors() {
 }
 
 var renderer = getRenderer();
+
 function getRenderer() {
   var rndrr = gpu
     .createKernel(function (stateMatrix) {
@@ -285,34 +290,7 @@ function getNueMannProcess() {
       var c = this.constants.rendererHeight;
       var count = 0;
       var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-      count = checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState);
-      if (count >= this.constants.threshold) {
-        return nextState;
-      } else {
-        return stateMatrix[i][j];
-      }
-    })
-    .setOutput([rendererWidth, rendererHeight])
-    .setConstants({
-      rendererWidth: rendererHeight,
-      rendererHeight: rendererWidth,
-      threshold: automatonThreshold,
-      numStates: automatonNumStates,
-    })
-    .setFunctions([checkNuemannNeighbourhood]);
-}
-
-var processCross = getCrossProcess();
-function getCrossProcess() {
-  return gpu
-    .createKernel(function (stateMatrix) {
-      var i = this.thread.y;
-      var j = this.thread.x;
-      var r = this.constants.rendererWidth;
-      var c = this.constants.rendererHeight;
-      var count = 0;
-      var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-      count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
+      count = checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
       if (count >= this.constants.threshold) {
         return nextState;
       } else {
@@ -327,30 +305,74 @@ function getCrossProcess() {
       numStates: automatonNumStates,
       range: automatonRange
     })
+    .setFunctions([checkNuemannNeighbourhood]);
+}
+
+var processCross = getCrossProcess();
+function getCrossProcess() {
+  return gpu
+    .createKernel(function (stateMatrix) {
+      var i = this.thread.y;
+      var j = this.thread.x;
+      var r = this.constants.rendererWidth;
+      var c = this.constants.rendererHeight;
+      var count = 0;
+      var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
+      count = checkCrossNeighbourhood(
+        stateMatrix,
+        i,
+        j,
+        r,
+        c,
+        nextState,
+        this.constants.range
+      );
+      if (count >= this.constants.threshold) {
+        return nextState;
+      } else {
+        return stateMatrix[i][j];
+      }
+    })
+    .setOutput([rendererWidth, rendererHeight])
+    .setConstants({
+      rendererWidth: rendererHeight,
+      rendererHeight: rendererWidth,
+      threshold: automatonThreshold,
+      numStates: automatonNumStates,
+      range: automatonRange,
+    })
     .setFunctions([checkCrossNeighbourhood]);
 }
 
-function checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState) {
+function checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
   var count = 0;
-  if (i - 1 >= 0) {
-    if (stateMatrix[i - 1][j] == nextState) {
-      count++;
+  for (let offset = 1; offset <= range; offset++) {
+    if (j + offset < c) {
+      if (stateMatrix[i][j + offset] == nextState) {
+        count++;
+      }
+    }
+    if (j - offset >= 0) {
+      if (stateMatrix[i][j - offset] == nextState) {
+        count++;
+      }
     }
   }
-  if (j + 1 < c) {
-    if (stateMatrix[i][j + 1] == nextState) {
-      count++;
+  var bias = 1;
+  for (let iOffset = 1; iOffset <= range; iOffset++) {
+    for (let jOffset = -(range - bias); jOffset <= (range - bias); jOffset++) {
+      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
     }
-  }
-  if (i + 1 < r) {
-    if (stateMatrix[i + 1][j] == nextState) {
-      count++;
-    }
-  }
-  if (j - 1 >= 0) {
-    if (stateMatrix[i][j - 1] == nextState) {
-      count++;
-    }
+    bias++;
   }
   return count;
 }
@@ -390,33 +412,29 @@ function checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, maxRange) {
   return count;
 }
 
-function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, maxRange) {
+function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
   var count = 0;
-  for (let range = 1; range <= maxRange; range++) {
-    for (let k = -range; k <= range; k++) {
-      if (i - range >= 0 && j + k >= 0 && j + k < c) {
-        if (stateMatrix[i - range][j + k] == nextState) {
+  for (let offset = 1; offset <= range; offset++) {
+    if (j + offset < c) {
+      if (stateMatrix[i][j + offset] == nextState) {
+        count++;
+      }
+    }
+    if (j - offset >= 0) {
+      if (stateMatrix[i][j - offset] == nextState) {
+        count++;
+      }
+    }
+  }
+  for (let iOffset = 1; iOffset <= range; iOffset++) {
+    for (let jOffset = -range; jOffset <= range; jOffset++) {
+      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
           count++;
         }
       }
-    }
-    for (let k = 1; k <= range; k++) {
-      if (j + k < c) {
-        if (stateMatrix[i][j + k] == nextState) {
-          count++;
-        }
-      }
-    }
-    for (let k = -range; k <= range; k++) {
-      if (i + range < r && j + k >= 0 && j + k < c) {
-        if (stateMatrix[i + range][j + k] == nextState) {
-          count++;
-        }
-      }
-    }
-    for (let k = 1; k <= range; k++) {
-      if (j - k >= 0) {
-        if (stateMatrix[i][j - k] == nextState) {
+      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
           count++;
         }
       }
@@ -470,6 +488,7 @@ t1 = Date.now();
 var fps_t1 = Date.now();
 var fps_t2 = Date.now();
 var delay = 0;
+
 function animate() {
   t2 = Date.now();
   fps_t2 = Date.now();
@@ -492,6 +511,7 @@ function animate() {
 }
 
 window.onItemClicked = onItemClicked;
+
 function onItemClicked(item) {
   if (animationHandle) {
     cancelAnimationFrame(animationHandle);
@@ -500,72 +520,86 @@ function onItemClicked(item) {
     case "square-cycles":
       animationAction = drawMooreCycles;
       automatonRange = 1;
-      automatonNumStates = 16;
       automatonThreshold = 1;
+      automatonNumStates = 16;
       processMoore = getMooreProcess();
       break;
     case "nuemann-cycles":
       animationAction = drawNuewMannCycles;
       automatonRange = 1;
-      automatonNumStates = 16;
       automatonThreshold = 1;
+      automatonNumStates = 16;
       processNuemann = getNueMannProcess();
       break;
     case "cross-cycles":
       animationAction = drawCrossCycles;
       automatonRange = 1;
-      automatonNumStates = 16;
       automatonThreshold = 1;
+      automatonNumStates = 16;
       processCross = getCrossProcess();
       break;
     case "cca-r1t3c4nm":
       animationAction = drawMooreCycles;
       automatonRange = 1;
-      automatonNumStates = 4;
       automatonThreshold = 3;
+      automatonNumStates = 4;
       processMoore = getMooreProcess();
       break;
     case "cca-r1t3c3nm":
       animationAction = drawMooreCycles;
       automatonRange = 1;
-      automatonNumStates = 3;
       automatonThreshold = 3;
+      automatonNumStates = 3;
       processMoore = getMooreProcess();
       break;
     case "game-of-life":
       animationAction = drawGameOfLife;
       automatonRange = 1;
-      automatonNumStates = 2;
       automatonThreshold = 3;
+      automatonNumStates = 2;
       processMoore = getGameOfLifeProcess();
       break;
     case "cca-r2t11c3nm":
       animationAction = drawMooreCycles;
       automatonRange = 2;
-      automatonNumStates = 3;
       automatonThreshold = 11;
+      automatonNumStates = 3;
       processMoore = getMooreProcess();
       break;
     case "cca-r2t5c8nm":
       animationAction = drawMooreCycles;
       automatonRange = 2;
-      automatonNumStates = 8;
       automatonThreshold = 5;
+      automatonNumStates = 8;
       processMoore = getMooreProcess();
       break;
     case "cca-r3t15c3nm":
       animationAction = drawMooreCycles;
       automatonRange = 3;
-      automatonNumStates = 3;
       automatonThreshold = 15;
+      automatonNumStates = 3;
       processMoore = getMooreProcess();
       break;
     case "cca-r2t9c4nm":
       animationAction = drawMooreCycles;
       automatonRange = 2;
-      automatonNumStates = 4;
       automatonThreshold = 9;
+      automatonNumStates = 4;
       processMoore = getMooreProcess();
+      break;
+    case "cca-r3t10c2nn":
+      animationAction = drawNuewMannCycles;
+      automatonRange = 3;
+      automatonThreshold = 10;
+      automatonNumStates = 2;
+      processMoore = getNueMannProcess();
+      break;
+    case "cca-r2t5c3nn":
+      animationAction = drawNuewMannCycles;
+      automatonRange = 1;
+      automatonThreshold = 1;
+      automatonNumStates = 5;
+      processMoore = getNueMannProcess();
       break;
     default:
       break;
@@ -578,6 +612,7 @@ function onItemClicked(item) {
 }
 
 window.onStartClicked = onStartClicked;
+
 function onStartClicked() {
   if (animationHandle) {
     cancelAnimationFrame(animationHandle);
