@@ -178,6 +178,7 @@ export function getGradientStops(startColor, endColor, numStops) {
 }
 
 export function getGradientStopsRgb(startColor, endColor, numStops) {
+  numStops = numStops + 1;
   var startRGB = hexToRgb(startColor);
   var endRGB = hexToRgb(endColor);
   var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
@@ -186,7 +187,7 @@ export function getGradientStopsRgb(startColor, endColor, numStops) {
   var colors = [];
   colors.push(hexToRgb(startColor));
   var s = colors[colors.length - 1];
-  for (var i = 0; i < numStops; i++) {
+  for (var i = 0; i < numStops - 1; i++) {
     var c = {
       r: s.r + rStep,
       g: s.g + gStep,

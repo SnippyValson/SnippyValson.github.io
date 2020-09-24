@@ -427,6 +427,7 @@ function getGradientStops(startColor, endColor, numStops) {
 }
 
 function getGradientStopsRgb(startColor, endColor, numStops) {
+  numStops = numStops + 1;
   var startRGB = hexToRgb(startColor);
   var endRGB = hexToRgb(endColor);
   var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
@@ -436,7 +437,7 @@ function getGradientStopsRgb(startColor, endColor, numStops) {
   colors.push(hexToRgb(startColor));
   var s = colors[colors.length - 1];
 
-  for (var i = 0; i < numStops; i++) {
+  for (var i = 0; i < numStops - 1; i++) {
     var c = {
       r: s.r + rStep,
       g: s.g + gStep,
@@ -1149,7 +1150,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58555" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63289" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

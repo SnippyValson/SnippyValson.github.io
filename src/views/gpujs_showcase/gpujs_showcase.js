@@ -13,6 +13,7 @@ var gpuAutomataState = Array2D(rendererHeight, rendererWidth);
 var gpuTempState = Array2D(rendererHeight, rendererWidth);
 var automatonThreshold = 1;
 var automatonNumStates = 16;
+var automatonRange = 1;
 var style = new Style();
 style.applyStyle();
 var gpu = new GPU();
@@ -219,7 +220,15 @@ function getMooreProcess() {
       var c = this.constants.rendererWidth;
       var count = 0;
       var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-      count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState);
+      count = checkMooreNeighbourhood(
+        stateMatrix,
+        i,
+        j,
+        r,
+        c,
+        nextState,
+        this.constants.range
+      );
       if (count >= this.constants.threshold) {
         return nextState;
       } else {
@@ -232,6 +241,7 @@ function getMooreProcess() {
       rendererHeight: rendererHeight,
       threshold: automatonThreshold,
       numStates: automatonNumStates,
+      range: automatonRange,
     })
     .setFunctions([checkMooreNeighbourhood]);
 }
@@ -245,7 +255,7 @@ function getGameOfLifeProcess() {
       var r = this.constants.rendererWidth;
       var c = this.constants.rendererHeight;
       var count = 0;
-      count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1);
+      count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1, 1);
       var newState = stateMatrix[i][j];
       if (count < 2 || count > 3) {
         newState = 0;
@@ -302,7 +312,7 @@ function getCrossProcess() {
       var c = this.constants.rendererHeight;
       var count = 0;
       var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-      count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState);
+      count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
       if (count >= this.constants.threshold) {
         return nextState;
       } else {
@@ -315,6 +325,7 @@ function getCrossProcess() {
       rendererHeight: rendererWidth,
       threshold: automatonThreshold,
       numStates: automatonNumStates,
+      range: automatonRange
     })
     .setFunctions([checkCrossNeighbourhood]);
 }
@@ -344,71 +355,71 @@ function checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState) {
   return count;
 }
 
-function checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState) {
+function checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, maxRange) {
   var count = 0;
-  if (i - 1 >= 0 && j - 1 >= 0) {
-    if (stateMatrix[i - 1][j - 1] == nextState) {
-      count++;
+  for (let range = 1; range <= maxRange; range++) {
+    for (let k = 1; k <= range; k++) {
+      if (i + k < r && j + k < c) {
+        if (stateMatrix[i + k][j + k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
-  if (i - 1 >= 0 && j + 1 < c) {
-    if (stateMatrix[i - 1][j + 1] == nextState) {
-      count++;
+    for (let k = 1; k <= range; k++) {
+      if (i + k < r && j - k >= 0) {
+        if (stateMatrix[i + k][j - k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
-  if (i + 1 < r && j + 1 < c) {
-    if (stateMatrix[i + 1][j + 1] == nextState) {
-      count++;
+    for (let k = 1; k <= range; k++) {
+      if (i - k >= 0 && j + k < c) {
+        if (stateMatrix[i - k][j + k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
-  if (i + 1 < r && j - 1 >= 0) {
-    if (stateMatrix[i + 1][j - 1] == nextState) {
-      count++;
+    for (let k = 1; k <= range; k++) {
+      if (i - k >= 0 && j - k >= 0) {
+        if (stateMatrix[i - k][j - k] == nextState) {
+          count++;
+        }
+      }
     }
   }
   return count;
 }
 
-function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState) {
+function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, maxRange) {
   var count = 0;
-  if (i - 1 >= 0 && j - 1 >= 0) {
-    if (stateMatrix[i - 1][j - 1] == nextState) {
-      count++;
+  for (let range = 1; range <= maxRange; range++) {
+    for (let k = -range; k <= range; k++) {
+      if (i - range >= 0 && j + k >= 0 && j + k < c) {
+        if (stateMatrix[i - range][j + k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
-  if (i - 1 >= 0) {
-    if (stateMatrix[i - 1][j] == nextState) {
-      count++;
+    for (let k = 1; k <= range; k++) {
+      if (j + k < c) {
+        if (stateMatrix[i][j + k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
-  if (i - 1 >= 0 && j + 1 < c) {
-    if (stateMatrix[i - 1][j + 1] == nextState) {
-      count++;
+    for (let k = -range; k <= range; k++) {
+      if (i + range < r && j + k >= 0 && j + k < c) {
+        if (stateMatrix[i + range][j + k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
-  if (j + 1 < c) {
-    if (stateMatrix[i][j + 1] == nextState) {
-      count++;
-    }
-  }
-  if (i + 1 < r && j + 1 < c) {
-    if (stateMatrix[i + 1][j + 1] == nextState) {
-      count++;
-    }
-  }
-  if (i + 1 < r) {
-    if (stateMatrix[i + 1][j] == nextState) {
-      count++;
-    }
-  }
-  if (i + 1 < r && j - 1 >= 0) {
-    if (stateMatrix[i + 1][j - 1] == nextState) {
-      count++;
-    }
-  }
-  if (j - 1 >= 0) {
-    if (stateMatrix[i][j - 1] == nextState) {
-      count++;
+    for (let k = 1; k <= range; k++) {
+      if (j - k >= 0) {
+        if (stateMatrix[i][j - k] == nextState) {
+          count++;
+        }
+      }
     }
   }
   return count;
@@ -469,9 +480,11 @@ function animate() {
   t1 = t2;
   document.getElementById(
     "info-label"
-  ).innerHTML = `Processed & plotted ${numPoints} points ${
-    Math.round(1000/delay)
-  } times/second. [${Math.round(numPoints * Math.round(1000/delay))} points/second.] Phew!!!`;
+  ).innerHTML = `Processed & plotted ${numPoints} points ${Math.round(
+    1000 / delay
+  )} times/second. [${Math.round(
+    numPoints * Math.round(1000 / delay)
+  )} points/second.] Phew!!!`;
   if (animationAction) {
     animationAction();
   }
@@ -486,44 +499,79 @@ function onItemClicked(item) {
   switch (item) {
     case "square-cycles":
       animationAction = drawMooreCycles;
+      automatonRange = 1;
       automatonNumStates = 16;
       automatonThreshold = 1;
       processMoore = getMooreProcess();
       break;
     case "nuemann-cycles":
       animationAction = drawNuewMannCycles;
+      automatonRange = 1;
       automatonNumStates = 16;
       automatonThreshold = 1;
       processNuemann = getNueMannProcess();
       break;
     case "cross-cycles":
       animationAction = drawCrossCycles;
+      automatonRange = 1;
       automatonNumStates = 16;
       automatonThreshold = 1;
       processCross = getCrossProcess();
       break;
     case "cca-r1t3c4nm":
       animationAction = drawMooreCycles;
+      automatonRange = 1;
       automatonNumStates = 4;
       automatonThreshold = 3;
       processMoore = getMooreProcess();
       break;
     case "cca-r1t3c3nm":
       animationAction = drawMooreCycles;
+      automatonRange = 1;
       automatonNumStates = 3;
       automatonThreshold = 3;
       processMoore = getMooreProcess();
       break;
     case "game-of-life":
       animationAction = drawGameOfLife;
+      automatonRange = 1;
       automatonNumStates = 2;
       automatonThreshold = 3;
       processMoore = getGameOfLifeProcess();
+      break;
+    case "cca-r2t11c3nm":
+      animationAction = drawMooreCycles;
+      automatonRange = 2;
+      automatonNumStates = 3;
+      automatonThreshold = 11;
+      processMoore = getMooreProcess();
+      break;
+    case "cca-r2t5c8nm":
+      animationAction = drawMooreCycles;
+      automatonRange = 2;
+      automatonNumStates = 8;
+      automatonThreshold = 5;
+      processMoore = getMooreProcess();
+      break;
+    case "cca-r3t15c3nm":
+      animationAction = drawMooreCycles;
+      automatonRange = 3;
+      automatonNumStates = 3;
+      automatonThreshold = 15;
+      processMoore = getMooreProcess();
+      break;
+    case "cca-r2t9c4nm":
+      animationAction = drawMooreCycles;
+      automatonRange = 2;
+      automatonNumStates = 4;
+      automatonThreshold = 9;
+      processMoore = getMooreProcess();
       break;
     default:
       break;
   }
   getColors();
+  console.table(constants);
   renderer = getRenderer();
   resetState();
   renderer(gpuAutomataState);

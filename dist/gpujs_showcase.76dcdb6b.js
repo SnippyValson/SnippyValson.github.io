@@ -24483,6 +24483,7 @@ function getGradientStops(startColor, endColor, numStops) {
 }
 
 function getGradientStopsRgb(startColor, endColor, numStops) {
+  numStops = numStops + 1;
   var startRGB = hexToRgb(startColor);
   var endRGB = hexToRgb(endColor);
   var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
@@ -24492,7 +24493,7 @@ function getGradientStopsRgb(startColor, endColor, numStops) {
   colors.push(hexToRgb(startColor));
   var s = colors[colors.length - 1];
 
-  for (var i = 0; i < numStops; i++) {
+  for (var i = 0; i < numStops - 1; i++) {
     var c = {
       r: s.r + rStep,
       g: s.g + gStep,
@@ -24534,6 +24535,7 @@ var gpuAutomataState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
 var gpuTempState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
 var automatonThreshold = 1;
 var automatonNumStates = 16;
+var automatonRange = 1;
 var style = new _style.Style();
 style.applyStyle();
 var gpu = new _gpu.GPU();
@@ -24672,7 +24674,7 @@ function getMooreProcess() {
     var c = this.constants.rendererWidth;
     var count = 0;
     var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState);
+    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
 
     if (count >= this.constants.threshold) {
       return nextState;
@@ -24683,7 +24685,8 @@ function getMooreProcess() {
     rendererWidth: rendererWidth,
     rendererHeight: rendererHeight,
     threshold: automatonThreshold,
-    numStates: automatonNumStates
+    numStates: automatonNumStates,
+    range: automatonRange
   }).setFunctions([checkMooreNeighbourhood]);
 }
 
@@ -24696,7 +24699,7 @@ function getGameOfLifeProcess() {
     var r = this.constants.rendererWidth;
     var c = this.constants.rendererHeight;
     var count = 0;
-    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1);
+    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1, 1);
     var newState = stateMatrix[i][j];
 
     if (count < 2 || count > 3) {
@@ -24751,7 +24754,7 @@ function getCrossProcess() {
     var c = this.constants.rendererHeight;
     var count = 0;
     var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-    count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState);
+    count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
 
     if (count >= this.constants.threshold) {
       return nextState;
@@ -24762,7 +24765,8 @@ function getCrossProcess() {
     rendererWidth: rendererHeight,
     rendererHeight: rendererWidth,
     threshold: automatonThreshold,
-    numStates: automatonNumStates
+    numStates: automatonNumStates,
+    range: automatonRange
   }).setFunctions([checkCrossNeighbourhood]);
 }
 
@@ -24796,84 +24800,80 @@ function checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState) {
   return count;
 }
 
-function checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState) {
+function checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, maxRange) {
   var count = 0;
 
-  if (i - 1 >= 0 && j - 1 >= 0) {
-    if (stateMatrix[i - 1][j - 1] == nextState) {
-      count++;
+  for (var range = 1; range <= maxRange; range++) {
+    for (var k = 1; k <= range; k++) {
+      if (i + k < r && j + k < c) {
+        if (stateMatrix[i + k][j + k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
 
-  if (i - 1 >= 0 && j + 1 < c) {
-    if (stateMatrix[i - 1][j + 1] == nextState) {
-      count++;
+    for (var _k = 1; _k <= range; _k++) {
+      if (i + _k < r && j - _k >= 0) {
+        if (stateMatrix[i + _k][j - _k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
 
-  if (i + 1 < r && j + 1 < c) {
-    if (stateMatrix[i + 1][j + 1] == nextState) {
-      count++;
+    for (var _k2 = 1; _k2 <= range; _k2++) {
+      if (i - _k2 >= 0 && j + _k2 < c) {
+        if (stateMatrix[i - _k2][j + _k2] == nextState) {
+          count++;
+        }
+      }
     }
-  }
 
-  if (i + 1 < r && j - 1 >= 0) {
-    if (stateMatrix[i + 1][j - 1] == nextState) {
-      count++;
+    for (var _k3 = 1; _k3 <= range; _k3++) {
+      if (i - _k3 >= 0 && j - _k3 >= 0) {
+        if (stateMatrix[i - _k3][j - _k3] == nextState) {
+          count++;
+        }
+      }
     }
   }
 
   return count;
 }
 
-function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState) {
+function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, maxRange) {
   var count = 0;
 
-  if (i - 1 >= 0 && j - 1 >= 0) {
-    if (stateMatrix[i - 1][j - 1] == nextState) {
-      count++;
+  for (var range = 1; range <= maxRange; range++) {
+    for (var k = -range; k <= range; k++) {
+      if (i - range >= 0 && j + k >= 0 && j + k < c) {
+        if (stateMatrix[i - range][j + k] == nextState) {
+          count++;
+        }
+      }
     }
-  }
 
-  if (i - 1 >= 0) {
-    if (stateMatrix[i - 1][j] == nextState) {
-      count++;
+    for (var _k4 = 1; _k4 <= range; _k4++) {
+      if (j + _k4 < c) {
+        if (stateMatrix[i][j + _k4] == nextState) {
+          count++;
+        }
+      }
     }
-  }
 
-  if (i - 1 >= 0 && j + 1 < c) {
-    if (stateMatrix[i - 1][j + 1] == nextState) {
-      count++;
+    for (var _k5 = -range; _k5 <= range; _k5++) {
+      if (i + range < r && j + _k5 >= 0 && j + _k5 < c) {
+        if (stateMatrix[i + range][j + _k5] == nextState) {
+          count++;
+        }
+      }
     }
-  }
 
-  if (j + 1 < c) {
-    if (stateMatrix[i][j + 1] == nextState) {
-      count++;
-    }
-  }
-
-  if (i + 1 < r && j + 1 < c) {
-    if (stateMatrix[i + 1][j + 1] == nextState) {
-      count++;
-    }
-  }
-
-  if (i + 1 < r) {
-    if (stateMatrix[i + 1][j] == nextState) {
-      count++;
-    }
-  }
-
-  if (i + 1 < r && j - 1 >= 0) {
-    if (stateMatrix[i + 1][j - 1] == nextState) {
-      count++;
-    }
-  }
-
-  if (j - 1 >= 0) {
-    if (stateMatrix[i][j - 1] == nextState) {
-      count++;
+    for (var _k6 = 1; _k6 <= range; _k6++) {
+      if (j - _k6 >= 0) {
+        if (stateMatrix[i][j - _k6] == nextState) {
+          count++;
+        }
+      }
     }
   }
 
@@ -24956,6 +24956,7 @@ function onItemClicked(item) {
   switch (item) {
     case "square-cycles":
       animationAction = drawMooreCycles;
+      automatonRange = 1;
       automatonNumStates = 16;
       automatonThreshold = 1;
       processMoore = getMooreProcess();
@@ -24963,6 +24964,7 @@ function onItemClicked(item) {
 
     case "nuemann-cycles":
       animationAction = drawNuewMannCycles;
+      automatonRange = 1;
       automatonNumStates = 16;
       automatonThreshold = 1;
       processNuemann = getNueMannProcess();
@@ -24970,6 +24972,7 @@ function onItemClicked(item) {
 
     case "cross-cycles":
       animationAction = drawCrossCycles;
+      automatonRange = 1;
       automatonNumStates = 16;
       automatonThreshold = 1;
       processCross = getCrossProcess();
@@ -24977,6 +24980,7 @@ function onItemClicked(item) {
 
     case "cca-r1t3c4nm":
       animationAction = drawMooreCycles;
+      automatonRange = 1;
       automatonNumStates = 4;
       automatonThreshold = 3;
       processMoore = getMooreProcess();
@@ -24984,6 +24988,7 @@ function onItemClicked(item) {
 
     case "cca-r1t3c3nm":
       animationAction = drawMooreCycles;
+      automatonRange = 1;
       automatonNumStates = 3;
       automatonThreshold = 3;
       processMoore = getMooreProcess();
@@ -24991,9 +24996,42 @@ function onItemClicked(item) {
 
     case "game-of-life":
       animationAction = drawGameOfLife;
+      automatonRange = 1;
       automatonNumStates = 2;
       automatonThreshold = 3;
       processMoore = getGameOfLifeProcess();
+      break;
+
+    case "cca-r2t11c3nm":
+      animationAction = drawMooreCycles;
+      automatonRange = 2;
+      automatonNumStates = 3;
+      automatonThreshold = 11;
+      processMoore = getMooreProcess();
+      break;
+
+    case "cca-r2t5c8nm":
+      animationAction = drawMooreCycles;
+      automatonRange = 2;
+      automatonNumStates = 8;
+      automatonThreshold = 5;
+      processMoore = getMooreProcess();
+      break;
+
+    case "cca-r3t15c3nm":
+      animationAction = drawMooreCycles;
+      automatonRange = 3;
+      automatonNumStates = 3;
+      automatonThreshold = 15;
+      processMoore = getMooreProcess();
+      break;
+
+    case "cca-r2t9c4nm":
+      animationAction = drawMooreCycles;
+      automatonRange = 2;
+      automatonNumStates = 4;
+      automatonThreshold = 9;
+      processMoore = getMooreProcess();
       break;
 
     default:
@@ -25001,6 +25039,7 @@ function onItemClicked(item) {
   }
 
   getColors();
+  console.table(constants);
   renderer = getRenderer();
   resetState();
   renderer(gpuAutomataState);
@@ -25043,7 +25082,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58555" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63289" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
