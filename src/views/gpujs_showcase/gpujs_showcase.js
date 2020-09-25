@@ -499,11 +499,11 @@ function animate() {
   t1 = t2;
   document.getElementById(
     "info-label"
-  ).innerHTML = `Processed & plotted ${numPoints} points ${Math.round(
+  ).innerHTML = `Processed & plotted ${(numPoints /1000000).toFixed(2)}M points ${Math.round(
     1000 / delay
-  )} times/second. [${Math.round(
-    numPoints * Math.round(1000 / delay)
-  )} points/second.] Phew!!!`;
+  )} times/second. [${(
+    numPoints * Math.round(1000 / delay)/1000000
+  ).toFixed(2)}M points/second.] Phew!!!`;
   if (animationAction) {
     animationAction();
   }

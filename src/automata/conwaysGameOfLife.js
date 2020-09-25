@@ -7,6 +7,10 @@ export class ConwaysGameOfLife extends Automaton {
         super(rows, cols, colors, context, blocksize, numStates, 0 , 0, neighbourhood);
     }
 
+    updateParams(params){
+        super.updateParams(params);
+    }
+
     calculateAndDrawNextState() {
         for(var i = 0; i < this.size.rows; i++) {
             for(var j = 0; j < this.size.cols; j ++) {

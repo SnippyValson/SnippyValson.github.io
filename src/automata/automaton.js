@@ -31,6 +31,36 @@ export class Automaton {
         }
     }
 
+    updateParams(params){
+        if(params.rows != undefined){
+            this.size.rows = params.rows;
+        }
+        if(params.cols != undefined){
+            this.size.cols = params.cols;
+        }
+        if(params.colors != undefined){
+            this.colors = params.colors;
+        }
+        if(params.numStates != undefined){
+            this.numStates = params.numStates;
+        }
+        if(params.range != undefined){
+            this.range = params.range;
+        }
+        if(params.numStates != undefined){
+            this.threshold = params.threshold;
+        }
+        if(params.blockSize != undefined){
+            this.blockSize = params.blockSize;
+        }
+        if(params.state != undefined){
+            this.state = params.state;
+        }
+        if(params.neighbourhood != undefined){
+            this.neighbourhood = params.neighbourhood;
+        }
+    }
+
     randomize() {
         for(var i = 0 ; i < this.size.rows; i ++) {
             for(var j = 0; j < this.size.cols; j ++) {

@@ -4,8 +4,11 @@ import { Automaton } from './automaton.js';
 export class CyclicCellularAutomata extends Automaton {
 
     constructor(rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood) {
-        console.log(threshold);
         super(rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood);
+    }
+
+    updateParams(params){
+        super.updateParams(params);
     }
 
     calculateAndDrawNextState() {
