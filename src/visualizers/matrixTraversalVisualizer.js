@@ -1,5 +1,5 @@
 import { BooleanKeyframeTrack } from "three";
-import { drawState, Array2D, drawBlock } from "./../libs/uitils";
+import { drawState, Array2D, drawBlock, getGradientStops } from "./../libs/uitils";
 
 export class MatrixTraversalVisualizer {
   size;
@@ -12,7 +12,8 @@ export class MatrixTraversalVisualizer {
   row_offset;
   column_offset;
   mode;
-
+  gradient;
+  gradientIndex;
   constructor(rows, cols, colors, context, blockSize) {
     this.size = { rows: Math.round(rows), cols: Math.round(cols) };
     this.drawingContext = context;
@@ -29,6 +30,8 @@ export class MatrixTraversalVisualizer {
         this.state[i][j] = 0;
       }
     }
+    this.gradient = getGradientStops(this.colors[0], this.colors[1], this.size.cols + this.size.rows -2);
+    this.gradientIndex = 0;
   }
 
   upate(rows, cols, colors, context, blockSize) {
@@ -62,7 +65,7 @@ export class MatrixTraversalVisualizer {
             this.row_index - this.row_offset,
             this.column_index,
             this.blockSize,
-            this.colors[1]
+            this.gradient[this.gradientIndex]
           );
           /* Top half.*/
           if (this.row_index < this.size.rows - 1) {
@@ -72,6 +75,7 @@ export class MatrixTraversalVisualizer {
               this.row_index++;
               this.column_index = this.column_offset;
               this.row_offset = 0;
+              this.gradientIndex++;
             }
           } else {
             /* Bottom Half. */
@@ -80,6 +84,7 @@ export class MatrixTraversalVisualizer {
             if (this.row_index - this.row_offset < 0) {
               this.column_index = ++this.column_offset;
               this.row_offset = 0;
+              this.gradientIndex++;
             }
             if (this.column_offset > this.size.cols) {
               this.mode = "Spiral";
@@ -88,6 +93,9 @@ export class MatrixTraversalVisualizer {
               this.row_offset = 0;
               this.column_offset = 0;
               this.column_index = 0;
+              this.gradientIndex = 0;
+              this.gradient = getGradientStops(this.colors[0], this.colors[1], 398);
+              console.table(this.gradient);
               /* Clear the canvas. */
               drawState(
                 this.drawingContext,
@@ -108,7 +116,7 @@ export class MatrixTraversalVisualizer {
             this.row_index,
             this.column_index - this.column_offset,
             this.blockSize,
-            this.colors[1]
+            this.gradient[this.gradientIndex]
           );
           /* Top half.*/
           if (this.column_index < this.size.cols) {
@@ -118,6 +126,7 @@ export class MatrixTraversalVisualizer {
               this.column_index++;
               this.row_index = this.size.rows - 1;
               this.column_offset = 0;
+              this.gradientIndex++;
             }
           } else {
             /* Bottom Half. */
@@ -126,6 +135,7 @@ export class MatrixTraversalVisualizer {
             if (this.row_index < 0) {
               this.row_index = this.size.rows - ++this.row_offset;
               this.column_offset = 0;
+              this.gradientIndex++;
             }
             if (this.row_offset > this.size.rows) {
               this.mode = "DIAG_TL_BR";
@@ -134,6 +144,8 @@ export class MatrixTraversalVisualizer {
               this.row_offset = 0;
               this.column_offset = 0;
               this.column_index = 0;
+              this.gradientIndex = 0;
+              this.gradient = getGradientStops(this.colors[0], this.colors[1], this.size.cols + this.size.rows -2);
               /* Clear the canvas. */
               drawState(
                 this.drawingContext,
@@ -229,6 +241,8 @@ export class MatrixTraversalVisualizer {
             this.row_offset = 0;
             this.column_offset = 0;
             this.column_index = 0;
+            this.gradientIndex = 0;
+            this.gradient = getGradientStops(this.colors[0], this.colors[1], this.size.cols + this.size.rows -2);
             /* Clear the canvas. */
             drawState(
               this.drawingContext,

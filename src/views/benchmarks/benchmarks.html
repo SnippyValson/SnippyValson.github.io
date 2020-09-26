@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body class="pixel-body">   
+    <div id="top-bar">
+        <a class="pixel-button" href="./../../index.html">Home</a>
+        <label class="pixel-text-medium" id="info-label">Idle</label>
+    </div>
+    <div class="pixel-div" id="side-panel">
+        <button class="pixel-button list-button" onclick="onItemClicked('sorting-benchmarks')">Sorting</button>
+    </div>
+    <div class="pixel-div" id="renderer-panel">
+        <div class="pixel-div section">
+            <label class="pixel-text-medium">Populate the array. Click start to populate the array with random values.</label>
+            <button class="pixel-button section-button" onclick="populateArray()">Start</button>
+        </div>
+        <div class="pixel-div section">
+            <p class="pixel-text-medium">Bubble sort.</p>
+            <label class="pixel-text-medium">Sort the array using bubble sort alogrithm. Click start.</label>
+            <p class="pixel-text-medium" id="bubblesort-result">Result : </p>
+            <button class="pixel-button section-button" onclick="bubbleSortArray()">Start</button>
+        </div>
+        <div class="pixel-div section">
+            <p class="pixel-text-medium">Quick sort.</p>
+            <label class="pixel-text-medium">Sort the array using quick sort alogrithm. Click start.</label>
+            <p class="pixel-text-medium" id="quicksort-result">Result : </p>
+            <button class="pixel-button section-button" onclick="quickSortArray()">Start</button>
+        </div>
+        <div class="pixel-div section">
+            <p class="pixel-text-medium">Bubble sort (Multithreaded).</p>
+            <label class="pixel-text-medium">Sort the array using bubble sort alogrithm (Multithreaded). Click start.</label>
+            <p class="pixel-text-medium" id="multi-bubblesort-result">Result : </p>
+            <button class="pixel-button section-button" onclick="multiBubbleSortArray()">Start</button>
+        </div>
+        <div class="pixel-div section">
+            <p class="pixel-text-medium">Quick sort (Multithreaded).</p>
+            <label class="pixel-text-medium">Sort the array using quick sort alogrithm (Multithreaded). Click start.</label>
+            <p class="pixel-text-medium" id="multi-quicksort-result">Result : </p>
+            <button class="pixel-button section-button" onclick="multiQuickSortArray()">Start</button>
+        </div>
+    </div>
+    <script src="benchmarks.js"></script>
+</body>
+</html>
