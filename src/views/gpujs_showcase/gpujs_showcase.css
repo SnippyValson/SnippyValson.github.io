@@ -9,6 +9,7 @@
     margin: 5px;
     position: relative;
     float: left;
+    overflow-y : scroll;
 }
 
 #renderer-panel {
@@ -17,7 +18,6 @@
     margin: 5px;
     width: calc(100% - calc(var(--side-panel-with) + 30px));
     height: calc(100% - calc(var(--top-bar-height) + 50px));
-    background: white;
 }
 
 #top-bar {
@@ -31,8 +31,8 @@
     display: block;
     margin-top: 5px;
     margin-left: 5px;
-    min-width: 350px;
-    max-width: 350px;
+    min-width: 335px;
+    max-width: 335px;
 }
 
 #start-button {

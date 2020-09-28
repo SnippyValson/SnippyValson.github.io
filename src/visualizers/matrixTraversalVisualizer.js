@@ -1,4 +1,3 @@
-import { BooleanKeyframeTrack } from "three";
 import { drawState, Array2D, drawBlock, getGradientStops } from "./../libs/uitils";
 
 export class MatrixTraversalVisualizer {

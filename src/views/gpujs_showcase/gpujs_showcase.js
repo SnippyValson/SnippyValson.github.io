@@ -22,6 +22,17 @@ var colors;
 var t1 = Date.now();
 var t2 = Date.now();
 var numPoints = rendererHeight * rendererWidth;
+var listButtons = document.getElementsByClassName("list-button");
+var selectedButton = "square-cycles";
+
+function setSelectedButton(selectedButton) {
+  for (let listButton of listButtons) {
+      listButton.classList.add("pixel-button");
+      listButton.classList.remove("pixel-button-inverted");
+  }
+  selectedButton.classList.add("pixel-button-inverted");
+  selectedButton.classList.remove("pixel-button");
+}
 
 getColors();
 
@@ -290,7 +301,15 @@ function getNueMannProcess() {
       var c = this.constants.rendererHeight;
       var count = 0;
       var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-      count = checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
+      count = checkNuemannNeighbourhood(
+        stateMatrix,
+        i,
+        j,
+        r,
+        c,
+        nextState,
+        this.constants.range
+      );
       if (count >= this.constants.threshold) {
         return nextState;
       } else {
@@ -303,7 +322,7 @@ function getNueMannProcess() {
       rendererHeight: rendererWidth,
       threshold: automatonThreshold,
       numStates: automatonNumStates,
-      range: automatonRange
+      range: automatonRange,
     })
     .setFunctions([checkNuemannNeighbourhood]);
 }
@@ -360,7 +379,7 @@ function checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
   }
   var bias = 1;
   for (let iOffset = 1; iOffset <= range; iOffset++) {
-    for (let jOffset = -(range - bias); jOffset <= (range - bias); jOffset++) {
+    for (let jOffset = -(range - bias); jOffset <= range - bias; jOffset++) {
       if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
         if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
           count++;
@@ -497,12 +516,11 @@ function animate() {
     fps_t1 = fps_t2;
   }
   t1 = t2;
-  document.getElementById(
-    "info-label"
-  ).innerHTML = `Processed & plotted ${(numPoints /1000000).toFixed(2)}M points ${Math.round(
-    1000 / delay
-  )} times/second. [${(
-    numPoints * Math.round(1000 / delay)/1000000
+  document.getElementById("info-label").innerHTML = `Processed & plotted ${(
+    numPoints / 1000000
+  ).toFixed(2)}M points ${Math.round(1000 / delay)} times/second. [${(
+    (numPoints * Math.round(1000 / delay)) /
+    1000000
   ).toFixed(2)}M points/second.] Phew!!!`;
   if (animationAction) {
     animationAction();
@@ -512,7 +530,8 @@ function animate() {
 
 window.onItemClicked = onItemClicked;
 
-function onItemClicked(item) {
+function onItemClicked(item, element) {
+  setSelectedButton(element);
   if (animationHandle) {
     cancelAnimationFrame(animationHandle);
   }
@@ -605,7 +624,6 @@ function onItemClicked(item) {
       break;
   }
   getColors();
-  console.table(constants);
   renderer = getRenderer();
   resetState();
   renderer(gpuAutomataState);

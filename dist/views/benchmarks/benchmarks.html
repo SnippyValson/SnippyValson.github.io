@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 <link rel="stylesheet" href="/benchmarks.78f986f4.css"></head>
-<body class="pixel-body">   
+<body class="pixel-body">
+    <div class="pixel-div center-div pixel-dialog unselectable fade-out" id="message">
+        <button class="pixel-button top-right" onclick="closeMessage(event)">x</button>
+        <p class="pixel-text-medium">Message</p>
+        <div id="content-div">
+            <p class="pixel-text-medium" id="message-content">Sample message</p>
+        </div>
+    </div>
+    <div class="modal" id="modal-shadow"></div>   
     <div id="top-bar">
         <a class="pixel-button" href="/index.html">Home</a>
         <label class="pixel-text-medium" id="info-label">Idle</label>
@@ -16,29 +24,38 @@
     <div class="pixel-div" id="renderer-panel">
         <div class="pixel-div section">
             <label class="pixel-text-medium">Populate the array. Click start to populate the array with random values.</label>
+            <div class="top-offset">
+                <label class="pixel-text-medium unselectable">Count : </label>
+                <input class="pixel-text-medium pixel-input" id="count" value="100000">
+            </div>
+            <label class="pixel-text-big check-box hidden" id="populate-array-done">☑</label>
             <button class="pixel-button section-button" onclick="populateArray()">Start</button>
         </div>
         <div class="pixel-div section">
             <p class="pixel-text-medium">Bubble sort.</p>
             <label class="pixel-text-medium">Sort the array using bubble sort alogrithm. Click start.</label>
+            <label class="pixel-text-big check-box hidden" id="bubble-sort-done">☑</label>
             <p class="pixel-text-medium" id="bubblesort-result">Result : </p>
             <button class="pixel-button section-button" onclick="bubbleSortArray()">Start</button>
         </div>
         <div class="pixel-div section">
             <p class="pixel-text-medium">Quick sort.</p>
             <label class="pixel-text-medium">Sort the array using quick sort alogrithm. Click start.</label>
+            <label class="pixel-text-big check-box hidden" id="quick-sort-done">☑</label>
             <p class="pixel-text-medium" id="quicksort-result">Result : </p>
             <button class="pixel-button section-button" onclick="quickSortArray()">Start</button>
         </div>
         <div class="pixel-div section">
             <p class="pixel-text-medium">Bubble sort (Multithreaded).</p>
             <label class="pixel-text-medium">Sort the array using bubble sort alogrithm (Multithreaded). Click start.</label>
+            <label class="pixel-text-big check-box hidden" id="bubble-sort-multi-done">☑</label>
             <p class="pixel-text-medium" id="multi-bubblesort-result">Result : </p>
             <button class="pixel-button section-button" onclick="multiBubbleSortArray()">Start</button>
         </div>
         <div class="pixel-div section">
             <p class="pixel-text-medium">Quick sort (Multithreaded).</p>
             <label class="pixel-text-medium">Sort the array using quick sort alogrithm (Multithreaded). Click start.</label>
+            <label class="pixel-text-big check-box hidden" id="quick-sort-multi-done">☑</label>
             <p class="pixel-text-medium" id="multi-quicksort-result">Result : </p>
             <button class="pixel-button section-button" onclick="multiQuickSortArray()">Start</button>
         </div>

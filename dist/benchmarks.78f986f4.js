@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,17 +184,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/benchmarks.css":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/benchmarks.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/colors.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -223,6 +223,10 @@ ColorPalletes.push({
   background: '#2f4650',
   foreground: '#91eddf'
 });
+ColorPalletes.push({
+  background: '#000000',
+  foreground: '#63b762'
+});
 },{}],"libs/style.js":[function(require,module,exports) {
 "use strict";
 
@@ -232,12 +236,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.Style = void 0;
 
 var _colors = require("./colors.js");
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -275,153 +273,8 @@ var Style = /*#__PURE__*/function () {
   }, {
     key: "applyStyle",
     value: function applyStyle() {
-      var _this = this;
-
-      var pixelDivs = document.getElementsByClassName("pixel-div");
-
-      var _iterator = _createForOfIteratorHelper(pixelDivs),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var pd = _step.value;
-          pd.style.background = _colors.ColorPalletes[this.colorIndex].background;
-          pd.style.color = _colors.ColorPalletes[this.colorIndex].foreground;
-          pd.style.borderColor = _colors.ColorPalletes[this.colorIndex].foreground;
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-
-      var pixelBodies = document.getElementsByClassName("pixel-body");
-
-      var _iterator2 = _createForOfIteratorHelper(pixelBodies),
-          _step2;
-
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var pbd = _step2.value;
-          pbd.style.background = _colors.ColorPalletes[this.colorIndex].background;
-        }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
-      }
-
-      var pixelInputs = document.getElementsByClassName("pixel-input");
-
-      if (pixelInputs.length > 0) {
-        var _iterator3 = _createForOfIteratorHelper(pixelInputs),
-            _step3;
-
-        try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var pi = _step3.value;
-            pi.style.backgroundColor = _colors.ColorPalletes[this.colorIndex].background;
-            pi.style.color = _colors.ColorPalletes[this.colorIndex].foreground;
-            pi.style.borderColor = _colors.ColorPalletes[this.colorIndex].foreground;
-          }
-        } catch (err) {
-          _iterator3.e(err);
-        } finally {
-          _iterator3.f();
-        }
-      }
-
-      var pixelTextm = document.getElementsByClassName("pixel-text-medium");
-
-      if (pixelTextm.length > 0) {
-        var _iterator4 = _createForOfIteratorHelper(pixelTextm),
-            _step4;
-
-        try {
-          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-            var pt = _step4.value;
-            pt.style.backgroundColor = _colors.ColorPalletes[this.colorIndex].background;
-            pt.style.color = _colors.ColorPalletes[this.colorIndex].foreground;
-            pt.style.borderColor = _colors.ColorPalletes[this.colorIndex].foreground;
-          }
-        } catch (err) {
-          _iterator4.e(err);
-        } finally {
-          _iterator4.f();
-        }
-      }
-
-      var pixelTexts = document.getElementsByClassName("pixel-text-small");
-
-      if (pixelTexts.length > 0) {
-        var _iterator5 = _createForOfIteratorHelper(pixelTexts),
-            _step5;
-
-        try {
-          for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-            var _pt = _step5.value;
-            _pt.style.backgroundColor = _colors.ColorPalletes[this.colorIndex].background;
-            _pt.style.color = _colors.ColorPalletes[this.colorIndex].foreground;
-            _pt.style.borderColor = _colors.ColorPalletes[this.colorIndex].foreground;
-          }
-        } catch (err) {
-          _iterator5.e(err);
-        } finally {
-          _iterator5.f();
-        }
-      }
-
-      var pixelButtons = document.getElementsByClassName("pixel-button");
-
-      var _iterator6 = _createForOfIteratorHelper(pixelButtons),
-          _step6;
-
-      try {
-        var _loop = function _loop() {
-          var pb = _step6.value;
-          pb.style.background = _colors.ColorPalletes[_this.colorIndex].background;
-          pb.style.color = _colors.ColorPalletes[_this.colorIndex].foreground;
-          pb.style.borderColor = _colors.ColorPalletes[_this.colorIndex].foreground;
-          colorIndex = _this.colorIndex;
-          pb.onmouseover = undefined;
-
-          pb.onmouseover = function () {
-            pb.style.background = _colors.ColorPalletes[colorIndex].foreground;
-            pb.style.color = _colors.ColorPalletes[colorIndex].background;
-          };
-
-          pb.onmouseout = undefined;
-
-          pb.onmouseout = function () {
-            pb.style.background = _colors.ColorPalletes[colorIndex].background;
-            pb.style.color = _colors.ColorPalletes[colorIndex].foreground;
-          };
-
-          pb.onmousedown = undefined;
-
-          pb.onmousedown = function () {
-            pb.style.background = _colors.ColorPalletes[colorIndex].background;
-            pb.style.color = _colors.ColorPalletes[colorIndex].foreground;
-          };
-
-          pb.onmouseup = undefined;
-
-          pb.onmouseup = function () {
-            pb.style.background = _colors.ColorPalletes[colorIndex].foreground;
-            pb.style.color = _colors.ColorPalletes[colorIndex].background;
-          };
-        };
-
-        for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-          var colorIndex;
-
-          _loop();
-        }
-      } catch (err) {
-        _iterator6.e(err);
-      } finally {
-        _iterator6.f();
-      }
+      document.documentElement.style.setProperty("--pixel-foreground", _colors.ColorPalletes[this.colorIndex].foreground);
+      document.documentElement.style.setProperty("--pixel-background", _colors.ColorPalletes[this.colorIndex].background);
     }
   }]);
 
@@ -443,7 +296,7 @@ style.applyStyle();
 var array = [];
 var merged = [];
 var numFinised = 0;
-var arraySize = 80000000;
+var arraySize = 80000;
 var numPhysicalThreads = navigator.hardwareConcurrency;
 var startTime = performance.now();
 var endTime = performance.now();
@@ -466,6 +319,7 @@ for (var i = 0; i < numPhysicalThreads; i++) {
       endTime = performance.now();
       document.getElementById("multi-bubblesort-result").innerHTML = "".concat(endTime - startTime, " ms");
       document.getElementById("info-label").innerHTML = "Idle";
+      showCheckBox("bubble-sort-multi-done");
     }
   };
 
@@ -485,6 +339,7 @@ for (var i = 0; i < numPhysicalThreads; i++) {
       endTime = performance.now();
       document.getElementById("multi-quicksort-result").innerHTML = "".concat(endTime - startTime, " ms");
       document.getElementById("info-label").innerHTML = "Idle";
+      showCheckBox("quick-sort-multi-done");
     }
   };
 
@@ -496,6 +351,7 @@ var populationWorker = new Worker("/population_worker.af636754.js");
 populationWorker.onmessage = function (e) {
   array = e.data;
   document.getElementById("info-label").innerHTML = "Idle";
+  showCheckBox("populate-array-done");
 };
 
 var bubbleSortWorker = new Worker("/bubblesort_worker.7a0723df.js");
@@ -504,6 +360,7 @@ bubbleSortWorker.onmessage = function (e) {
   endTime = performance.now();
   document.getElementById("bubblesort-result").innerHTML = "".concat(endTime - startTime, " ms");
   document.getElementById("info-label").innerHTML = "Idle";
+  showCheckBox("bubble-sort-done");
 };
 
 var quickSortWorker = new Worker("/quicksort_worker.059f91c8.js");
@@ -512,6 +369,7 @@ quickSortWorker.onmessage = function (e) {
   endTime = performance.now();
   document.getElementById("quicksort-result").innerHTML = "".concat(endTime - startTime, " ms");
   document.getElementById("info-label").innerHTML = "Idle";
+  showCheckBox("quick-sort-done");
 };
 
 window.onItemCliked = onItemCliked;
@@ -527,14 +385,24 @@ function onItemCliked(item) {
 window.populateArray = populateArray;
 
 function populateArray() {
+  arraySize = parseInt(document.getElementById("count").value);
   document.getElementById("info-label").innerHTML = "Loading...";
+  hideCheckBox("populate-array-done");
   populationWorker.postMessage(arraySize);
 }
 
 window.bubbleSortArray = bubbleSortArray;
 
 function bubbleSortArray() {
+  if (array == undefined || array.length == 0) {
+    showModal("Please generate data.");
+    return;
+  } else if (array.length > 100000) {
+    showModal("You are going to process a large array, this may cause your browswer to hang.");
+  }
+
   document.getElementById("info-label").innerHTML = "Loading...";
+  hideCheckBox("bubble-sort-done");
   startTime = performance.now();
   bubbleSortWorker.postMessage({
     array: array
@@ -544,7 +412,15 @@ function bubbleSortArray() {
 window.quickSortArray = quickSortArray;
 
 function quickSortArray() {
+  if (array == undefined || array.length == 0) {
+    showModal("Please generate data.");
+    return;
+  } else if (array.length > 100000) {
+    showModal("You are going to process a large array, this may cause your browswer to hang.");
+  }
+
   document.getElementById("info-label").innerHTML = "Loading...";
+  hideCheckBox("quick-sort-done");
   startTime = performance.now();
   quickSortWorker.postMessage({
     array: array
@@ -554,39 +430,98 @@ function quickSortArray() {
 window.multiBubbleSortArray = multiBubbleSortArray;
 
 function multiBubbleSortArray() {
+  if (array == undefined || array.length == 0) {
+    showModal("Please generate data.");
+    return;
+  } else if (array.length > 100000) {
+    showModal("You are going to process a large array, this may cause your browswer to hang.");
+  }
+
   document.getElementById("info-label").innerHTML = "Loading...";
+  hideCheckBox("bubble-sort-multi-done");
   startTime = performance.now();
   var index = 0;
   numFinised = 0;
   merged = [];
-  var sliceLength = arraySize / numPhysicalThreads;
+  var numSlices = numPhysicalThreads;
+  var sliceLength = Math.floor(arraySize / numPhysicalThreads);
+  var remaining = arraySize % numPhysicalThreads;
 
-  for (var _i = 0; _i < numPhysicalThreads; _i++) {
+  if (remaining != 0) {
+    numSlices--;
+  }
+
+  for (var _i = 0; _i < numSlices; _i++) {
     bubbleSortWorkers[_i].postMessage({
       array: array.slice(index, index + sliceLength)
     });
 
     index += sliceLength;
   }
+
+  if (remaining != 0) {
+    bubbleSortWorkers[numPhysicalThreads - 1].postMessage({
+      array: array.slice(index, index + sliceLength + remaining)
+    });
+  }
 }
 
 window.multiQuickSortArray = multiQuickSortArray;
 
 function multiQuickSortArray() {
+  if (array == undefined || array.length == 0) {
+    showModal("Please generate data.");
+    return;
+  } else if (array.length > 100000) {
+    showModal("You are going to process a large array, this may cause your browswer to hang.");
+  }
+
   document.getElementById("info-label").innerHTML = "Loading...";
+  hideCheckBox("quick-sort-multi-done");
   startTime = performance.now();
   var index = 0;
   numFinised = 0;
   merged = [];
-  var sliceLength = arraySize / numPhysicalThreads;
+  var numSlices = numPhysicalThreads;
+  var sliceLength = Math.floor(arraySize / numPhysicalThreads);
+  var remaining = arraySize % numPhysicalThreads;
 
-  for (var _i2 = 0; _i2 < numPhysicalThreads; _i2++) {
+  if (remaining != 0) {
+    numSlices--;
+  }
+
+  for (var _i2 = 0; _i2 < numSlices; _i2++) {
     quickSortWorkers[_i2].postMessage({
       array: array.slice(index, index + sliceLength)
     });
 
     index += sliceLength;
   }
+
+  if (remaining != 0) {
+    quickSortWorkers[numPhysicalThreads - 1].postMessage({
+      array: array.slice(index, index + sliceLength + remaining)
+    });
+  }
+}
+
+window.closeMessage = closeMessage;
+
+function closeMessage() {
+  hideModal();
+}
+
+function showModal(message) {
+  document.getElementById("modal-shadow").style.display = "block";
+  document.getElementById("message").classList.remove("fade-out");
+  document.getElementById("message").classList.add("fade-in");
+  document.getElementById("message-content").innerHTML = message;
+}
+
+function hideModal() {
+  document.getElementById("modal-shadow").style.display = "none";
+  document.getElementById("message").classList.add("fade-out");
+  document.getElementById("message").classList.remove("fade-in");
 }
 
 function mergeSortedArrays(a, b) {
@@ -622,7 +557,17 @@ function mergeSortedArrays(a, b) {
 
   return result;
 }
-},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../libs/style":"libs/style.js","./bubblesort_worker.js":[["bubblesort_worker.7a0723df.js","views/benchmarks/bubblesort_worker.js"],"bubblesort_worker.7a0723df.js.map","views/benchmarks/bubblesort_worker.js"],"./quicksort_worker.js":[["quicksort_worker.059f91c8.js","views/benchmarks/quicksort_worker.js"],"quicksort_worker.059f91c8.js.map","views/benchmarks/quicksort_worker.js"],"./population_worker.js":[["population_worker.af636754.js","views/benchmarks/population_worker.js"],"population_worker.af636754.js.map","views/benchmarks/population_worker.js"]}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+function showCheckBox(checkBoxId) {
+  document.getElementById(checkBoxId).classList.remove("hidden");
+  document.getElementById(checkBoxId).classList.add("visible");
+}
+
+function hideCheckBox(checkBoxId) {
+  document.getElementById(checkBoxId).classList.remove("visible");
+  document.getElementById(checkBoxId).classList.add("hidden");
+}
+},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../libs/style":"libs/style.js","./bubblesort_worker.js":[["bubblesort_worker.7a0723df.js","views/benchmarks/bubblesort_worker.js"],"bubblesort_worker.7a0723df.js.map","views/benchmarks/bubblesort_worker.js"],"./quicksort_worker.js":[["quicksort_worker.059f91c8.js","views/benchmarks/quicksort_worker.js"],"quicksort_worker.059f91c8.js.map","views/benchmarks/quicksort_worker.js"],"./population_worker.js":[["population_worker.af636754.js","views/benchmarks/population_worker.js"],"population_worker.af636754.js.map","views/benchmarks/population_worker.js"]}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -650,7 +595,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62177" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49230" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -826,5 +771,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/benchmarks.js"], null)
+},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/benchmarks.js"], null)
 //# sourceMappingURL=/benchmarks.78f986f4.js.map
