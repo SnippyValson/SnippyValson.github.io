@@ -451,9 +451,9 @@ var bubbleSortWorkers = [];
 var quickSortWorkers = [];
 
 for (var i = 0; i < numPhysicalThreads; i++) {
-  var w = new Worker("/bubblesort_worker.7a0723df.js");
+  var bubbleWorker = new Worker("/bubblesort_worker.7a0723df.js");
 
-  w.onmessage = function (e) {
+  bubbleWorker.onmessage = function (e) {
     if (numFinised == 0) {
       merged = e.data;
     } else {
@@ -469,10 +469,10 @@ for (var i = 0; i < numPhysicalThreads; i++) {
     }
   };
 
-  bubbleSortWorkers.push(w);
-  var qw = new Worker("/quicksort_worker.059f91c8.js");
+  bubbleSortWorkers.push(bubbleWorker);
+  var quickWorker = new Worker("/quicksort_worker.059f91c8.js");
 
-  qw.onmessage = function (e) {
+  quickWorker.onmessage = function (e) {
     if (numFinised == 0) {
       merged = e.data;
     } else {
@@ -488,7 +488,7 @@ for (var i = 0; i < numPhysicalThreads; i++) {
     }
   };
 
-  quickSortWorkers.push(qw);
+  quickSortWorkers.push(quickWorker);
 }
 
 var populationWorker = new Worker("/population_worker.af636754.js");
@@ -604,6 +604,20 @@ function mergeSortedArrays(a, b) {
       result[index++] = b[bIndex];
       bIndex++;
     }
+
+    if (aIndex == a.length - 1 || bIndex == b.length - 1) {
+      break;
+    }
+  }
+
+  if (aIndex == a.length - 1) {
+    for (var _i3 = bIndex; _i3 < b.length; _i3++) {
+      result[index++] = b[_i3];
+    }
+  } else if (bIndex == b.length - 1) {
+    for (var _i4 = aIndex; _i4 < a.length; _i4++) {
+      result[index++] = a[_i4];
+    }
   }
 
   return result;
@@ -636,7 +650,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59548" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62177" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
