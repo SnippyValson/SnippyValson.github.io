@@ -10,7 +10,17 @@
         <button class="pixel-button top-right" onclick="closeMessage(event)">x</button>
         <p class="pixel-text-medium">Message</p>
         <div id="content-div">
-            <p class="pixel-text-medium" id="message-content">Sample message</p>
+            <p class="pixel-text-medium message" id="message-content">Sample message</p>
+            <button class="pixel-button dialog-button" onclick="closeMessage(event)">Ok</button>
+        </div>
+    </div>
+    <div class="pixel-div center-div pixel-dialog unselectable fade-out" id="okcanceldialog">
+        <button class="pixel-button top-right" onclick="closeDialog(event)">x</button>
+        <p class="pixel-text-medium">Message</p>
+        <div id="content-div">
+            <p class="pixel-text-medium message" id="okcanceldialog-content">Sample message</p>
+            <button class="pixel-button dialog-button" onclick="closeDialog(event)">Cancel</button>
+            <button class="pixel-button dialog-button" onclick="closeDialogOK(event)">Ok</button>
         </div>
     </div>
     <div class="modal" id="modal-shadow"></div>   
@@ -29,7 +39,7 @@
                 <input class="pixel-text-medium pixel-input" id="count" value="100000">
             </div>
             <label class="pixel-text-big check-box hidden" id="populate-array-done">☑</label>
-            <button class="pixel-button section-button" onclick="populateArray()">Start</button>
+            <button class="pixel-button section-button" onclick="populateArray()">Generate</button>
         </div>
         <div class="pixel-div section">
             <p class="pixel-text-medium">Bubble sort.</p>

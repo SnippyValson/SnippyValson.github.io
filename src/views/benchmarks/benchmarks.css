@@ -69,4 +69,12 @@
   #content-div {
       margin-top: 100px;
   }
+
+  .dialog-button {
+      float: right;
+      margin-left: 20px;
+  }
   
+  .message {
+      margin-bottom: 50px;
+  }

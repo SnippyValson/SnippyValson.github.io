@@ -275,6 +275,14 @@
   #content-div {
       margin-top: 100px;
   }
+
+  .dialog-button {
+      float: right;
+      margin-left: 20px;
+  }
   
+  .message {
+      margin-bottom: 50px;
+  }
 
 /*# sourceMappingURL=/benchmarks.78f986f4.css.map */

@@ -282,7 +282,17 @@ var Style = /*#__PURE__*/function () {
 }();
 
 exports.Style = Style;
-},{"./colors.js":"libs/colors.js"}],"views/benchmarks/benchmarks.js":[function(require,module,exports) {
+},{"./colors.js":"libs/colors.js"}],"views/benchmarks/strings.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Strings = void 0;
+var Strings = {};
+exports.Strings = Strings;
+Strings["bubbleSortWorkerFile"] = "bubblesort_worker.js";
+},{}],"views/benchmarks/benchmarks.js":[function(require,module,exports) {
 "use strict";
 
 require("./../../main.css");
@@ -290,6 +300,8 @@ require("./../../main.css");
 require("./benchmarks.css");
 
 var _style = require("../../libs/style");
+
+var _strings = require("./strings");
 
 var style = new _style.Style();
 style.applyStyle();
@@ -302,9 +314,11 @@ var startTime = performance.now();
 var endTime = performance.now();
 var bubbleSortWorkers = [];
 var quickSortWorkers = [];
+var okAction;
+var cancelAction;
 
 for (var i = 0; i < numPhysicalThreads; i++) {
-  var bubbleWorker = new Worker("/bubblesort_worker.7a0723df.js");
+  var bubbleWorker = new Worker(_strings.Strings.bubbleSortWorkerFile);
 
   bubbleWorker.onmessage = function (e) {
     if (numFinised == 0) {
@@ -395,12 +409,17 @@ window.bubbleSortArray = bubbleSortArray;
 
 function bubbleSortArray() {
   if (array == undefined || array.length == 0) {
-    showModal("Please generate data.");
+    showMessage("Please generate data.");
     return;
   } else if (array.length > 100000) {
-    showModal("You are going to process a large array, this may cause your browswer to hang.");
+    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeBubbleSort, function () {});
+    return;
   }
 
+  executeBubbleSort();
+}
+
+function executeBubbleSort() {
   document.getElementById("info-label").innerHTML = "Loading...";
   hideCheckBox("bubble-sort-done");
   startTime = performance.now();
@@ -413,12 +432,17 @@ window.quickSortArray = quickSortArray;
 
 function quickSortArray() {
   if (array == undefined || array.length == 0) {
-    showModal("Please generate data.");
+    showMessage("Please generate data.");
     return;
   } else if (array.length > 100000) {
-    showModal("You are going to process a large array, this may cause your browswer to hang.");
+    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeQuickSort, function () {});
+    return;
   }
 
+  executeQuickSort();
+}
+
+function executeQuickSort() {
   document.getElementById("info-label").innerHTML = "Loading...";
   hideCheckBox("quick-sort-done");
   startTime = performance.now();
@@ -431,12 +455,17 @@ window.multiBubbleSortArray = multiBubbleSortArray;
 
 function multiBubbleSortArray() {
   if (array == undefined || array.length == 0) {
-    showModal("Please generate data.");
+    showMessage("Please generate data.");
     return;
   } else if (array.length > 100000) {
-    showModal("You are going to process a large array, this may cause your browswer to hang.");
+    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeMultiBubbleSort, function () {});
+    return;
   }
 
+  executeMultiBubbleSort();
+}
+
+function executeMultiBubbleSort() {
   document.getElementById("info-label").innerHTML = "Loading...";
   hideCheckBox("bubble-sort-multi-done");
   startTime = performance.now();
@@ -470,12 +499,17 @@ window.multiQuickSortArray = multiQuickSortArray;
 
 function multiQuickSortArray() {
   if (array == undefined || array.length == 0) {
-    showModal("Please generate data.");
+    showMessage("Please generate data.");
     return;
   } else if (array.length > 100000) {
-    showModal("You are going to process a large array, this may cause your browswer to hang.");
+    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeMultiQuickSort, function () {});
+    return;
   }
 
+  executeMultiQuickSort();
+}
+
+function executeMultiQuickSort() {
   document.getElementById("info-label").innerHTML = "Loading...";
   hideCheckBox("quick-sort-multi-done");
   startTime = performance.now();
@@ -508,20 +542,69 @@ function multiQuickSortArray() {
 window.closeMessage = closeMessage;
 
 function closeMessage() {
+  hideMessage();
+}
+
+window.closeDialog = closeDialog;
+
+function closeDialog() {
+  hideDialog();
+
+  if (cancelAction) {
+    cancelAction();
+  }
+
+  okAction = undefined;
+  cancelAction = undefined;
+}
+
+window.closeDialogOK = closeDialogOK;
+
+function closeDialogOK() {
+  hideDialog();
+
+  if (okAction) {
+    okAction();
+  }
+
+  okAction = undefined;
+  cancelAction = undefined;
+}
+
+function showDialog(message, okaction, cancelaction) {
+  okAction = okaction;
+  cancelAction = cancelaction;
+  showModal();
+  document.getElementById("okcanceldialog").classList.remove("fade-out");
+  document.getElementById("okcanceldialog").classList.add("fade-in");
+  document.getElementById("okcanceldialog-content").innerHTML = message;
+}
+
+function hideDialog() {
+  document.getElementById("okcanceldialog").classList.add("fade-out");
+  document.getElementById("okcanceldialog").classList.remove("fade-in");
   hideModal();
 }
 
-function showModal(message) {
-  document.getElementById("modal-shadow").style.display = "block";
+function showMessage(message) {
+  showModal();
   document.getElementById("message").classList.remove("fade-out");
   document.getElementById("message").classList.add("fade-in");
   document.getElementById("message-content").innerHTML = message;
 }
 
-function hideModal() {
-  document.getElementById("modal-shadow").style.display = "none";
+function hideMessage() {
   document.getElementById("message").classList.add("fade-out");
   document.getElementById("message").classList.remove("fade-in");
+  hideModal();
+}
+
+function showModal() {
+  document.getElementById("modal-shadow").style.display = "block";
+}
+
+function hideModal() {
+  document.getElementById("modal-shadow").style.display = "none";
 }
 
 function mergeSortedArrays(a, b) {
@@ -567,7 +650,7 @@ function hideCheckBox(checkBoxId) {
   document.getElementById(checkBoxId).classList.remove("visible");
   document.getElementById(checkBoxId).classList.add("hidden");
 }
-},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../libs/style":"libs/style.js","./bubblesort_worker.js":[["bubblesort_worker.7a0723df.js","views/benchmarks/bubblesort_worker.js"],"bubblesort_worker.7a0723df.js.map","views/benchmarks/bubblesort_worker.js"],"./quicksort_worker.js":[["quicksort_worker.059f91c8.js","views/benchmarks/quicksort_worker.js"],"quicksort_worker.059f91c8.js.map","views/benchmarks/quicksort_worker.js"],"./population_worker.js":[["population_worker.af636754.js","views/benchmarks/population_worker.js"],"population_worker.af636754.js.map","views/benchmarks/population_worker.js"]}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../libs/style":"libs/style.js","./strings":"views/benchmarks/strings.js","./quicksort_worker.js":[["quicksort_worker.059f91c8.js","views/benchmarks/quicksort_worker.js"],"quicksort_worker.059f91c8.js.map","views/benchmarks/quicksort_worker.js"],"./population_worker.js":[["population_worker.af636754.js","views/benchmarks/population_worker.js"],"population_worker.af636754.js.map","views/benchmarks/population_worker.js"],"./bubblesort_worker.js":[["bubblesort_worker.7a0723df.js","views/benchmarks/bubblesort_worker.js"],"bubblesort_worker.7a0723df.js.map","views/benchmarks/bubblesort_worker.js"]}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -595,7 +678,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49230" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64742" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

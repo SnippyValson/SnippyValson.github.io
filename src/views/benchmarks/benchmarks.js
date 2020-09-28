@@ -1,6 +1,7 @@
 import "./../../main.css";
 import "./benchmarks.css";
 import { Style } from "../../libs/style";
+import { Strings } from "./strings"
 
 var style = new Style();
 style.applyStyle();
@@ -13,9 +14,11 @@ var startTime = performance.now();
 var endTime = performance.now();
 var bubbleSortWorkers = [];
 var quickSortWorkers = [];
+var okAction;
+var cancelAction;
 
 for (let i = 0; i < numPhysicalThreads; i++) {
-  var bubbleWorker = new Worker("bubblesort_worker.js");
+  var bubbleWorker = new Worker(Strings.bubbleSortWorkerFile);
   bubbleWorker.onmessage = function (e) {
     if (numFinised == 0) {
       merged = e.data;
@@ -101,118 +104,183 @@ function populateArray() {
 window.bubbleSortArray = bubbleSortArray;
 function bubbleSortArray() {
   if (array == undefined || array.length == 0) {
-    showModal("Please generate data.");
+    showMessage("Please generate data.");
     return;
   } else if(array.length > 100000) {
-    showModal("You are going to process a large array, this may cause your browswer to hang.");
+    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeBubbleSort, ()=>{});
+    return;
   }
-  document.getElementById("info-label").innerHTML = "Loading...";
-  hideCheckBox("bubble-sort-done");
-  startTime = performance.now();
-  bubbleSortWorker.postMessage({
-    array: array,
-  });
+  executeBubbleSort();
+}
+
+function executeBubbleSort(){
+    document.getElementById("info-label").innerHTML = "Loading...";
+    hideCheckBox("bubble-sort-done");
+    startTime = performance.now();
+    bubbleSortWorker.postMessage({
+      array: array,
+    });
 }
 
 window.quickSortArray = quickSortArray;
 function quickSortArray() {
   if (array == undefined || array.length == 0) {
-    showModal("Please generate data.");
+    showMessage("Please generate data.");
     return;
   } else if(array.length > 100000) {
-    showModal("You are going to process a large array, this may cause your browswer to hang.");
+    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeQuickSort, ()=>{});
+    return;
   }
-  document.getElementById("info-label").innerHTML = "Loading...";
-  hideCheckBox("quick-sort-done");
-  startTime = performance.now();
-  quickSortWorker.postMessage({
-    array: array,
-  });
+  executeQuickSort();
+}
+
+function executeQuickSort() {
+    document.getElementById("info-label").innerHTML = "Loading...";
+    hideCheckBox("quick-sort-done");
+    startTime = performance.now();
+    quickSortWorker.postMessage({
+      array: array,
+    });
 }
 
 window.multiBubbleSortArray = multiBubbleSortArray;
 function multiBubbleSortArray() {
   if (array == undefined || array.length == 0) {
-    showModal("Please generate data.");
+    showMessage("Please generate data.");
     return;
   } else if(array.length > 100000) {
-    showModal("You are going to process a large array, this may cause your browswer to hang.");
+    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeMultiBubbleSort, ()=>{});
+    return;
   }
-  document.getElementById("info-label").innerHTML = "Loading...";
-  hideCheckBox("bubble-sort-multi-done");
-  startTime = performance.now();
-  let index = 0;
-  numFinised = 0;
-  merged = [];
-  var numSlices = numPhysicalThreads;
-  let sliceLength = Math.floor(arraySize / numPhysicalThreads);
-  let remaining = arraySize % numPhysicalThreads;
-  if (remaining != 0) {
-    numSlices--;
-  }
-  for (let i = 0; i < numSlices; i++) {
-    bubbleSortWorkers[i].postMessage({
-      array: array.slice(index, index + sliceLength),
-    });
-    index += sliceLength;
-  }
-  if (remaining != 0) {
-    bubbleSortWorkers[numPhysicalThreads - 1].postMessage({
-      array: array.slice(index, index + sliceLength + remaining),
-    });
-  }
+  executeMultiBubbleSort();
+}
+
+function executeMultiBubbleSort() {
+    document.getElementById("info-label").innerHTML = "Loading...";
+    hideCheckBox("bubble-sort-multi-done");
+    startTime = performance.now();
+    let index = 0;
+    numFinised = 0;
+    merged = [];
+    var numSlices = numPhysicalThreads;
+    let sliceLength = Math.floor(arraySize / numPhysicalThreads);
+    let remaining = arraySize % numPhysicalThreads;
+    if (remaining != 0) {
+      numSlices--;
+    }
+    for (let i = 0; i < numSlices; i++) {
+      bubbleSortWorkers[i].postMessage({
+        array: array.slice(index, index + sliceLength),
+      });
+      index += sliceLength;
+    }
+    if (remaining != 0) {
+      bubbleSortWorkers[numPhysicalThreads - 1].postMessage({
+        array: array.slice(index, index + sliceLength + remaining),
+      });
+    }
 }
 
 window.multiQuickSortArray = multiQuickSortArray;
 function multiQuickSortArray() {
   if (array == undefined || array.length == 0) {
-    showModal("Please generate data.");
+    showMessage("Please generate data.");
     return;
   } else if(array.length > 100000) {
-    showModal("You are going to process a large array, this may cause your browswer to hang.");
+    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeMultiQuickSort, ()=>{});
+    return;
   }
-  document.getElementById("info-label").innerHTML = "Loading...";
-  hideCheckBox("quick-sort-multi-done");
-  startTime = performance.now();
-  let index = 0;
-  numFinised = 0;
-  merged = [];
-  var numSlices = numPhysicalThreads;
-  let sliceLength = Math.floor(arraySize / numPhysicalThreads);
-  let remaining = arraySize % numPhysicalThreads;
-  if (remaining != 0) {
-    numSlices--;
-  }
-  for (let i = 0; i < numSlices; i++) {
-    quickSortWorkers[i].postMessage({
-      array: array.slice(index, index + sliceLength),
-    });
-    index += sliceLength;
-  }
-  if (remaining != 0) {
-    quickSortWorkers[numPhysicalThreads - 1].postMessage({
-      array: array.slice(index, index + sliceLength + remaining),
-    });
-  }
+  executeMultiQuickSort();
+}
+
+function executeMultiQuickSort() {
+    document.getElementById("info-label").innerHTML = "Loading...";
+    hideCheckBox("quick-sort-multi-done");
+    startTime = performance.now();
+    let index = 0;
+    numFinised = 0;
+    merged = [];
+    var numSlices = numPhysicalThreads;
+    let sliceLength = Math.floor(arraySize / numPhysicalThreads);
+    let remaining = arraySize % numPhysicalThreads;
+    if (remaining != 0) {
+      numSlices--;
+    }
+    for (let i = 0; i < numSlices; i++) {
+      quickSortWorkers[i].postMessage({
+        array: array.slice(index, index + sliceLength),
+      });
+      index += sliceLength;
+    }
+    if (remaining != 0) {
+      quickSortWorkers[numPhysicalThreads - 1].postMessage({
+        array: array.slice(index, index + sliceLength + remaining),
+      });
+    }
 }
 
 window.closeMessage = closeMessage;
 function closeMessage() {
-  hideModal();
+    hideMessage();
 }
 
-function showModal(message) {
+window.closeDialog = closeDialog;
+function closeDialog() {
+    hideDialog();
+    if(cancelAction) {
+        cancelAction();
+    }
+    okAction = undefined;
+    cancelAction = undefined;
+}
+
+window.closeDialogOK = closeDialogOK;
+function closeDialogOK() {
+    hideDialog();
+    if(okAction) {
+        okAction();
+    }
+    okAction = undefined;
+    cancelAction = undefined;
+}
+
+function showDialog(message, okaction, cancelaction) {
+    okAction = okaction;
+    cancelAction = cancelaction;
+    showModal();
+    document.getElementById("okcanceldialog").classList.remove("fade-out");
+    document.getElementById("okcanceldialog").classList.add("fade-in");
+    document.getElementById("okcanceldialog-content").innerHTML = message;
+}
+
+function hideDialog(){
+    document.getElementById("okcanceldialog").classList.add("fade-out");
+    document.getElementById("okcanceldialog").classList.remove("fade-in");
+    hideModal();
+}
+
+function showMessage(message) {
+    showModal();
+    document.getElementById("message").classList.remove("fade-out");
+    document.getElementById("message").classList.add("fade-in");
+    document.getElementById("message-content").innerHTML = message;
+}
+
+function hideMessage() {
+    document.getElementById("message").classList.add("fade-out");
+    document.getElementById("message").classList.remove("fade-in");
+    hideModal();
+}
+
+function showModal() {
   document.getElementById("modal-shadow").style.display = "block";
-  document.getElementById("message").classList.remove("fade-out");
-  document.getElementById("message").classList.add("fade-in");
-  document.getElementById("message-content").innerHTML = message;
 }
 
 function hideModal() {
   document.getElementById("modal-shadow").style.display = "none";
-  document.getElementById("message").classList.add("fade-out");
-  document.getElementById("message").classList.remove("fade-in");
 }
+
+
 
 function mergeSortedArrays(a, b) {
   let count = a.length + b.length;
