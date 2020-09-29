@@ -194,7 +194,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/colors.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -235,7 +235,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Style = void 0;
 
-var _colors = require("./colors.js");
+var _colors = require("../global/colors.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -282,7 +282,7 @@ var Style = /*#__PURE__*/function () {
 }();
 
 exports.Style = Style;
-},{"./colors.js":"libs/colors.js"}],"node_modules/gpu.js/dist/gpu-browser.js":[function(require,module,exports) {
+},{"../global/colors.js":"global/colors.js"}],"node_modules/gpu.js/dist/gpu-browser.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -24989,7 +24989,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64742" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49993" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

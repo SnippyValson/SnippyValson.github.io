@@ -117,74 +117,72 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
+})({"views/benchmarks/workers/quicksort_worker.js":[function(require,module,exports) {
+onmessage = function onmessage(e) {
+  var array = e.data.array;
+  QuickSort(array, 0, array.length - 1);
+  postMessage(array);
+}; // Find a "pivot" element in the array to compare all other
+// elements against and then shift elements before or after
+// pivot depending on their values
 
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
 
-  return bundleURL;
-}
+function QuickSort(arr) {
+  var left = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+  var right = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : arr.length - 1;
+  var len = arr.length,
+      index;
 
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
+  if (len > 1) {
+    index = partition(arr, left, right);
 
-    if (matches) {
-      return getBaseURL(matches[0]);
+    if (left < index - 1) {
+      QuickSort(arr, left, index - 1);
+    }
+
+    if (index < right) {
+      QuickSort(arr, index, right);
     }
   }
 
-  return '/';
+  return arr;
 }
 
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
+function partition(arr, left, right) {
+  var middle = Math.floor((right + left) / 2),
+      pivot = arr[middle],
+      i = left,
+      // Start pointer at the first item in the array
+  j = right; // Start pointer at the last item in the array
 
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
+  while (i <= j) {
+    // Move left pointer to the right until the value at the
+    // left is greater than the pivot value
+    while (arr[i] < pivot) {
+      i++;
+    } // Move right pointer to the left until the value at the
+    // right is less than the pivot value
 
-function updateLink(link) {
-  var newLink = link.cloneNode();
 
-  newLink.onload = function () {
-    link.remove();
-  };
+    while (arr[j] > pivot) {
+      j--;
+    } // If the left pointer is less than or equal to the 
+    // right pointer, then swap values
 
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
 
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
+    if (i <= j) {
+      var _ref = [arr[j], arr[i]];
+      arr[i] = _ref[0];
+      arr[j] = _ref[1];
+      // ES6 destructuring swap
+      i++;
+      j--;
+    }
   }
 
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
-
-    cssTimeout = null;
-  }, 50);
+  return i;
 }
-
-module.exports = reloadCSS;
-},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -388,5 +386,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
-//# sourceMappingURL=/index.js.map
+},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/workers/quicksort_worker.js"], null)
+//# sourceMappingURL=/quicksort_worker.b12ed062.js.map

@@ -458,7 +458,7 @@ function rgbToInt(rgb) {
   rgbInt = (rgbInt << 8) + rgb.b;
   return rgbInt;
 }
-},{}],"libs/colors.js":[function(require,module,exports) {
+},{}],"global/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -499,7 +499,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Style = void 0;
 
-var _colors = require("./colors.js");
+var _colors = require("../global/colors.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -546,7 +546,7 @@ var Style = /*#__PURE__*/function () {
 }();
 
 exports.Style = Style;
-},{"./colors.js":"libs/colors.js"}],"automata/automaton.js":[function(require,module,exports) {
+},{"../global/colors.js":"global/colors.js"}],"automata/automaton.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1346,7 +1346,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64742" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49993" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

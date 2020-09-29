@@ -194,7 +194,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"libs/colors.js":[function(require,module,exports) {
+},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -235,7 +235,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Style = void 0;
 
-var _colors = require("./colors.js");
+var _colors = require("../global/colors.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -282,16 +282,118 @@ var Style = /*#__PURE__*/function () {
 }();
 
 exports.Style = Style;
-},{"./colors.js":"libs/colors.js"}],"views/benchmarks/strings.js":[function(require,module,exports) {
+},{"../global/colors.js":"global/colors.js"}],"views/benchmarks/localization/strings.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Strings = void 0;
-var Strings = {};
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Strings = /*#__PURE__*/function () {
+  function Strings() {
+    _classCallCheck(this, Strings);
+
+    _defineProperty(this, "strings", {});
+
+    this.strings["en"] = {};
+    this.strings["en"]["Idle"] = "Idle";
+    this.strings["en"]["LargeArrayWarning"] = "You are going to process a large array, this may cause your browswer to hang.";
+    this.strings["en"]["GenerateDataPrompt"] = "Please generate data.";
+    this.strings["en"]["BusyIndicator"] = "Working...";
+  }
+
+  _createClass(Strings, [{
+    key: "localized",
+    get: function get() {
+      return this.strings.en;
+    }
+  }]);
+
+  return Strings;
+}();
+
 exports.Strings = Strings;
-Strings["bubbleSortWorkerFile"] = "bubblesort_worker.js";
+},{}],"global/localization/strings.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Strings = void 0;
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Strings = /*#__PURE__*/function () {
+  function Strings() {
+    _classCallCheck(this, Strings);
+
+    _defineProperty(this, "strings", {});
+
+    this.strings["constants"] = {};
+    this.strings["en"] = {};
+    this.strings["en"]["MilliSecondsUnit"] = "ms";
+  }
+
+  _createClass(Strings, [{
+    key: "constants",
+    get: function get() {
+      return this.strings.constants;
+    }
+  }, {
+    key: "localized",
+    get: function get() {
+      return this.strings.en;
+    }
+  }]);
+
+  return Strings;
+}();
+
+exports.Strings = Strings;
+},{}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Constants = void 0;
+var Constants = {};
+exports.Constants = Constants;
+Constants["infoLabel"] = "info-label";
+Constants["VisibleClass"] = "visible";
+Constants["HiddenClass"] = "hidden";
+Constants["OkCancelDialogId"] = "okcanceldialog";
+Constants["OkCancelDialogContentId"] = "okcanceldialog-content";
+Constants["MessageId"] = "message";
+Constants["MessageContentId"] = "message-content";
+Constants["MessageContentId"] = "message-content";
+Constants["LargeArraySize"] = 100000;
+},{}],"global/constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Constants = void 0;
+var Constants = {};
+exports.Constants = Constants;
+Constants["fadeOutClass"] = "fade-out";
+Constants["fadeInClass"] = "fade-in";
 },{}],"views/benchmarks/benchmarks.js":[function(require,module,exports) {
 "use strict";
 
@@ -301,10 +403,17 @@ require("./benchmarks.css");
 
 var _style = require("../../libs/style");
 
-var _strings = require("./strings");
+var _strings = require("./localization/strings");
+
+var _strings2 = require("../../global/localization/strings");
+
+var _contants = require("./constants/contants");
+
+var _constants = require("../../global/constants");
 
 var style = new _style.Style();
-style.applyStyle();
+var localStrings = new _strings.Strings();
+var globalStrings = new _strings2.Strings();
 var array = [];
 var merged = [];
 var numFinised = 0;
@@ -316,9 +425,10 @@ var bubbleSortWorkers = [];
 var quickSortWorkers = [];
 var okAction;
 var cancelAction;
+style.applyStyle();
 
 for (var i = 0; i < numPhysicalThreads; i++) {
-  var bubbleWorker = new Worker(_strings.Strings.bubbleSortWorkerFile);
+  var bubbleWorker = new Worker("/bubblesort_worker.50de8120.js");
 
   bubbleWorker.onmessage = function (e) {
     if (numFinised == 0) {
@@ -331,14 +441,14 @@ for (var i = 0; i < numPhysicalThreads; i++) {
 
     if (numFinised == numPhysicalThreads) {
       endTime = performance.now();
-      document.getElementById("multi-bubblesort-result").innerHTML = "".concat(endTime - startTime, " ms");
-      document.getElementById("info-label").innerHTML = "Idle";
+      setText("multi-bubblesort-result", "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
+      setIdle();
       showCheckBox("bubble-sort-multi-done");
     }
   };
 
   bubbleSortWorkers.push(bubbleWorker);
-  var quickWorker = new Worker("/quicksort_worker.059f91c8.js");
+  var quickWorker = new Worker("/quicksort_worker.b12ed062.js");
 
   quickWorker.onmessage = function (e) {
     if (numFinised == 0) {
@@ -351,8 +461,8 @@ for (var i = 0; i < numPhysicalThreads; i++) {
 
     if (numFinised == numPhysicalThreads) {
       endTime = performance.now();
-      document.getElementById("multi-quicksort-result").innerHTML = "".concat(endTime - startTime, " ms");
-      document.getElementById("info-label").innerHTML = "Idle";
+      setText("multi-quicksort-result", "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
+      setIdle();
       showCheckBox("quick-sort-multi-done");
     }
   };
@@ -360,29 +470,29 @@ for (var i = 0; i < numPhysicalThreads; i++) {
   quickSortWorkers.push(quickWorker);
 }
 
-var populationWorker = new Worker("/population_worker.af636754.js");
+var populationWorker = new Worker("/population_worker.913fbfbb.js");
 
 populationWorker.onmessage = function (e) {
   array = e.data;
-  document.getElementById("info-label").innerHTML = "Idle";
+  setIdle();
   showCheckBox("populate-array-done");
 };
 
-var bubbleSortWorker = new Worker("/bubblesort_worker.7a0723df.js");
+var bubbleSortWorker = new Worker("/bubblesort_worker.50de8120.js");
 
 bubbleSortWorker.onmessage = function (e) {
   endTime = performance.now();
-  document.getElementById("bubblesort-result").innerHTML = "".concat(endTime - startTime, " ms");
-  document.getElementById("info-label").innerHTML = "Idle";
+  setText("bubblesort-result", "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
+  setIdle();
   showCheckBox("bubble-sort-done");
 };
 
-var quickSortWorker = new Worker("/quicksort_worker.059f91c8.js");
+var quickSortWorker = new Worker("/quicksort_worker.b12ed062.js");
 
 quickSortWorker.onmessage = function (e) {
   endTime = performance.now();
-  document.getElementById("quicksort-result").innerHTML = "".concat(endTime - startTime, " ms");
-  document.getElementById("info-label").innerHTML = "Idle";
+  setText("quicksort-result", "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
+  setIdle();
   showCheckBox("quick-sort-done");
 };
 
@@ -400,7 +510,7 @@ window.populateArray = populateArray;
 
 function populateArray() {
   arraySize = parseInt(document.getElementById("count").value);
-  document.getElementById("info-label").innerHTML = "Loading...";
+  setBusy();
   hideCheckBox("populate-array-done");
   populationWorker.postMessage(arraySize);
 }
@@ -409,10 +519,10 @@ window.bubbleSortArray = bubbleSortArray;
 
 function bubbleSortArray() {
   if (array == undefined || array.length == 0) {
-    showMessage("Please generate data.");
+    showMessage(localStrings.localized.GenerateDataPrompt);
     return;
-  } else if (array.length > 100000) {
-    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeBubbleSort, function () {});
+  } else if (array.length > _contants.Constants.LargeArraySize) {
+    showDialog(localStrings.localized.LargeArrayWarning, executeBubbleSort, function () {});
     return;
   }
 
@@ -420,7 +530,7 @@ function bubbleSortArray() {
 }
 
 function executeBubbleSort() {
-  document.getElementById("info-label").innerHTML = "Loading...";
+  setBusy();
   hideCheckBox("bubble-sort-done");
   startTime = performance.now();
   bubbleSortWorker.postMessage({
@@ -432,10 +542,10 @@ window.quickSortArray = quickSortArray;
 
 function quickSortArray() {
   if (array == undefined || array.length == 0) {
-    showMessage("Please generate data.");
+    showMessage(localStrings.localized.GenerateDataPrompt);
     return;
-  } else if (array.length > 100000) {
-    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeQuickSort, function () {});
+  } else if (array.length > _contants.Constants.LargeArraySize) {
+    showDialog(localStrings.localized.LargeArrayWarning, executeQuickSort, function () {});
     return;
   }
 
@@ -443,7 +553,7 @@ function quickSortArray() {
 }
 
 function executeQuickSort() {
-  document.getElementById("info-label").innerHTML = "Loading...";
+  setBusy();
   hideCheckBox("quick-sort-done");
   startTime = performance.now();
   quickSortWorker.postMessage({
@@ -455,10 +565,10 @@ window.multiBubbleSortArray = multiBubbleSortArray;
 
 function multiBubbleSortArray() {
   if (array == undefined || array.length == 0) {
-    showMessage("Please generate data.");
+    showMessage(localStrings.localized.GenerateDataPrompt);
     return;
-  } else if (array.length > 100000) {
-    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeMultiBubbleSort, function () {});
+  } else if (array.length > _contants.Constants.LargeArraySize) {
+    showDialog(localStrings.localized.LargeArrayWarning, executeMultiBubbleSort, function () {});
     return;
   }
 
@@ -466,7 +576,7 @@ function multiBubbleSortArray() {
 }
 
 function executeMultiBubbleSort() {
-  document.getElementById("info-label").innerHTML = "Loading...";
+  setBusy();
   hideCheckBox("bubble-sort-multi-done");
   startTime = performance.now();
   var index = 0;
@@ -499,10 +609,10 @@ window.multiQuickSortArray = multiQuickSortArray;
 
 function multiQuickSortArray() {
   if (array == undefined || array.length == 0) {
-    showMessage("Please generate data.");
+    showMessage(localStrings.localized.GenerateDataPrompt);
     return;
-  } else if (array.length > 100000) {
-    showDialog("You are going to process a large array, this may cause your browswer to hang.", executeMultiQuickSort, function () {});
+  } else if (array.length > _contants.Constants.LargeArraySize) {
+    showDialog(localStrings.localized.LargeArrayWarning, executeMultiQuickSort, function () {});
     return;
   }
 
@@ -510,7 +620,7 @@ function multiQuickSortArray() {
 }
 
 function executeMultiQuickSort() {
-  document.getElementById("info-label").innerHTML = "Loading...";
+  setBusy();
   hideCheckBox("quick-sort-multi-done");
   startTime = performance.now();
   var index = 0;
@@ -575,27 +685,27 @@ function showDialog(message, okaction, cancelaction) {
   okAction = okaction;
   cancelAction = cancelaction;
   showModal();
-  document.getElementById("okcanceldialog").classList.remove("fade-out");
-  document.getElementById("okcanceldialog").classList.add("fade-in");
-  document.getElementById("okcanceldialog-content").innerHTML = message;
+  document.getElementById(_contants.Constants.OkCancelDialogId).classList.remove(_constants.Constants.fadeOutClass);
+  document.getElementById(_contants.Constants.OkCancelDialogId).classList.add(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.OkCancelDialogContentId).innerHTML = message;
 }
 
 function hideDialog() {
-  document.getElementById("okcanceldialog").classList.add("fade-out");
-  document.getElementById("okcanceldialog").classList.remove("fade-in");
+  document.getElementById(_contants.Constants.OkCancelDialogId).classList.add(_constants.Constants.fadeOutClass);
+  document.getElementById(_contants.Constants.OkCancelDialogId).classList.remove(_constants.Constants.fadeInClass);
   hideModal();
 }
 
 function showMessage(message) {
   showModal();
-  document.getElementById("message").classList.remove("fade-out");
-  document.getElementById("message").classList.add("fade-in");
-  document.getElementById("message-content").innerHTML = message;
+  document.getElementById(_contants.Constants.MessageId).classList.remove(_constants.Constants.fadeOutClass);
+  document.getElementById(_contants.Constants.MessageId).classList.add(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.MessageContentId).innerHTML = message;
 }
 
 function hideMessage() {
-  document.getElementById("message").classList.add("fade-out");
-  document.getElementById("message").classList.remove("fade-in");
+  document.getElementById(_contants.Constants.MessageId).classList.add(_constants.Constants.fadeOutClass);
+  document.getElementById(_contants.Constants.MessageId).classList.remove(_constants.Constants.fadeInClass);
   hideModal();
 }
 
@@ -605,6 +715,28 @@ function showModal() {
 
 function hideModal() {
   document.getElementById("modal-shadow").style.display = "none";
+}
+
+function setText(textContainerId, text) {
+  document.getElementById(textContainerId).innerHTML = text;
+}
+
+function setIdle() {
+  document.getElementById(_contants.Constants.infoLabel).innerHTML = localStrings.localized.Idle;
+}
+
+function setBusy() {
+  document.getElementById(_contants.Constants.infoLabel).innerHTML = localStrings.localized.BusyIndicator;
+}
+
+function showCheckBox(checkBoxId) {
+  document.getElementById(checkBoxId).classList.remove(_contants.Constants.HiddenClass);
+  document.getElementById(checkBoxId).classList.add(_contants.Constants.VisibleClass);
+}
+
+function hideCheckBox(checkBoxId) {
+  document.getElementById(checkBoxId).classList.remove(_contants.Constants.VisibleClass);
+  document.getElementById(checkBoxId).classList.add(_contants.Constants.HiddenClass);
 }
 
 function mergeSortedArrays(a, b) {
@@ -640,17 +772,7 @@ function mergeSortedArrays(a, b) {
 
   return result;
 }
-
-function showCheckBox(checkBoxId) {
-  document.getElementById(checkBoxId).classList.remove("hidden");
-  document.getElementById(checkBoxId).classList.add("visible");
-}
-
-function hideCheckBox(checkBoxId) {
-  document.getElementById(checkBoxId).classList.remove("visible");
-  document.getElementById(checkBoxId).classList.add("hidden");
-}
-},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../libs/style":"libs/style.js","./strings":"views/benchmarks/strings.js","./quicksort_worker.js":[["quicksort_worker.059f91c8.js","views/benchmarks/quicksort_worker.js"],"quicksort_worker.059f91c8.js.map","views/benchmarks/quicksort_worker.js"],"./population_worker.js":[["population_worker.af636754.js","views/benchmarks/population_worker.js"],"population_worker.af636754.js.map","views/benchmarks/population_worker.js"],"./bubblesort_worker.js":[["bubblesort_worker.7a0723df.js","views/benchmarks/bubblesort_worker.js"],"bubblesort_worker.7a0723df.js.map","views/benchmarks/bubblesort_worker.js"]}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../libs/style":"libs/style.js","./localization/strings":"views/benchmarks/localization/strings.js","../../global/localization/strings":"global/localization/strings.js","./constants/contants":"views/benchmarks/constants/contants.js","../../global/constants":"global/constants.js","./workers\\bubblesort_worker.js":[["bubblesort_worker.50de8120.js","views/benchmarks/workers/bubblesort_worker.js"],"bubblesort_worker.50de8120.js.map","views/benchmarks/workers/bubblesort_worker.js"],"./workers\\quicksort_worker.js":[["quicksort_worker.b12ed062.js","views/benchmarks/workers/quicksort_worker.js"],"quicksort_worker.b12ed062.js.map","views/benchmarks/workers/quicksort_worker.js"],"./workers\\population_worker.js":[["population_worker.913fbfbb.js","views/benchmarks/workers/population_worker.js"],"population_worker.913fbfbb.js.map","views/benchmarks/workers/population_worker.js"]}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -678,7 +800,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64742" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49993" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
