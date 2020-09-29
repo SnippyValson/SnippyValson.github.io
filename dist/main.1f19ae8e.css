@@ -5,7 +5,7 @@
   --pixel-background: black;
 }
 
-* {
+*{
   scrollbar-width: thin;
   scrollbar-color: var(--pixel-foreground) var(--pixel-background);
 }
