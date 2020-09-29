@@ -284,10 +284,10 @@ function showDialog(message, okaction, cancelaction) {
     showModal();
     document
         .getElementById(Constants.id.OkCancelDialog)
-        .classList.remove(GlobalConstants.fadeOutClass);
+        .classList.remove(GlobalConstants.class.FadeOut);
     document
         .getElementById(Constants.id.OkCancelDialog)
-        .classList.add(GlobalConstants.fadeInClass);
+        .classList.add(GlobalConstants.class.FadeIn);
     document.getElementById(
         Constants.id.OkCancelDialogContent
     ).innerHTML = message;
@@ -296,10 +296,10 @@ function showDialog(message, okaction, cancelaction) {
 function hideDialog() {
     document
         .getElementById(Constants.id.OkCancelDialog)
-        .classList.add(GlobalConstants.fadeOutClass);
+        .classList.add(GlobalConstants.class.FadeOut);
     document
         .getElementById(Constants.id.OkCancelDialog)
-        .classList.remove(GlobalConstants.fadeInClass);
+        .classList.remove(GlobalConstants.class.FadeIn);
     hideModal();
 }
 
@@ -307,29 +307,29 @@ function showMessage(message) {
     showModal();
     document
         .getElementById(Constants.id.Message)
-        .classList.remove(GlobalConstants.fadeOutClass);
+        .classList.remove(GlobalConstants.class.FadeOut);
     document
         .getElementById(Constants.id.Message)
-        .classList.add(GlobalConstants.fadeInClass);
+        .classList.add(GlobalConstants.class.FadeIn);
     document.getElementById(Constants.id.MessageContent).innerHTML = message;
 }
 
 function hideMessage() {
     document
         .getElementById(Constants.id.Message)
-        .classList.add(GlobalConstants.fadeOutClass);
+        .classList.add(GlobalConstants.class.FadeOut);
     document
         .getElementById(Constants.id.Message)
-        .classList.remove(GlobalConstants.fadeInClass);
+        .classList.remove(GlobalConstants.class.FadeIn);
     hideModal();
 }
 
 function showModal() {
-    document.getElementById(Constants.id.ModalShadow).style.display = "block";
+    document.getElementById(Constants.id.ModalShadow).style.display = GlobalConstants.value.Block;
 }
 
 function hideModal() {
-    document.getElementById(Constants.id.ModalShadow).style.display = "none";
+    document.getElementById(Constants.id.ModalShadow).style.display = GlobalConstants.value.None;
 }
 
 function setText(textContainerId, text) {

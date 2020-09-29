@@ -1,4 +1,10 @@
 export const Constants = {};
 
-Constants["fadeOutClass"] = "fade-out";
-Constants["fadeInClass"] = "fade-in";
+Constants.value = {};
+Constants.class = {};
+
+Constants.value.Block = "block";
+Constants.value.None = "none";
+
+Constants.class.FadeOut = "fade-out";
+Constants.class.FadeIn = "fade-in";

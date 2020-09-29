@@ -374,28 +374,28 @@ Object.defineProperty(exports, "__esModule", {
 exports.Constants = void 0;
 var Constants = {};
 exports.Constants = Constants;
-Constants["id"] = {};
-Constants["class"] = {};
-Constants["value"] = {};
-Constants["value"]["LargeArraySize"] = 100000;
-Constants["id"]["MultiBubblesortCheckBox"] = "bubble-sort-multi-done";
-Constants["id"]["MultiQuicksortCheckBox"] = "quick-sort-multi-done";
-Constants["id"]["BubblesortCheckBox"] = "bubble-sort-done";
-Constants["id"]["QuicksortCheckBox"] = "quick-sort-done";
-Constants["id"]["PopulateCheckBox"] = "populate-array-done";
-Constants["id"]["QuicksortResult"] = "quicksort-result";
-Constants["id"]["BubblesortResult"] = "bubblesort-result";
-Constants["id"]["MultiQuicksortResult"] = "multi-quicksort-result";
-Constants["id"]["MultiBubblesortResult"] = "multi-bubblesort-result";
-Constants["id"]["MessageContent"] = "message-content";
-Constants["id"]["Message"] = "message";
-Constants["id"]["OkCancelDialogContent"] = "okcanceldialog-content";
-Constants["id"]["OkCancelDialog"] = "okcanceldialog";
-Constants["id"]["InfoLabel"] = "info-label";
-Constants["id"]["Count"] = "count";
-Constants["id"]["ModalShadow"] = "modal-shadow";
-Constants["class"]["Hidden"] = "hidden";
-Constants["class"]["Visible"] = "visible";
+Constants.id = {};
+Constants.class = {};
+Constants.value = {};
+Constants.value.LargeArraySize = 100000;
+Constants.id.MultiBubblesortCheckBox = "bubble-sort-multi-done";
+Constants.id.MultiQuicksortCheckBox = "quick-sort-multi-done";
+Constants.id.BubblesortCheckBox = "bubble-sort-done";
+Constants.id.QuicksortCheckBox = "quick-sort-done";
+Constants.id.PopulateCheckBox = "populate-array-done";
+Constants.id.QuicksortResult = "quicksort-result";
+Constants.id.BubblesortResult = "bubblesort-result";
+Constants.id.MultiQuicksortResult = "multi-quicksort-result";
+Constants.id.MultiBubblesortResult = "multi-bubblesort-result";
+Constants.id.MessageContent = "message-content";
+Constants.id.Message = "message";
+Constants.id.OkCancelDialogContent = "okcanceldialog-content";
+Constants.id.OkCancelDialog = "okcanceldialog";
+Constants.id.InfoLabel = "info-label";
+Constants.id.Count = "count";
+Constants.id.ModalShadow = "modal-shadow";
+Constants.class.Hidden = "hidden";
+Constants.class.Visible = "visible";
 },{}],"global/constants.js":[function(require,module,exports) {
 "use strict";
 
@@ -405,8 +405,12 @@ Object.defineProperty(exports, "__esModule", {
 exports.Constants = void 0;
 var Constants = {};
 exports.Constants = Constants;
-Constants["fadeOutClass"] = "fade-out";
-Constants["fadeInClass"] = "fade-in";
+Constants.value = {};
+Constants.class = {};
+Constants.value.Block = "block";
+Constants.value.None = "none";
+Constants.class.FadeOut = "fade-out";
+Constants.class.FadeIn = "fade-in";
 },{}],"views/benchmarks/benchmarks.js":[function(require,module,exports) {
 "use strict";
 
@@ -698,36 +702,36 @@ function showDialog(message, okaction, cancelaction) {
   okAction = okaction;
   cancelAction = cancelaction;
   showModal();
-  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.remove(_constants.Constants.fadeOutClass);
-  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.add(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.remove(_constants.Constants.class.FadeOut);
+  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.add(_constants.Constants.class.FadeIn);
   document.getElementById(_contants.Constants.id.OkCancelDialogContent).innerHTML = message;
 }
 
 function hideDialog() {
-  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.add(_constants.Constants.fadeOutClass);
-  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.remove(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.add(_constants.Constants.class.FadeOut);
+  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.remove(_constants.Constants.class.FadeIn);
   hideModal();
 }
 
 function showMessage(message) {
   showModal();
-  document.getElementById(_contants.Constants.id.Message).classList.remove(_constants.Constants.fadeOutClass);
-  document.getElementById(_contants.Constants.id.Message).classList.add(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.id.Message).classList.remove(_constants.Constants.class.FadeOut);
+  document.getElementById(_contants.Constants.id.Message).classList.add(_constants.Constants.class.FadeIn);
   document.getElementById(_contants.Constants.id.MessageContent).innerHTML = message;
 }
 
 function hideMessage() {
-  document.getElementById(_contants.Constants.id.Message).classList.add(_constants.Constants.fadeOutClass);
-  document.getElementById(_contants.Constants.id.Message).classList.remove(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.id.Message).classList.add(_constants.Constants.class.FadeOut);
+  document.getElementById(_contants.Constants.id.Message).classList.remove(_constants.Constants.class.FadeIn);
   hideModal();
 }
 
 function showModal() {
-  document.getElementById(_contants.Constants.id.ModalShadow).style.display = "block";
+  document.getElementById(_contants.Constants.id.ModalShadow).style.display = _constants.Constants.value.Block;
 }
 
 function hideModal() {
-  document.getElementById(_contants.Constants.id.ModalShadow).style.display = "none";
+  document.getElementById(_contants.Constants.id.ModalShadow).style.display = _constants.Constants.value.None;
 }
 
 function setText(textContainerId, text) {
