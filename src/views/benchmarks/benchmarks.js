@@ -45,11 +45,11 @@ for (let i = 0; i < numPhysicalThreads; i++) {
         if (numFinised == numPhysicalThreads) {
             endTime = performance.now();
             setText(
-                "multi-bubblesort-result",
+                Constants.id.MultiBubblesortResult,
                 `${endTime - startTime} ${globalStrings.localized.MilliSecondsUnit}`
             );
             setIdle();
-            showCheckBox("bubble-sort-multi-done");
+            showCheckBox(Constants.id.MultiBubblesortCheckBox);
         }
     };
     bubbleSortWorkers.push(bubbleWorker);
@@ -64,11 +64,11 @@ for (let i = 0; i < numPhysicalThreads; i++) {
         if (numFinised == numPhysicalThreads) {
             endTime = performance.now();
             setText(
-                "multi-quicksort-result",
+                Constants.id.MultiQuicksortResult,
                 `${endTime - startTime} ${globalStrings.localized.MilliSecondsUnit}`
             );
             setIdle();
-            showCheckBox("quick-sort-multi-done");
+            showCheckBox(Constants.id.MultiQuicksortCheckBox);
         }
     };
     quickSortWorkers.push(quickWorker);
@@ -78,29 +78,29 @@ var populationWorker = new Worker("workers/population_worker.js");
 populationWorker.onmessage = function (e) {
     array = e.data;
     setIdle();
-    showCheckBox("populate-array-done");
+    showCheckBox(Constants.id.PopulateCheckBox);
 };
 
 var bubbleSortWorker = new Worker("workers/bubblesort_worker.js");
 bubbleSortWorker.onmessage = function (e) {
     endTime = performance.now();
     setText(
-        "bubblesort-result",
+        Constants.id.BubblesortResult,
         `${endTime - startTime} ${globalStrings.localized.MilliSecondsUnit}`
     );
     setIdle();
-    showCheckBox("bubble-sort-done");
+    showCheckBox(Constants.id.BubblesortCheckBox);
 };
 
 var quickSortWorker = new Worker("workers/quicksort_worker.js");
 quickSortWorker.onmessage = function (e) {
     endTime = performance.now();
     setText(
-        "quicksort-result",
+        Constants.id.QuicksortResult,
         `${endTime - startTime} ${globalStrings.localized.MilliSecondsUnit}`
     );
     setIdle();
-    showCheckBox("quick-sort-done");
+    showCheckBox(Constants.id.QuicksortCheckBox);
 };
 
 window.onItemCliked = onItemCliked;
@@ -113,9 +113,9 @@ function onItemCliked(item) {
 
 window.populateArray = populateArray;
 function populateArray() {
-    arraySize = parseInt(document.getElementById("count").value);
+    arraySize = parseInt(document.getElementById(Constants.id.Count).value);
     setBusy();
-    hideCheckBox("populate-array-done");
+    hideCheckBox(Constants.id.PopulateCheckBox);
     populationWorker.postMessage(arraySize);
 }
 
@@ -124,7 +124,7 @@ function bubbleSortArray() {
     if (array == undefined || array.length == 0) {
         showMessage(localStrings.localized.GenerateDataPrompt);
         return;
-    } else if (array.length > Constants.LargeArraySize) {
+    } else if (array.length > Constants.value.LargeArraySize) {
         showDialog(
             localStrings.localized.LargeArrayWarning,
             executeBubbleSort,
@@ -137,7 +137,7 @@ function bubbleSortArray() {
 
 function executeBubbleSort() {
     setBusy();
-    hideCheckBox("bubble-sort-done");
+    hideCheckBox(Constants.id.BubblesortCheckBox);
     startTime = performance.now();
     bubbleSortWorker.postMessage({
         array: array,
@@ -149,7 +149,7 @@ function quickSortArray() {
     if (array == undefined || array.length == 0) {
         showMessage(localStrings.localized.GenerateDataPrompt);
         return;
-    } else if (array.length > Constants.LargeArraySize) {
+    } else if (array.length > Constants.value.LargeArraySize) {
         showDialog(
             localStrings.localized.LargeArrayWarning,
             executeQuickSort,
@@ -162,7 +162,7 @@ function quickSortArray() {
 
 function executeQuickSort() {
     setBusy();
-    hideCheckBox("quick-sort-done");
+    hideCheckBox(Constants.id.QuicksortCheckBox);
     startTime = performance.now();
     quickSortWorker.postMessage({
         array: array,
@@ -174,7 +174,7 @@ function multiBubbleSortArray() {
     if (array == undefined || array.length == 0) {
         showMessage(localStrings.localized.GenerateDataPrompt);
         return;
-    } else if (array.length > Constants.LargeArraySize) {
+    } else if (array.length > Constants.value.LargeArraySize) {
         showDialog(
             localStrings.localized.LargeArrayWarning,
             executeMultiBubbleSort,
@@ -186,15 +186,15 @@ function multiBubbleSortArray() {
 }
 
 function executeMultiBubbleSort() {
-    setBusy();
-    hideCheckBox("bubble-sort-multi-done");
     startTime = performance.now();
-    let index = 0;
-    numFinised = 0;
     merged = [];
-    var numSlices = numPhysicalThreads;
+    numFinised = 0;
+    let index = 0;
+    let numSlices = numPhysicalThreads;
     let sliceLength = Math.floor(arraySize / numPhysicalThreads);
     let remaining = arraySize % numPhysicalThreads;
+    setBusy();
+    hideCheckBox(Constants.id.MultiBubblesortCheckBox);
     if (remaining != 0) {
         numSlices--;
     }
@@ -216,7 +216,7 @@ function multiQuickSortArray() {
     if (array == undefined || array.length == 0) {
         showMessage(localStrings.localized.GenerateDataPrompt);
         return;
-    } else if (array.length > Constants.LargeArraySize) {
+    } else if (array.length > Constants.value.LargeArraySize) {
         showDialog(
             localStrings.localized.LargeArrayWarning,
             executeMultiQuickSort,
@@ -228,15 +228,15 @@ function multiQuickSortArray() {
 }
 
 function executeMultiQuickSort() {
-    setBusy();
-    hideCheckBox("quick-sort-multi-done");
     startTime = performance.now();
-    let index = 0;
     numFinised = 0;
     merged = [];
-    var numSlices = numPhysicalThreads;
+    let index = 0;
+    let numSlices = numPhysicalThreads;
     let sliceLength = Math.floor(arraySize / numPhysicalThreads);
     let remaining = arraySize % numPhysicalThreads;
+    setBusy();
+    hideCheckBox(Constants.id.MultiQuicksortCheckBox);
     if (remaining != 0) {
         numSlices--;
     }
@@ -283,22 +283,22 @@ function showDialog(message, okaction, cancelaction) {
     cancelAction = cancelaction;
     showModal();
     document
-        .getElementById(Constants.OkCancelDialogId)
+        .getElementById(Constants.id.OkCancelDialog)
         .classList.remove(GlobalConstants.fadeOutClass);
     document
-        .getElementById(Constants.OkCancelDialogId)
+        .getElementById(Constants.id.OkCancelDialog)
         .classList.add(GlobalConstants.fadeInClass);
     document.getElementById(
-        Constants.OkCancelDialogContentId
+        Constants.id.OkCancelDialogContent
     ).innerHTML = message;
 }
 
 function hideDialog() {
     document
-        .getElementById(Constants.OkCancelDialogId)
+        .getElementById(Constants.id.OkCancelDialog)
         .classList.add(GlobalConstants.fadeOutClass);
     document
-        .getElementById(Constants.OkCancelDialogId)
+        .getElementById(Constants.id.OkCancelDialog)
         .classList.remove(GlobalConstants.fadeInClass);
     hideModal();
 }
@@ -306,30 +306,30 @@ function hideDialog() {
 function showMessage(message) {
     showModal();
     document
-        .getElementById(Constants.MessageId)
+        .getElementById(Constants.id.Message)
         .classList.remove(GlobalConstants.fadeOutClass);
     document
-        .getElementById(Constants.MessageId)
+        .getElementById(Constants.id.Message)
         .classList.add(GlobalConstants.fadeInClass);
-    document.getElementById(Constants.MessageContentId).innerHTML = message;
+    document.getElementById(Constants.id.MessageContent).innerHTML = message;
 }
 
 function hideMessage() {
     document
-        .getElementById(Constants.MessageId)
+        .getElementById(Constants.id.Message)
         .classList.add(GlobalConstants.fadeOutClass);
     document
-        .getElementById(Constants.MessageId)
+        .getElementById(Constants.id.Message)
         .classList.remove(GlobalConstants.fadeInClass);
     hideModal();
 }
 
 function showModal() {
-    document.getElementById("modal-shadow").style.display = "block";
+    document.getElementById(Constants.id.ModalShadow).style.display = "block";
 }
 
 function hideModal() {
-    document.getElementById("modal-shadow").style.display = "none";
+    document.getElementById(Constants.id.ModalShadow).style.display = "none";
 }
 
 function setText(textContainerId, text) {
@@ -337,23 +337,23 @@ function setText(textContainerId, text) {
 }
 
 function setIdle() {
-    document.getElementById(Constants.infoLabel).innerHTML =
+    document.getElementById(Constants.id.InfoLabel).innerHTML =
         localStrings.localized.Idle;
 }
 
 function setBusy() {
-    document.getElementById(Constants.infoLabel).innerHTML =
+    document.getElementById(Constants.id.InfoLabel).innerHTML =
         localStrings.localized.BusyIndicator;
 }
 
 function showCheckBox(checkBoxId) {
-    document.getElementById(checkBoxId).classList.remove(Constants.HiddenClass);
-    document.getElementById(checkBoxId).classList.add(Constants.VisibleClass);
+    document.getElementById(checkBoxId).classList.remove(Constants.class.Hidden);
+    document.getElementById(checkBoxId).classList.add(Constants.class.Visible);
 }
 
 function hideCheckBox(checkBoxId) {
-    document.getElementById(checkBoxId).classList.remove(Constants.VisibleClass);
-    document.getElementById(checkBoxId).classList.add(Constants.HiddenClass);
+    document.getElementById(checkBoxId).classList.remove(Constants.class.Visible);
+    document.getElementById(checkBoxId).classList.add(Constants.class.Hidden);
 }
 
 function mergeSortedArrays(a, b) {

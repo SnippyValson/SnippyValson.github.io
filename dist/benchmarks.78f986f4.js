@@ -374,15 +374,28 @@ Object.defineProperty(exports, "__esModule", {
 exports.Constants = void 0;
 var Constants = {};
 exports.Constants = Constants;
-Constants["infoLabel"] = "info-label";
-Constants["VisibleClass"] = "visible";
-Constants["HiddenClass"] = "hidden";
-Constants["OkCancelDialogId"] = "okcanceldialog";
-Constants["OkCancelDialogContentId"] = "okcanceldialog-content";
-Constants["MessageId"] = "message";
-Constants["MessageContentId"] = "message-content";
-Constants["MessageContentId"] = "message-content";
-Constants["LargeArraySize"] = 100000;
+Constants["id"] = {};
+Constants["class"] = {};
+Constants["value"] = {};
+Constants["value"]["LargeArraySize"] = 100000;
+Constants["id"]["MultiBubblesortCheckBox"] = "bubble-sort-multi-done";
+Constants["id"]["MultiQuicksortCheckBox"] = "quick-sort-multi-done";
+Constants["id"]["BubblesortCheckBox"] = "bubble-sort-done";
+Constants["id"]["QuicksortCheckBox"] = "quick-sort-done";
+Constants["id"]["PopulateCheckBox"] = "populate-array-done";
+Constants["id"]["QuicksortResult"] = "quicksort-result";
+Constants["id"]["BubblesortResult"] = "bubblesort-result";
+Constants["id"]["MultiQuicksortResult"] = "multi-quicksort-result";
+Constants["id"]["MultiBubblesortResult"] = "multi-bubblesort-result";
+Constants["id"]["MessageContent"] = "message-content";
+Constants["id"]["Message"] = "message";
+Constants["id"]["OkCancelDialogContent"] = "okcanceldialog-content";
+Constants["id"]["OkCancelDialog"] = "okcanceldialog";
+Constants["id"]["InfoLabel"] = "info-label";
+Constants["id"]["Count"] = "count";
+Constants["id"]["ModalShadow"] = "modal-shadow";
+Constants["class"]["Hidden"] = "hidden";
+Constants["class"]["Visible"] = "visible";
 },{}],"global/constants.js":[function(require,module,exports) {
 "use strict";
 
@@ -441,9 +454,9 @@ for (var i = 0; i < numPhysicalThreads; i++) {
 
     if (numFinised == numPhysicalThreads) {
       endTime = performance.now();
-      setText("multi-bubblesort-result", "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
+      setText(_contants.Constants.id.MultiBubblesortResult, "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
       setIdle();
-      showCheckBox("bubble-sort-multi-done");
+      showCheckBox(_contants.Constants.id.MultiBubblesortCheckBox);
     }
   };
 
@@ -461,9 +474,9 @@ for (var i = 0; i < numPhysicalThreads; i++) {
 
     if (numFinised == numPhysicalThreads) {
       endTime = performance.now();
-      setText("multi-quicksort-result", "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
+      setText(_contants.Constants.id.MultiQuicksortResult, "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
       setIdle();
-      showCheckBox("quick-sort-multi-done");
+      showCheckBox(_contants.Constants.id.MultiQuicksortCheckBox);
     }
   };
 
@@ -475,25 +488,25 @@ var populationWorker = new Worker("/population_worker.913fbfbb.js");
 populationWorker.onmessage = function (e) {
   array = e.data;
   setIdle();
-  showCheckBox("populate-array-done");
+  showCheckBox(_contants.Constants.id.PopulateCheckBox);
 };
 
 var bubbleSortWorker = new Worker("/bubblesort_worker.50de8120.js");
 
 bubbleSortWorker.onmessage = function (e) {
   endTime = performance.now();
-  setText("bubblesort-result", "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
+  setText(_contants.Constants.id.BubblesortResult, "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
   setIdle();
-  showCheckBox("bubble-sort-done");
+  showCheckBox(_contants.Constants.id.BubblesortCheckBox);
 };
 
 var quickSortWorker = new Worker("/quicksort_worker.b12ed062.js");
 
 quickSortWorker.onmessage = function (e) {
   endTime = performance.now();
-  setText("quicksort-result", "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
+  setText(_contants.Constants.id.QuicksortResult, "".concat(endTime - startTime, " ").concat(globalStrings.localized.MilliSecondsUnit));
   setIdle();
-  showCheckBox("quick-sort-done");
+  showCheckBox(_contants.Constants.id.QuicksortCheckBox);
 };
 
 window.onItemCliked = onItemCliked;
@@ -509,9 +522,9 @@ function onItemCliked(item) {
 window.populateArray = populateArray;
 
 function populateArray() {
-  arraySize = parseInt(document.getElementById("count").value);
+  arraySize = parseInt(document.getElementById(_contants.Constants.id.Count).value);
   setBusy();
-  hideCheckBox("populate-array-done");
+  hideCheckBox(_contants.Constants.id.PopulateCheckBox);
   populationWorker.postMessage(arraySize);
 }
 
@@ -521,7 +534,7 @@ function bubbleSortArray() {
   if (array == undefined || array.length == 0) {
     showMessage(localStrings.localized.GenerateDataPrompt);
     return;
-  } else if (array.length > _contants.Constants.LargeArraySize) {
+  } else if (array.length > _contants.Constants.value.LargeArraySize) {
     showDialog(localStrings.localized.LargeArrayWarning, executeBubbleSort, function () {});
     return;
   }
@@ -531,7 +544,7 @@ function bubbleSortArray() {
 
 function executeBubbleSort() {
   setBusy();
-  hideCheckBox("bubble-sort-done");
+  hideCheckBox(_contants.Constants.id.BubblesortCheckBox);
   startTime = performance.now();
   bubbleSortWorker.postMessage({
     array: array
@@ -544,7 +557,7 @@ function quickSortArray() {
   if (array == undefined || array.length == 0) {
     showMessage(localStrings.localized.GenerateDataPrompt);
     return;
-  } else if (array.length > _contants.Constants.LargeArraySize) {
+  } else if (array.length > _contants.Constants.value.LargeArraySize) {
     showDialog(localStrings.localized.LargeArrayWarning, executeQuickSort, function () {});
     return;
   }
@@ -554,7 +567,7 @@ function quickSortArray() {
 
 function executeQuickSort() {
   setBusy();
-  hideCheckBox("quick-sort-done");
+  hideCheckBox(_contants.Constants.id.QuicksortCheckBox);
   startTime = performance.now();
   quickSortWorker.postMessage({
     array: array
@@ -567,7 +580,7 @@ function multiBubbleSortArray() {
   if (array == undefined || array.length == 0) {
     showMessage(localStrings.localized.GenerateDataPrompt);
     return;
-  } else if (array.length > _contants.Constants.LargeArraySize) {
+  } else if (array.length > _contants.Constants.value.LargeArraySize) {
     showDialog(localStrings.localized.LargeArrayWarning, executeMultiBubbleSort, function () {});
     return;
   }
@@ -576,15 +589,15 @@ function multiBubbleSortArray() {
 }
 
 function executeMultiBubbleSort() {
-  setBusy();
-  hideCheckBox("bubble-sort-multi-done");
   startTime = performance.now();
-  var index = 0;
-  numFinised = 0;
   merged = [];
+  numFinised = 0;
+  var index = 0;
   var numSlices = numPhysicalThreads;
   var sliceLength = Math.floor(arraySize / numPhysicalThreads);
   var remaining = arraySize % numPhysicalThreads;
+  setBusy();
+  hideCheckBox(_contants.Constants.id.MultiBubblesortCheckBox);
 
   if (remaining != 0) {
     numSlices--;
@@ -611,7 +624,7 @@ function multiQuickSortArray() {
   if (array == undefined || array.length == 0) {
     showMessage(localStrings.localized.GenerateDataPrompt);
     return;
-  } else if (array.length > _contants.Constants.LargeArraySize) {
+  } else if (array.length > _contants.Constants.value.LargeArraySize) {
     showDialog(localStrings.localized.LargeArrayWarning, executeMultiQuickSort, function () {});
     return;
   }
@@ -620,15 +633,15 @@ function multiQuickSortArray() {
 }
 
 function executeMultiQuickSort() {
-  setBusy();
-  hideCheckBox("quick-sort-multi-done");
   startTime = performance.now();
-  var index = 0;
   numFinised = 0;
   merged = [];
+  var index = 0;
   var numSlices = numPhysicalThreads;
   var sliceLength = Math.floor(arraySize / numPhysicalThreads);
   var remaining = arraySize % numPhysicalThreads;
+  setBusy();
+  hideCheckBox(_contants.Constants.id.MultiQuicksortCheckBox);
 
   if (remaining != 0) {
     numSlices--;
@@ -685,36 +698,36 @@ function showDialog(message, okaction, cancelaction) {
   okAction = okaction;
   cancelAction = cancelaction;
   showModal();
-  document.getElementById(_contants.Constants.OkCancelDialogId).classList.remove(_constants.Constants.fadeOutClass);
-  document.getElementById(_contants.Constants.OkCancelDialogId).classList.add(_constants.Constants.fadeInClass);
-  document.getElementById(_contants.Constants.OkCancelDialogContentId).innerHTML = message;
+  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.remove(_constants.Constants.fadeOutClass);
+  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.add(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.id.OkCancelDialogContent).innerHTML = message;
 }
 
 function hideDialog() {
-  document.getElementById(_contants.Constants.OkCancelDialogId).classList.add(_constants.Constants.fadeOutClass);
-  document.getElementById(_contants.Constants.OkCancelDialogId).classList.remove(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.add(_constants.Constants.fadeOutClass);
+  document.getElementById(_contants.Constants.id.OkCancelDialog).classList.remove(_constants.Constants.fadeInClass);
   hideModal();
 }
 
 function showMessage(message) {
   showModal();
-  document.getElementById(_contants.Constants.MessageId).classList.remove(_constants.Constants.fadeOutClass);
-  document.getElementById(_contants.Constants.MessageId).classList.add(_constants.Constants.fadeInClass);
-  document.getElementById(_contants.Constants.MessageContentId).innerHTML = message;
+  document.getElementById(_contants.Constants.id.Message).classList.remove(_constants.Constants.fadeOutClass);
+  document.getElementById(_contants.Constants.id.Message).classList.add(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.id.MessageContent).innerHTML = message;
 }
 
 function hideMessage() {
-  document.getElementById(_contants.Constants.MessageId).classList.add(_constants.Constants.fadeOutClass);
-  document.getElementById(_contants.Constants.MessageId).classList.remove(_constants.Constants.fadeInClass);
+  document.getElementById(_contants.Constants.id.Message).classList.add(_constants.Constants.fadeOutClass);
+  document.getElementById(_contants.Constants.id.Message).classList.remove(_constants.Constants.fadeInClass);
   hideModal();
 }
 
 function showModal() {
-  document.getElementById("modal-shadow").style.display = "block";
+  document.getElementById(_contants.Constants.id.ModalShadow).style.display = "block";
 }
 
 function hideModal() {
-  document.getElementById("modal-shadow").style.display = "none";
+  document.getElementById(_contants.Constants.id.ModalShadow).style.display = "none";
 }
 
 function setText(textContainerId, text) {
@@ -722,21 +735,21 @@ function setText(textContainerId, text) {
 }
 
 function setIdle() {
-  document.getElementById(_contants.Constants.infoLabel).innerHTML = localStrings.localized.Idle;
+  document.getElementById(_contants.Constants.id.InfoLabel).innerHTML = localStrings.localized.Idle;
 }
 
 function setBusy() {
-  document.getElementById(_contants.Constants.infoLabel).innerHTML = localStrings.localized.BusyIndicator;
+  document.getElementById(_contants.Constants.id.InfoLabel).innerHTML = localStrings.localized.BusyIndicator;
 }
 
 function showCheckBox(checkBoxId) {
-  document.getElementById(checkBoxId).classList.remove(_contants.Constants.HiddenClass);
-  document.getElementById(checkBoxId).classList.add(_contants.Constants.VisibleClass);
+  document.getElementById(checkBoxId).classList.remove(_contants.Constants.class.Hidden);
+  document.getElementById(checkBoxId).classList.add(_contants.Constants.class.Visible);
 }
 
 function hideCheckBox(checkBoxId) {
-  document.getElementById(checkBoxId).classList.remove(_contants.Constants.VisibleClass);
-  document.getElementById(checkBoxId).classList.add(_contants.Constants.HiddenClass);
+  document.getElementById(checkBoxId).classList.remove(_contants.Constants.class.Visible);
+  document.getElementById(checkBoxId).classList.add(_contants.Constants.class.Hidden);
 }
 
 function mergeSortedArrays(a, b) {
