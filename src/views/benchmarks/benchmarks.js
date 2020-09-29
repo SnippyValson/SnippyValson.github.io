@@ -2,7 +2,7 @@ import "./../../main.css";
 import "./benchmarks.css";
 import {
     Style
-} from "../../libs/style";
+} from "../../global/style";
 import {
     Strings
 } from "./localization/strings";

@@ -1,4 +1,4 @@
-import { ColorPalletes } from "../global/colors.js";
+import { ColorPalletes } from "./colors.js";
 
 export class Style {
   colorIndex;

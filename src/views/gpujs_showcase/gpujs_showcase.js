@@ -1,6 +1,6 @@
 import "./../../main.css";
 import "./gpujs_showcase.css";
-import { Style } from "../../libs/style";
+import { Style } from "../../global/style";
 import { GPU } from "gpu.js";
 import { Array2D, getGradientStopsRgb } from "./../../libs/uitils.js";
 

@@ -227,7 +227,7 @@ ColorPalletes.push({
   background: '#000000',
   foreground: '#63b762'
 });
-},{}],"libs/style.js":[function(require,module,exports) {
+},{}],"global/style.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -235,7 +235,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Style = void 0;
 
-var _colors = require("../global/colors.js");
+var _colors = require("./colors.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -282,7 +282,7 @@ var Style = /*#__PURE__*/function () {
 }();
 
 exports.Style = Style;
-},{"../global/colors.js":"global/colors.js"}],"views/benchmarks/localization/strings.js":[function(require,module,exports) {
+},{"./colors.js":"global/colors.js"}],"views/benchmarks/localization/strings.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -304,11 +304,11 @@ var Strings = /*#__PURE__*/function () {
 
     _defineProperty(this, "strings", {});
 
-    this.strings["en"] = {};
-    this.strings["en"]["Idle"] = "Idle";
-    this.strings["en"]["LargeArrayWarning"] = "You are going to process a large array, this may cause your browswer to hang.";
-    this.strings["en"]["GenerateDataPrompt"] = "Please generate data.";
-    this.strings["en"]["BusyIndicator"] = "Working...";
+    this.strings.en = {};
+    this.strings.en.Idle = "Idle";
+    this.strings.en.LargeArrayWarning = "You are going to process a large array, this may cause your browswer to hang.";
+    this.strings.en.GenerateDataPrompt = "Please generate data.";
+    this.strings.en.BusyIndicator = "Working...";
   }
 
   _createClass(Strings, [{
@@ -344,17 +344,11 @@ var Strings = /*#__PURE__*/function () {
 
     _defineProperty(this, "strings", {});
 
-    this.strings["constants"] = {};
-    this.strings["en"] = {};
-    this.strings["en"]["MilliSecondsUnit"] = "ms";
+    this.strings.en = {};
+    this.strings.en.MilliSecondsUnit = "ms";
   }
 
   _createClass(Strings, [{
-    key: "constants",
-    get: function get() {
-      return this.strings.constants;
-    }
-  }, {
     key: "localized",
     get: function get() {
       return this.strings.en;
@@ -418,7 +412,7 @@ require("./../../main.css");
 
 require("./benchmarks.css");
 
-var _style = require("../../libs/style");
+var _style = require("../../global/style");
 
 var _strings = require("./localization/strings");
 
@@ -789,7 +783,7 @@ function mergeSortedArrays(a, b) {
 
   return result;
 }
-},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../libs/style":"libs/style.js","./localization/strings":"views/benchmarks/localization/strings.js","../../global/localization/strings":"global/localization/strings.js","./constants/contants":"views/benchmarks/constants/contants.js","../../global/constants":"global/constants.js","./workers\\bubblesort_worker.js":[["bubblesort_worker.50de8120.js","views/benchmarks/workers/bubblesort_worker.js"],"bubblesort_worker.50de8120.js.map","views/benchmarks/workers/bubblesort_worker.js"],"./workers\\quicksort_worker.js":[["quicksort_worker.b12ed062.js","views/benchmarks/workers/quicksort_worker.js"],"quicksort_worker.b12ed062.js.map","views/benchmarks/workers/quicksort_worker.js"],"./workers\\population_worker.js":[["population_worker.913fbfbb.js","views/benchmarks/workers/population_worker.js"],"population_worker.913fbfbb.js.map","views/benchmarks/workers/population_worker.js"]}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../global/style":"global/style.js","./localization/strings":"views/benchmarks/localization/strings.js","../../global/localization/strings":"global/localization/strings.js","./constants/contants":"views/benchmarks/constants/contants.js","../../global/constants":"global/constants.js","./workers\\bubblesort_worker.js":[["bubblesort_worker.50de8120.js","views/benchmarks/workers/bubblesort_worker.js"],"bubblesort_worker.50de8120.js.map","views/benchmarks/workers/bubblesort_worker.js"],"./workers\\quicksort_worker.js":[["quicksort_worker.b12ed062.js","views/benchmarks/workers/quicksort_worker.js"],"quicksort_worker.b12ed062.js.map","views/benchmarks/workers/quicksort_worker.js"],"./workers\\population_worker.js":[["population_worker.913fbfbb.js","views/benchmarks/workers/population_worker.js"],"population_worker.913fbfbb.js.map","views/benchmarks/workers/population_worker.js"]}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -817,7 +811,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49993" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53799" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

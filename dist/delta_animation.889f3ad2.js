@@ -227,7 +227,7 @@ ColorPalletes.push({
   background: '#000000',
   foreground: '#63b762'
 });
-},{}],"libs/style.js":[function(require,module,exports) {
+},{}],"global/style.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -235,7 +235,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Style = void 0;
 
-var _colors = require("../global/colors.js");
+var _colors = require("./colors.js");
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -282,7 +282,7 @@ var Style = /*#__PURE__*/function () {
 }();
 
 exports.Style = Style;
-},{"../global/colors.js":"global/colors.js"}],"node_modules/three/build/three.module.js":[function(require,module,exports) {
+},{"./colors.js":"global/colors.js"}],"node_modules/three/build/three.module.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -36734,7 +36734,7 @@ require("./../../main.css");
 
 require("./delta_animation.css");
 
-var _style = require("../../libs/style");
+var _style = require("../../global/style");
 
 var THREE = _interopRequireWildcard(require("three"));
 
@@ -36849,7 +36849,7 @@ function onUpdateClicked() {
   console.log(newFps);
   frameRate = parseFloat(newFps);
 }
-},{"./../../main.css":"main.css","./delta_animation.css":"views/delta_animation/delta_animation.css","../../libs/style":"libs/style.js","three":"node_modules/three/build/three.module.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./delta_animation.css":"views/delta_animation/delta_animation.css","../../global/style":"global/style.js","three":"node_modules/three/build/three.module.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -36877,7 +36877,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49993" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53799" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

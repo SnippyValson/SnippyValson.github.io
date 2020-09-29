@@ -6,7 +6,7 @@ import {
   getNuemannNeighbours,
   getCrossNeighbours,
 } from "./libs/uitils.js";
-import { Style } from "./libs/style";
+import { Style } from "./global/style.js";
 import { ConwaysGameOfLife } from "./automata/conwaysGameOfLife.js";
 import { CyclicCellularAutomata } from "./automata/cyclicCellularAutomata";
 import { MatrixTraversalVisualizer } from "./visualizers/matrixTraversalVisualizer";

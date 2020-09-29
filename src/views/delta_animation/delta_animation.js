@@ -2,7 +2,7 @@ import "./../../main.css";
 import "./delta_animation.css";
 import {
   Style
-} from "../../libs/style";
+} from "../../global/style";
 import * as THREE from "three";
 import {
   PointLightHelper
