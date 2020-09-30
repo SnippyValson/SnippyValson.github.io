@@ -531,20 +531,6 @@ function animate() {
 window.onItemClicked = onItemClicked;
 
 
-
-// ==========================================
-  var gpuWorker = new Worker("workers/gpu_worker.js");
-  gpuWorker.onmessage = function(e) {
-    gpuTempState = e.data;
-    renderAndSwap();
-    animationHandle = requestAnimationFrame(workerAnimate);
-  }
-
-  function workerAnimate() {
-    gpuWorker.postMessage({state:gpuAutomataState, rendererHeight : rendererHeight, rendererWidth: rendererWidth, automatonNumStates : automatonNumStates, automatonRange:automatonRange, automatonThreshold : automatonThreshold });
-  }
-// ===========================================
-
 function onItemClicked(item, element) {
   setSelectedButton(element);
   if (animationHandle) {
@@ -650,5 +636,5 @@ function onStartClicked() {
   if (animationHandle) {
     cancelAnimationFrame(animationHandle);
   }
-  animationHandle = requestAnimationFrame(workerAnimate);
+  animationHandle = requestAnimationFrame(animate);
 }
