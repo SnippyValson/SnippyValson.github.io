@@ -282,7 +282,276 @@ var Style = /*#__PURE__*/function () {
 }();
 
 exports.Style = Style;
-},{"./colors.js":"global/colors.js"}],"node_modules/gpu.js/dist/gpu-browser.js":[function(require,module,exports) {
+},{"./colors.js":"global/colors.js"}],"libs/uitils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getNuemannNeighbours = getNuemannNeighbours;
+exports.getCrossNeighbours = getCrossNeighbours;
+exports.getMooreNeighbours = getMooreNeighbours;
+exports.getMooreNeighboursWrap = getMooreNeighboursWrap;
+exports.getRandomColor = getRandomColor;
+exports.rand = rand;
+exports.getNextState = getNextState;
+exports.fillBackground = fillBackground;
+exports.drawState = drawState;
+exports.drawBlock = drawBlock;
+exports.getGradientStops = getGradientStops;
+exports.getGradientStopsRgb = getGradientStopsRgb;
+exports.rgbToInt = rgbToInt;
+exports.Array2D = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function getNuemannNeighbours(x, y, matrix, r, c) {
+  var i = x;
+  var j = y;
+  var neigbours = [];
+
+  if (i - 1 >= 0) {
+    neigbours.push(matrix[i - 1][j]);
+  }
+
+  if (j + 1 < c) {
+    neigbours.push(matrix[i][j + 1]);
+  }
+
+  if (i + 1 < r) {
+    neigbours.push(matrix[i + 1][j]);
+  }
+
+  if (j - 1 >= 0) {
+    neigbours.push(matrix[i][j - 1]);
+  }
+
+  return neigbours;
+}
+
+function getCrossNeighbours(x, y, matrix, r, c) {
+  var i = x;
+  var j = y;
+  var neigbours = [];
+
+  if (i - 1 >= 0 && j - 1 >= 0) {
+    neigbours.push(matrix[i - 1][j - 1]);
+  }
+
+  if (i - 1 >= 0 && j + 1 < c) {
+    neigbours.push(matrix[i - 1][j + 1]);
+  }
+
+  if (i + 1 < r && j + 1 < c) {
+    neigbours.push(matrix[i + 1][j + 1]);
+  }
+
+  if (i + 1 < r && j - 1 >= 0) {
+    neigbours.push(matrix[i + 1][j - 1]);
+  }
+
+  return neigbours;
+}
+
+function getMooreNeighbours(x, y, matrix, r, c) {
+  var i = x;
+  var j = y;
+  var neigbours = [];
+
+  try {
+    if (i - 1 >= 0 && j - 1 >= 0) {
+      neigbours.push(matrix[i - 1][j - 1]);
+    }
+
+    if (i - 1 >= 0) {
+      neigbours.push(matrix[i - 1][j]);
+    }
+
+    if (i - 1 >= 0 && j + 1 < c) {
+      neigbours.push(matrix[i - 1][j + 1]);
+    }
+
+    if (j + 1 < c) {
+      neigbours.push(matrix[i][j + 1]);
+    }
+
+    if (i + 1 < r && j + 1 < c) {
+      neigbours.push(matrix[i + 1][j + 1]);
+    }
+
+    if (i + 1 < r) {
+      neigbours.push(matrix[i + 1][j]);
+    }
+
+    if (i + 1 < r && j - 1 >= 0) {
+      neigbours.push(matrix[i + 1][j - 1]);
+    }
+
+    if (j - 1 >= 0) {
+      neigbours.push(matrix[i][j - 1]);
+    }
+  } catch (e) {}
+
+  return neigbours;
+}
+
+function getMooreNeighboursWrap(x, y, matrix, r, c) {
+  var i = x;
+  var j = y;
+  var neigbours = [];
+
+  try {
+    neigbours.push(matrix[(i - 1 + r) % r][(j - 1 + c) % c]);
+    neigbours.push(matrix[(i - 1 + r) % r][j]);
+    neigbours.push(matrix[(i - 1 + r) % r][(j + 1 + c) % c]);
+    neigbours.push(matrix[i][(j + 1 + c) % c]);
+    neigbours.push(matrix[(i + 1 + r) % r][(j + 1 + c) % c]);
+    neigbours.push(matrix[(i + 1 + r) % r][j]);
+    neigbours.push(matrix[(i + 1 + r) % r][(j - 1 + c) % c]);
+    neigbours.push(matrix[i][(j - 1 + c) % c]);
+  } catch (e) {}
+
+  return neigbours;
+}
+
+function getRandomColor() {
+  var letters = "0123456789ABCDEF";
+  var color = "#";
+
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+
+  return color;
+}
+
+var Array2D = function Array2D(r, c) {
+  return _toConsumableArray(Array(r)).map(function (x) {
+    return Array(c).fill(0);
+  });
+};
+
+exports.Array2D = Array2D;
+
+function rand(min, max) {
+  return Math.floor(Math.pow(10, 14) * Math.random() * Math.random()) % (max - min + 1) + min;
+}
+
+function getNextState(state, numStates) {
+  return (state + 1) % numStates;
+}
+
+function fillBackground(context, color, width, height) {
+  context.beginPath();
+  context.fillStyle = color;
+  context.rect(0, 0, width, height);
+  context.fill();
+}
+
+function drawState(context, automataState, r, c, bsize, colors) {
+  for (var i = 0; i < r; i++) {
+    for (var j = 0; j < c; j++) {
+      drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
+    }
+  }
+}
+
+function drawBlock(context, x, y, blockSize, color) {
+  context.beginPath();
+  context.fillStyle = color;
+  context.lineWidth = 0;
+  context.rect(blockSize * y, blockSize * x, blockSize, blockSize);
+  context.fill();
+}
+
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
+}
+
+function getGradientStops(startColor, endColor, numStops) {
+  var startRGB = hexToRgb(startColor);
+  var endRGB = hexToRgb(endColor);
+  var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
+  var gStep = Math.floor(Math.abs(startRGB.g - endRGB.g) / numStops);
+  var bStep = Math.floor(Math.abs(startRGB.b - endRGB.b) / numStops);
+  var colors = [];
+  colors.push(hexToRgb(startColor));
+  var s = colors[colors.length - 1];
+
+  for (var i = 0; i < numStops; i++) {
+    var c = {
+      r: s.r + rStep,
+      g: s.g + gStep,
+      b: s.b + bStep
+    };
+    colors.push(c);
+    s = colors[colors.length - 1];
+  }
+
+  colors.push(hexToRgb(endColor));
+  colors = colors.map(function (c) {
+    return rgbToHex(c.r, c.g, c.b);
+  });
+  return colors;
+}
+
+function getGradientStopsRgb(startColor, endColor, numStops) {
+  numStops = numStops + 1;
+  var startRGB = hexToRgb(startColor);
+  var endRGB = hexToRgb(endColor);
+  var rStep = (endRGB.r - startRGB.r) / numStops;
+  var gStep = (endRGB.g - startRGB.g) / numStops;
+  var bStep = (endRGB.b - startRGB.b) / numStops;
+  console.log("".concat(rStep, " ").concat(gStep, " ").concat(bStep));
+  var colors = [];
+  colors.push(hexToRgb(startColor));
+  var s = colors[colors.length - 1];
+
+  for (var i = 0; i < numStops - 1; i++) {
+    var c = {
+      r: s.r + rStep,
+      g: s.g + gStep,
+      b: s.b + bStep
+    };
+    colors.push(c);
+    s = colors[colors.length - 1];
+  }
+
+  colors.push(hexToRgb(endColor));
+  return colors;
+}
+
+function rgbToInt(rgb) {
+  var rgbInt = rgb.r;
+  rgbInt = (rgbInt << 8) + rgb.g;
+  rgbInt = (rgbInt << 8) + rgb.b;
+  return rgbInt;
+}
+},{}],"node_modules/gpu.js/dist/gpu-browser.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -24098,339 +24367,393 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }]
   }, {}, [107])(107);
 });
-},{}],"libs/uitils.js":[function(require,module,exports) {
+},{}],"views/gpujs_showcase/kernels/moore_kernel.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getNuemannNeighbours = getNuemannNeighbours;
-exports.getCrossNeighbours = getCrossNeighbours;
-exports.getMooreNeighbours = getMooreNeighbours;
-exports.getMooreNeighboursWrap = getMooreNeighboursWrap;
-exports.getRandomColor = getRandomColor;
-exports.rand = rand;
-exports.getNextState = getNextState;
-exports.fillBackground = fillBackground;
-exports.drawState = drawState;
-exports.drawBlock = drawBlock;
-exports.getGradientStops = getGradientStops;
-exports.getGradientStopsRgb = getGradientStopsRgb;
-exports.rgbToInt = rgbToInt;
-exports.Array2D = void 0;
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function getNuemannNeighbours(x, y, matrix, r, c) {
-  var i = x;
-  var j = y;
-  var neigbours = [];
-
-  if (i - 1 >= 0) {
-    neigbours.push(matrix[i - 1][j]);
-  }
-
-  if (j + 1 < c) {
-    neigbours.push(matrix[i][j + 1]);
-  }
-
-  if (i + 1 < r) {
-    neigbours.push(matrix[i + 1][j]);
-  }
-
-  if (j - 1 >= 0) {
-    neigbours.push(matrix[i][j - 1]);
-  }
-
-  return neigbours;
-}
-
-function getCrossNeighbours(x, y, matrix, r, c) {
-  var i = x;
-  var j = y;
-  var neigbours = [];
-
-  if (i - 1 >= 0 && j - 1 >= 0) {
-    neigbours.push(matrix[i - 1][j - 1]);
-  }
-
-  if (i - 1 >= 0 && j + 1 < c) {
-    neigbours.push(matrix[i - 1][j + 1]);
-  }
-
-  if (i + 1 < r && j + 1 < c) {
-    neigbours.push(matrix[i + 1][j + 1]);
-  }
-
-  if (i + 1 < r && j - 1 >= 0) {
-    neigbours.push(matrix[i + 1][j - 1]);
-  }
-
-  return neigbours;
-}
-
-function getMooreNeighbours(x, y, matrix, r, c) {
-  var i = x;
-  var j = y;
-  var neigbours = [];
-
-  try {
-    if (i - 1 >= 0 && j - 1 >= 0) {
-      neigbours.push(matrix[i - 1][j - 1]);
-    }
-
-    if (i - 1 >= 0) {
-      neigbours.push(matrix[i - 1][j]);
-    }
-
-    if (i - 1 >= 0 && j + 1 < c) {
-      neigbours.push(matrix[i - 1][j + 1]);
-    }
-
-    if (j + 1 < c) {
-      neigbours.push(matrix[i][j + 1]);
-    }
-
-    if (i + 1 < r && j + 1 < c) {
-      neigbours.push(matrix[i + 1][j + 1]);
-    }
-
-    if (i + 1 < r) {
-      neigbours.push(matrix[i + 1][j]);
-    }
-
-    if (i + 1 < r && j - 1 >= 0) {
-      neigbours.push(matrix[i + 1][j - 1]);
-    }
-
-    if (j - 1 >= 0) {
-      neigbours.push(matrix[i][j - 1]);
-    }
-  } catch (e) {}
-
-  return neigbours;
-}
-
-function getMooreNeighboursWrap(x, y, matrix, r, c) {
-  var i = x;
-  var j = y;
-  var neigbours = [];
-
-  try {
-    neigbours.push(matrix[(i - 1 + r) % r][(j - 1 + c) % c]);
-    neigbours.push(matrix[(i - 1 + r) % r][j]);
-    neigbours.push(matrix[(i - 1 + r) % r][(j + 1 + c) % c]);
-    neigbours.push(matrix[i][(j + 1 + c) % c]);
-    neigbours.push(matrix[(i + 1 + r) % r][(j + 1 + c) % c]);
-    neigbours.push(matrix[(i + 1 + r) % r][j]);
-    neigbours.push(matrix[(i + 1 + r) % r][(j - 1 + c) % c]);
-    neigbours.push(matrix[i][(j - 1 + c) % c]);
-  } catch (e) {}
-
-  return neigbours;
-}
-
-function getRandomColor() {
-  var letters = "0123456789ABCDEF";
-  var color = "#";
-
-  for (var i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-
-  return color;
-}
-
-var Array2D = function Array2D(r, c) {
-  return _toConsumableArray(Array(r)).map(function (x) {
-    return Array(c).fill(0);
-  });
-};
-
-exports.Array2D = Array2D;
-
-function rand(min, max) {
-  return Math.floor(Math.pow(10, 14) * Math.random() * Math.random()) % (max - min + 1) + min;
-}
-
-function getNextState(state, numStates) {
-  return (state + 1) % numStates;
-}
-
-function fillBackground(context, color, width, height) {
-  context.beginPath();
-  context.fillStyle = color;
-  context.rect(0, 0, width, height);
-  context.fill();
-}
-
-function drawState(context, automataState, r, c, bsize, colors) {
-  for (var i = 0; i < r; i++) {
-    for (var j = 0; j < c; j++) {
-      drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
-    }
-  }
-}
-
-function drawBlock(context, x, y, blockSize, color) {
-  context.beginPath();
-  context.fillStyle = color;
-  context.lineWidth = 0;
-  context.rect(blockSize * y, blockSize * x, blockSize, blockSize);
-  context.fill();
-}
-
-function componentToHex(c) {
-  var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
-}
-
-function rgbToHex(r, g, b) {
-  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
-}
-
-function hexToRgb(hex) {
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result ? {
-    r: parseInt(result[1], 16),
-    g: parseInt(result[2], 16),
-    b: parseInt(result[3], 16)
-  } : null;
-}
-
-function getGradientStops(startColor, endColor, numStops) {
-  var startRGB = hexToRgb(startColor);
-  var endRGB = hexToRgb(endColor);
-  var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
-  var gStep = Math.floor(Math.abs(startRGB.g - endRGB.g) / numStops);
-  var bStep = Math.floor(Math.abs(startRGB.b - endRGB.b) / numStops);
-  var colors = [];
-  colors.push(hexToRgb(startColor));
-  var s = colors[colors.length - 1];
-
-  for (var i = 0; i < numStops; i++) {
-    var c = {
-      r: s.r + rStep,
-      g: s.g + gStep,
-      b: s.b + bStep
-    };
-    colors.push(c);
-    s = colors[colors.length - 1];
-  }
-
-  colors.push(hexToRgb(endColor));
-  colors = colors.map(function (c) {
-    return rgbToHex(c.r, c.g, c.b);
-  });
-  return colors;
-}
-
-function getGradientStopsRgb(startColor, endColor, numStops) {
-  numStops = numStops + 1;
-  var startRGB = hexToRgb(startColor);
-  var endRGB = hexToRgb(endColor);
-  var rStep = (endRGB.r - startRGB.r) / numStops;
-  var gStep = (endRGB.g - startRGB.g) / numStops;
-  var bStep = (endRGB.b - startRGB.b) / numStops;
-  console.log("".concat(rStep, " ").concat(gStep, " ").concat(bStep));
-  var colors = [];
-  colors.push(hexToRgb(startColor));
-  var s = colors[colors.length - 1];
-
-  for (var i = 0; i < numStops - 1; i++) {
-    var c = {
-      r: s.r + rStep,
-      g: s.g + gStep,
-      b: s.b + bStep
-    };
-    colors.push(c);
-    s = colors[colors.length - 1];
-  }
-
-  colors.push(hexToRgb(endColor));
-  return colors;
-}
-
-function rgbToInt(rgb) {
-  var rgbInt = rgb.r;
-  rgbInt = (rgbInt << 8) + rgb.g;
-  rgbInt = (rgbInt << 8) + rgb.b;
-  return rgbInt;
-}
-},{}],"views/gpujs_showcase/gpujs_showcase.js":[function(require,module,exports) {
-"use strict";
-
-require("./../../main.css");
-
-require("./gpujs_showcase.css");
-
-var _style = require("../../global/style");
+exports.getMooreProcess = getMooreProcess;
 
 var _gpu = require("gpu.js");
 
-var _uitils = require("./../../libs/uitils.js");
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-var animationHandle;
-var animationAction;
-var rendererOutlet = document.getElementById("renderer-panel");
-var rendererHeight = rendererOutlet.clientHeight - 20;
-var rendererWidth = rendererOutlet.clientWidth - 20;
-var gpuAutomataState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
-var gpuTempState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
-var automatonThreshold = 1;
-var automatonNumStates = 16;
-var automatonRange = 1;
-var style = new _style.Style();
-style.applyStyle();
 var gpu = new _gpu.GPU();
-var constants;
-var colors;
-var t1 = Date.now();
-var t2 = Date.now();
-var numPoints = rendererHeight * rendererWidth;
-var listButtons = document.getElementsByClassName("list-button");
-var selectedButton = "square-cycles";
 
-function setSelectedButton(selectedButton) {
-  var _iterator = _createForOfIteratorHelper(listButtons),
-      _step;
+function getMooreProcess(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange) {
+  return gpu.createKernel(function (stateMatrix) {
+    var i = this.thread.y;
+    var j = this.thread.x;
+    var r = this.constants.rendererHeight;
+    var c = this.constants.rendererWidth;
+    var count = 0;
+    var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
+    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
 
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var listButton = _step.value;
-      listButton.classList.add("pixel-button");
-      listButton.classList.remove("pixel-button-inverted");
+    if (count >= this.constants.threshold) {
+      return nextState;
+    } else {
+      return stateMatrix[i][j];
     }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  selectedButton.classList.add("pixel-button-inverted");
-  selectedButton.classList.remove("pixel-button");
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererWidth,
+    rendererHeight: rendererHeight,
+    threshold: automatonThreshold,
+    numStates: automatonNumStates,
+    range: automatonRange
+  }).setFunctions([checkMooreNeighbourhood]);
 }
 
-getColors();
+function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
+  var count = 0;
 
-function getColors() {
-  colors = (0, _uitils.getGradientStopsRgb)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, automatonNumStates - 2);
+  for (var offset = 1; offset <= range; offset++) {
+    if (j + offset < c) {
+      if (stateMatrix[i][j + offset] == nextState) {
+        count++;
+      }
+    }
+
+    if (j - offset >= 0) {
+      if (stateMatrix[i][j - offset] == nextState) {
+        count++;
+      }
+    }
+  }
+
+  for (var iOffset = 1; iOffset <= range; iOffset++) {
+    for (var jOffset = -range; jOffset <= range; jOffset++) {
+      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+
+      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+    }
+  }
+
+  return count;
+}
+},{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"views/gpujs_showcase/kernels/game_of_life_kernel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getGameOfLifeProcess = getGameOfLifeProcess;
+
+var _gpu = require("gpu.js");
+
+var gpu = new _gpu.GPU();
+
+function getGameOfLifeProcess(rendererWidth, rendererHeight) {
+  return gpu.createKernel(function (stateMatrix) {
+    var i = this.thread.y;
+    var j = this.thread.x;
+    var r = this.constants.rendererWidth;
+    var c = this.constants.rendererHeight;
+    var count = 0;
+    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1, 1);
+    var newState = stateMatrix[i][j];
+
+    if (count < 2 || count > 3) {
+      newState = 0;
+    } else if (count == 2 || count == 3) {
+      newState = stateMatrix[i][j];
+
+      if (count == 3) {
+        newState = 1;
+      }
+    }
+
+    return newState;
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererHeight,
+    rendererHeight: rendererWidth
+  }).setFunctions([checkMooreNeighbourhood]);
+}
+
+function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
+  var count = 0;
+
+  for (var offset = 1; offset <= range; offset++) {
+    if (j + offset < c) {
+      if (stateMatrix[i][j + offset] == nextState) {
+        count++;
+      }
+    }
+
+    if (j - offset >= 0) {
+      if (stateMatrix[i][j - offset] == nextState) {
+        count++;
+      }
+    }
+  }
+
+  for (var iOffset = 1; iOffset <= range; iOffset++) {
+    for (var jOffset = -range; jOffset <= range; jOffset++) {
+      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+
+      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+    }
+  }
+
+  return count;
+}
+},{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"views/gpujs_showcase/kernels/neumann_kernel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getNueMannProcess = getNueMannProcess;
+
+var _gpu = require("gpu.js");
+
+var gpu = new _gpu.GPU();
+
+function getNueMannProcess(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange) {
+  return gpu.createKernel(function (stateMatrix) {
+    var i = this.thread.y;
+    var j = this.thread.x;
+    var r = this.constants.rendererWidth;
+    var c = this.constants.rendererHeight;
+    var count = 0;
+    var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
+    count = checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
+
+    if (count >= this.constants.threshold) {
+      return nextState;
+    } else {
+      return stateMatrix[i][j];
+    }
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererHeight,
+    rendererHeight: rendererWidth,
+    threshold: automatonThreshold,
+    numStates: automatonNumStates,
+    range: automatonRange
+  }).setFunctions([checkNuemannNeighbourhood]);
+}
+
+function checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
+  var count = 0;
+
+  for (var offset = 1; offset <= range; offset++) {
+    if (j + offset < c) {
+      if (stateMatrix[i][j + offset] == nextState) {
+        count++;
+      }
+    }
+
+    if (j - offset >= 0) {
+      if (stateMatrix[i][j - offset] == nextState) {
+        count++;
+      }
+    }
+  }
+
+  var bias = 1;
+
+  for (var iOffset = 1; iOffset <= range; iOffset++) {
+    for (var jOffset = -(range - bias); jOffset <= range - bias; jOffset++) {
+      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+
+      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+    }
+
+    bias++;
+  }
+
+  return count;
+}
+},{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"views/gpujs_showcase/kernels/cross_kernel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getCrossProcess = getCrossProcess;
+
+var _gpu = require("gpu.js");
+
+var gpu = new _gpu.GPU();
+
+function getCrossProcess(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange) {
+  return gpu.createKernel(function (stateMatrix) {
+    var i = this.thread.y;
+    var j = this.thread.x;
+    var r = this.constants.rendererWidth;
+    var c = this.constants.rendererHeight;
+    var count = 0;
+    var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
+    count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
+
+    if (count >= this.constants.threshold) {
+      return nextState;
+    } else {
+      return stateMatrix[i][j];
+    }
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererHeight,
+    rendererHeight: rendererWidth,
+    threshold: automatonThreshold,
+    numStates: automatonNumStates,
+    range: automatonRange
+  }).setFunctions([checkCrossNeighbourhood]);
+}
+
+function checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, maxRange) {
+  var count = 0;
+
+  for (var range = 1; range <= maxRange; range++) {
+    for (var k = 1; k <= range; k++) {
+      if (i + k < r && j + k < c) {
+        if (stateMatrix[i + k][j + k] == nextState) {
+          count++;
+        }
+      }
+    }
+
+    for (var _k = 1; _k <= range; _k++) {
+      if (i + _k < r && j - _k >= 0) {
+        if (stateMatrix[i + _k][j - _k] == nextState) {
+          count++;
+        }
+      }
+    }
+
+    for (var _k2 = 1; _k2 <= range; _k2++) {
+      if (i - _k2 >= 0 && j + _k2 < c) {
+        if (stateMatrix[i - _k2][j + _k2] == nextState) {
+          count++;
+        }
+      }
+    }
+
+    for (var _k3 = 1; _k3 <= range; _k3++) {
+      if (i - _k3 >= 0 && j - _k3 >= 0) {
+        if (stateMatrix[i - _k3][j - _k3] == nextState) {
+          count++;
+        }
+      }
+    }
+  }
+
+  return count;
+}
+},{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"views/gpujs_showcase/kernels/render_kernel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getRenderer = getRenderer;
+
+var _gpu = require("gpu.js");
+
+var gpu = new _gpu.GPU();
+
+function getRenderer(rendererWidth, rendererHeight, colors) {
+  var rndrr = gpu.createKernel(function (stateMatrix) {
+    var i = this.thread.y;
+    var j = this.thread.x;
+
+    if (stateMatrix[i][j] === 0) {
+      this.color(this.constants.color0r, this.constants.color0g, this.constants.color0b);
+    } else if (stateMatrix[i][j] === 1) {
+      this.color(this.constants.color1r, this.constants.color1g, this.constants.color1b);
+    } else if (stateMatrix[i][j] === 2) {
+      this.color(this.constants.color2r, this.constants.color2g, this.constants.color2b);
+    } else if (stateMatrix[i][j] === 3) {
+      this.color(this.constants.color3r, this.constants.color3g, this.constants.color3b);
+    } else if (stateMatrix[i][j] === 4) {
+      this.color(this.constants.color4r, this.constants.color4g, this.constants.color4b);
+    } else if (stateMatrix[i][j] === 5) {
+      this.color(this.constants.color5r, this.constants.color5g, this.constants.color5b);
+    } else if (stateMatrix[i][j] === 6) {
+      this.color(this.constants.color6r, this.constants.color6g, this.constants.color6b);
+    } else if (stateMatrix[i][j] === 7) {
+      this.color(this.constants.color7r, this.constants.color7g, this.constants.color7b);
+    } else if (stateMatrix[i][j] === 8) {
+      this.color(this.constants.color8r, this.constants.color8g, this.constants.color8b);
+    } else if (stateMatrix[i][j] === 9) {
+      this.color(this.constants.color9r, this.constants.color9g, this.constants.color9b);
+    } else if (stateMatrix[i][j] === 10) {
+      this.color(this.constants.color10r, this.constants.color10g, this.constants.color10b);
+    } else if (stateMatrix[i][j] === 11) {
+      this.color(this.constants.color11r, this.constants.color11g, this.constants.color11b);
+    } else if (stateMatrix[i][j] === 12) {
+      this.color(this.constants.color12r, this.constants.color12g, this.constants.color12b);
+    } else if (stateMatrix[i][j] === 13) {
+      this.color(this.constants.color13r, this.constants.color13g, this.constants.color13b);
+    } else if (stateMatrix[i][j] === 14) {
+      this.color(this.constants.color14r, this.constants.color14g, this.constants.color14b);
+    } else if (stateMatrix[i][j] === 15) {
+      this.color(this.constants.color15r, this.constants.color15g, this.constants.color15b);
+    }
+  }).setOutput([rendererWidth, rendererHeight]).setGraphical(true).setConstants(colors);
+  return rndrr;
+}
+},{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"views/gpujs_showcase/constants/constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Constants = void 0;
+var Constants = {};
+exports.Constants = Constants;
+Constants.id = {};
+Constants.class = {};
+Constants.value = {};
+Constants.id.r1t1c16nm = "square-cycles";
+Constants.id.r1t1c16nn = "nuemann-cycles";
+Constants.id.r1t1c16nc = "cross-cycles";
+Constants.id.r1t3c4nm = "cca-r1t3c4nm";
+Constants.id.r1t3c3nm = "cca-r1t3c3nm";
+Constants.id.r2t11c3nm = "cca-r2t11c3nm";
+Constants.id.r2t5c8nm = "cca-r2t5c8nm";
+Constants.id.r3t15c3nm = "cca-r3t15c3nm";
+Constants.id.r2t9c4nm = "cca-r2t9c4nm";
+Constants.id.r3t10c2nn = "cca-r3t10c2nn";
+Constants.id.r2t5c3nn = "cca-r2t5c3nn";
+Constants.id.gameoflife = "game-of-life";
+Constants.id.RendererPanel = "renderer-panel";
+Constants.id.InfoLabel = "info-label";
+Constants.class.ListButton = "list-button";
+},{}],"views/gpujs_showcase/utils.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getColors = getColors;
+
+var _uitils = require("./../../libs/uitils.js");
+
+function getColors(color1, color2, numStops) {
+  var colors = (0, _uitils.getGradientStopsRgb)(color1, color2, numStops);
 
   if (colors.length < 16) {
     var length = colors.length;
@@ -24444,7 +24767,7 @@ function getColors() {
     }
   }
 
-  constants = {
+  var colorsRgb = {
     color0r: colors[0].r / 255,
     color0g: colors[0].g / 255,
     color0b: colors[0].b / 255,
@@ -24494,280 +24817,113 @@ function getColors() {
     color15g: colors[15].g / 255,
     color15b: colors[15].b / 255
   };
+  return colorsRgb;
+}
+},{"./../../libs/uitils.js":"libs/uitils.js"}],"global/constants.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Constants = void 0;
+var Constants = {};
+exports.Constants = Constants;
+Constants.value = {};
+Constants.class = {};
+Constants.units = {};
+Constants.value.Block = "block";
+Constants.value.None = "none";
+Constants.class.FadeOut = "fade-out";
+Constants.class.FadeIn = "fade-in";
+Constants.class.PixelButton = "pixel-button";
+Constants.class.PixelButtonInverted = "pixel-button-inverted";
+Constants.units.Pixel = "px";
+},{}],"views/gpujs_showcase/gpujs_showcase.js":[function(require,module,exports) {
+"use strict";
+
+require("./../../main.css");
+
+require("./gpujs_showcase.css");
+
+var _style = require("../../global/style");
+
+var _uitils = require("./../../libs/uitils.js");
+
+var _moore_kernel = require("./kernels/moore_kernel");
+
+var _game_of_life_kernel = require("./kernels/game_of_life_kernel");
+
+var _neumann_kernel = require("./kernels/neumann_kernel");
+
+var _cross_kernel = require("./kernels/cross_kernel");
+
+var _render_kernel = require("./kernels/render_kernel");
+
+var _constants = require("./constants/constants");
+
+var _utils = require("./utils");
+
+var _constants2 = require("../../global/constants");
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+var animationHandle;
+var animationAction;
+var rendererOutlet = document.getElementById(_constants.Constants.id.RendererPanel);
+var rendererHeight = rendererOutlet.clientHeight - 20;
+var rendererWidth = rendererOutlet.clientWidth - 20;
+var gpuAutomataState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
+var gpuTempState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
+var automatonThreshold = 1;
+var automatonNumStates = 16;
+var automatonRange = 1;
+var style = new _style.Style();
+var rendererColors;
+var t1 = performance.now();
+var t2 = performance.now();
+var fps_t1 = performance.now();
+var fps_t2 = performance.now();
+var delay = 0;
+var numPoints = rendererHeight * rendererWidth;
+var listButtons = document.getElementsByClassName(_constants.Constants.class.ListButton);
+var processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+var processGameOfLife = (0, _game_of_life_kernel.getGameOfLifeProcess)(rendererWidth, rendererHeight);
+var processNuemann = (0, _neumann_kernel.getNueMannProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+var processCross = (0, _cross_kernel.getCrossProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+var renderer;
+
+function setSelectedButton(selectedButton) {
+  var _iterator = _createForOfIteratorHelper(listButtons),
+      _step;
+
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var listButton = _step.value;
+      listButton.classList.add(_constants2.Constants.class.PixelButton);
+      listButton.classList.remove(_constants2.Constants.class.PixelButtonInverted);
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+
+  selectedButton.classList.add(_constants2.Constants.class.PixelButtonInverted);
+  selectedButton.classList.remove(_constants2.Constants.class.PixelButton);
 }
 
-var renderer = getRenderer();
-
-function getRenderer() {
-  var rndrr = gpu.createKernel(function (stateMatrix) {
-    var i = this.thread.y;
-    var j = this.thread.x;
-
-    if (stateMatrix[i][j] === 0) {
-      this.color(this.constants.color0r, this.constants.color0g, this.constants.color0b);
-    } else if (stateMatrix[i][j] === 1) {
-      this.color(this.constants.color1r, this.constants.color1g, this.constants.color1b);
-    } else if (stateMatrix[i][j] === 2) {
-      this.color(this.constants.color2r, this.constants.color2g, this.constants.color2b);
-    } else if (stateMatrix[i][j] === 3) {
-      this.color(this.constants.color3r, this.constants.color3g, this.constants.color3b);
-    } else if (stateMatrix[i][j] === 4) {
-      this.color(this.constants.color4r, this.constants.color4g, this.constants.color4b);
-    } else if (stateMatrix[i][j] === 5) {
-      this.color(this.constants.color5r, this.constants.color5g, this.constants.color5b);
-    } else if (stateMatrix[i][j] === 6) {
-      this.color(this.constants.color6r, this.constants.color6g, this.constants.color6b);
-    } else if (stateMatrix[i][j] === 7) {
-      this.color(this.constants.color7r, this.constants.color7g, this.constants.color7b);
-    } else if (stateMatrix[i][j] === 8) {
-      this.color(this.constants.color8r, this.constants.color8g, this.constants.color8b);
-    } else if (stateMatrix[i][j] === 9) {
-      this.color(this.constants.color9r, this.constants.color9g, this.constants.color9b);
-    } else if (stateMatrix[i][j] === 10) {
-      this.color(this.constants.color10r, this.constants.color10g, this.constants.color10b);
-    } else if (stateMatrix[i][j] === 11) {
-      this.color(this.constants.color11r, this.constants.color11g, this.constants.color11b);
-    } else if (stateMatrix[i][j] === 12) {
-      this.color(this.constants.color12r, this.constants.color12g, this.constants.color12b);
-    } else if (stateMatrix[i][j] === 13) {
-      this.color(this.constants.color13r, this.constants.color13g, this.constants.color13b);
-    } else if (stateMatrix[i][j] === 14) {
-      this.color(this.constants.color14r, this.constants.color14g, this.constants.color14b);
-    } else if (stateMatrix[i][j] === 15) {
-      this.color(this.constants.color15r, this.constants.color15g, this.constants.color15b);
-    }
-  }).setOutput([rendererWidth, rendererHeight]).setGraphical(true).setConstants(constants);
-  var rendererCanvas = rndrr.canvas;
-  console.log(gpuAutomataState.length + " " + gpuAutomataState[0].length);
-  console.log(rendererCanvas.width + " " + rendererCanvas.height);
+function updateRenderer() {
+  var renderer = (0, _render_kernel.getRenderer)(rendererWidth, rendererHeight, rendererColors);
+  var rendererCanvas = renderer.canvas;
   rendererOutlet.innerHTML = "";
-  rendererOutlet.appendChild(rndrr.canvas);
-  rendererCanvas.style.marginTop = "".concat((rendererOutlet.clientHeight - rendererCanvas.clientHeight) / 2, "px");
-  rendererCanvas.style.marginLeft = "".concat((rendererOutlet.clientWidth - rendererCanvas.clientWidth) / 2, "px");
-  return rndrr;
-}
-
-var processMoore = getMooreProcess();
-
-function getMooreProcess() {
-  return gpu.createKernel(function (stateMatrix) {
-    var i = this.thread.y;
-    var j = this.thread.x;
-    var r = this.constants.rendererHeight;
-    var c = this.constants.rendererWidth;
-    var count = 0;
-    var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
-
-    if (count >= this.constants.threshold) {
-      return nextState;
-    } else {
-      return stateMatrix[i][j];
-    }
-  }).setOutput([rendererWidth, rendererHeight]).setConstants({
-    rendererWidth: rendererWidth,
-    rendererHeight: rendererHeight,
-    threshold: automatonThreshold,
-    numStates: automatonNumStates,
-    range: automatonRange
-  }).setFunctions([checkMooreNeighbourhood]);
-}
-
-var processGameOfLife = getGameOfLifeProcess();
-
-function getGameOfLifeProcess() {
-  return gpu.createKernel(function (stateMatrix) {
-    var i = this.thread.y;
-    var j = this.thread.x;
-    var r = this.constants.rendererWidth;
-    var c = this.constants.rendererHeight;
-    var count = 0;
-    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, 1, 1);
-    var newState = stateMatrix[i][j];
-
-    if (count < 2 || count > 3) {
-      newState = 0;
-    } else if (count == 2 || count == 3) {
-      newState = stateMatrix[i][j];
-
-      if (count == 3) {
-        newState = 1;
-      }
-    }
-
-    return newState;
-  }).setOutput([rendererWidth, rendererHeight]).setConstants({
-    rendererWidth: rendererHeight,
-    rendererHeight: rendererWidth
-  }).setFunctions([checkMooreNeighbourhood]);
-}
-
-var processNuemann = getNueMannProcess();
-
-function getNueMannProcess() {
-  return gpu.createKernel(function (stateMatrix) {
-    var i = this.thread.y;
-    var j = this.thread.x;
-    var r = this.constants.rendererWidth;
-    var c = this.constants.rendererHeight;
-    var count = 0;
-    var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-    count = checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
-
-    if (count >= this.constants.threshold) {
-      return nextState;
-    } else {
-      return stateMatrix[i][j];
-    }
-  }).setOutput([rendererWidth, rendererHeight]).setConstants({
-    rendererWidth: rendererHeight,
-    rendererHeight: rendererWidth,
-    threshold: automatonThreshold,
-    numStates: automatonNumStates,
-    range: automatonRange
-  }).setFunctions([checkNuemannNeighbourhood]);
-}
-
-var processCross = getCrossProcess();
-
-function getCrossProcess() {
-  return gpu.createKernel(function (stateMatrix) {
-    var i = this.thread.y;
-    var j = this.thread.x;
-    var r = this.constants.rendererWidth;
-    var c = this.constants.rendererHeight;
-    var count = 0;
-    var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
-    count = checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
-
-    if (count >= this.constants.threshold) {
-      return nextState;
-    } else {
-      return stateMatrix[i][j];
-    }
-  }).setOutput([rendererWidth, rendererHeight]).setConstants({
-    rendererWidth: rendererHeight,
-    rendererHeight: rendererWidth,
-    threshold: automatonThreshold,
-    numStates: automatonNumStates,
-    range: automatonRange
-  }).setFunctions([checkCrossNeighbourhood]);
-}
-
-function checkNuemannNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
-  var count = 0;
-
-  for (var offset = 1; offset <= range; offset++) {
-    if (j + offset < c) {
-      if (stateMatrix[i][j + offset] == nextState) {
-        count++;
-      }
-    }
-
-    if (j - offset >= 0) {
-      if (stateMatrix[i][j - offset] == nextState) {
-        count++;
-      }
-    }
-  }
-
-  var bias = 1;
-
-  for (var iOffset = 1; iOffset <= range; iOffset++) {
-    for (var jOffset = -(range - bias); jOffset <= range - bias; jOffset++) {
-      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
-        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
-          count++;
-        }
-      }
-
-      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
-        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
-          count++;
-        }
-      }
-    }
-
-    bias++;
-  }
-
-  return count;
-}
-
-function checkCrossNeighbourhood(stateMatrix, i, j, r, c, nextState, maxRange) {
-  var count = 0;
-
-  for (var range = 1; range <= maxRange; range++) {
-    for (var k = 1; k <= range; k++) {
-      if (i + k < r && j + k < c) {
-        if (stateMatrix[i + k][j + k] == nextState) {
-          count++;
-        }
-      }
-    }
-
-    for (var _k = 1; _k <= range; _k++) {
-      if (i + _k < r && j - _k >= 0) {
-        if (stateMatrix[i + _k][j - _k] == nextState) {
-          count++;
-        }
-      }
-    }
-
-    for (var _k2 = 1; _k2 <= range; _k2++) {
-      if (i - _k2 >= 0 && j + _k2 < c) {
-        if (stateMatrix[i - _k2][j + _k2] == nextState) {
-          count++;
-        }
-      }
-    }
-
-    for (var _k3 = 1; _k3 <= range; _k3++) {
-      if (i - _k3 >= 0 && j - _k3 >= 0) {
-        if (stateMatrix[i - _k3][j - _k3] == nextState) {
-          count++;
-        }
-      }
-    }
-  }
-
-  return count;
-}
-
-function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
-  var count = 0;
-
-  for (var offset = 1; offset <= range; offset++) {
-    if (j + offset < c) {
-      if (stateMatrix[i][j + offset] == nextState) {
-        count++;
-      }
-    }
-
-    if (j - offset >= 0) {
-      if (stateMatrix[i][j - offset] == nextState) {
-        count++;
-      }
-    }
-  }
-
-  for (var iOffset = 1; iOffset <= range; iOffset++) {
-    for (var jOffset = -range; jOffset <= range; jOffset++) {
-      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
-        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
-          count++;
-        }
-      }
-
-      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
-        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
-          count++;
-        }
-      }
-    }
-  }
-
-  return count;
+  rendererOutlet.appendChild(renderer.canvas);
+  rendererCanvas.style.marginTop = "".concat((rendererOutlet.clientHeight - rendererCanvas.clientHeight) / 2).concat(_constants2.Constants.units.Pixel);
+  rendererCanvas.style.marginLeft = "".concat((rendererOutlet.clientWidth - rendererCanvas.clientWidth) / 2).concat(_constants2.Constants.units.Pixel);
+  return renderer;
 }
 
 function resetState() {
@@ -24778,12 +24934,6 @@ function resetState() {
     }
   }
 }
-
-resetState();
-renderer(gpuAutomataState);
-/* Reposition the renderer canvas after rendring it once. */
-
-renderer = getRenderer();
 
 function renderAndSwap() {
   renderer(gpuTempState);
@@ -24812,14 +24962,9 @@ function drawGameOfLife() {
   renderAndSwap();
 }
 
-t1 = Date.now();
-var fps_t1 = Date.now();
-var fps_t2 = Date.now();
-var delay = 0;
-
 function animate() {
-  t2 = Date.now();
-  fps_t2 = Date.now();
+  t2 = performance.now();
+  fps_t2 = performance.now();
 
   if (fps_t2 - fps_t1 >= 1000) {
     delay = t2 - t1;
@@ -24827,7 +24972,7 @@ function animate() {
   }
 
   t1 = t2;
-  document.getElementById("info-label").innerHTML = "Processed & plotted ".concat((numPoints / 1000000).toFixed(2), "M points ").concat(Math.round(1000 / delay), " times/second. [").concat((numPoints * Math.round(1000 / delay) / 1000000).toFixed(2), "M points/second.] Phew!!!");
+  document.getElementById(_constants.Constants.id.InfoLabel).innerHTML = "Processed & plotted ".concat((numPoints / 1000000).toFixed(2), "M points ").concat(Math.round(1000 / delay), " times/second. [").concat((numPoints * Math.round(1000 / delay) / 1000000).toFixed(2), "M points/second.] Phew!!!");
 
   if (animationAction) {
     animationAction();
@@ -24846,108 +24991,108 @@ function onItemClicked(item, element) {
   }
 
   switch (item) {
-    case "square-cycles":
+    case _constants.Constants.id.r1t1c16nm:
       animationAction = drawMooreCycles;
       automatonRange = 1;
       automatonThreshold = 1;
       automatonNumStates = 16;
-      processMoore = getMooreProcess();
+      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "nuemann-cycles":
+    case _constants.Constants.id.r1t1c16nn:
       animationAction = drawNuewMannCycles;
       automatonRange = 1;
       automatonThreshold = 1;
       automatonNumStates = 16;
-      processNuemann = getNueMannProcess();
+      processNuemann = (0, _neumann_kernel.getNueMannProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "cross-cycles":
+    case _constants.Constants.id.r1t1c16nc:
       animationAction = drawCrossCycles;
       automatonRange = 1;
       automatonThreshold = 1;
       automatonNumStates = 16;
-      processCross = getCrossProcess();
+      processCross = (0, _cross_kernel.getCrossProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "cca-r1t3c4nm":
+    case _constants.Constants.id.r1t3c4nm:
       animationAction = drawMooreCycles;
       automatonRange = 1;
       automatonThreshold = 3;
       automatonNumStates = 4;
-      processMoore = getMooreProcess();
+      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "cca-r1t3c3nm":
+    case _constants.Constants.id.r1t3c3nm:
       animationAction = drawMooreCycles;
       automatonRange = 1;
       automatonThreshold = 3;
       automatonNumStates = 3;
-      processMoore = getMooreProcess();
+      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "game-of-life":
+    case _constants.Constants.id.gameoflife:
       animationAction = drawGameOfLife;
       automatonRange = 1;
       automatonThreshold = 3;
       automatonNumStates = 2;
-      processMoore = getGameOfLifeProcess();
+      processMoore = (0, _game_of_life_kernel.getGameOfLifeProcess)(rendererWidth, rendererHeight);
       break;
 
-    case "cca-r2t11c3nm":
+    case _constants.Constants.id.r2t11c3nm:
       animationAction = drawMooreCycles;
       automatonRange = 2;
       automatonThreshold = 11;
       automatonNumStates = 3;
-      processMoore = getMooreProcess();
+      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "cca-r2t5c8nm":
+    case _constants.Constants.id.r2t5c8nm:
       animationAction = drawMooreCycles;
       automatonRange = 2;
       automatonThreshold = 5;
       automatonNumStates = 8;
-      processMoore = getMooreProcess();
+      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "cca-r3t15c3nm":
+    case _constants.Constants.id.r3t15c3nm:
       animationAction = drawMooreCycles;
       automatonRange = 3;
       automatonThreshold = 15;
       automatonNumStates = 3;
-      processMoore = getMooreProcess();
+      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "cca-r2t9c4nm":
+    case _constants.Constants.id.r2t9c4nm:
       animationAction = drawMooreCycles;
       automatonRange = 2;
       automatonThreshold = 9;
       automatonNumStates = 4;
-      processMoore = getMooreProcess();
+      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "cca-r3t10c2nn":
+    case _constants.Constants.id.r3t10c2nn:
       animationAction = drawNuewMannCycles;
       automatonRange = 3;
       automatonThreshold = 10;
       automatonNumStates = 2;
-      processMoore = getNueMannProcess();
+      processNuemann = (0, _neumann_kernel.getNueMannProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
-    case "cca-r2t5c3nn":
+    case _constants.Constants.id.r2t5c3nn:
       animationAction = drawNuewMannCycles;
       automatonRange = 1;
       automatonThreshold = 1;
       automatonNumStates = 5;
-      processMoore = getNueMannProcess();
+      processNuemann = (0, _neumann_kernel.getNueMannProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
       break;
 
     default:
       break;
   }
 
-  getColors();
-  renderer = getRenderer();
+  rendererColors = (0, _utils.getColors)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, automatonNumStates - 2);
+  renderer = updateRenderer();
   resetState();
   renderer(gpuAutomataState);
 }
@@ -24961,7 +25106,17 @@ function onStartClicked() {
 
   animationHandle = requestAnimationFrame(animate);
 }
-},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","gpu.js":"node_modules/gpu.js/dist/gpu-browser.js","./../../libs/uitils.js":"libs/uitils.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+style.applyStyle();
+rendererColors = (0, _utils.getColors)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, automatonNumStates - 2);
+renderer = updateRenderer();
+resetState();
+renderer(gpuAutomataState);
+/* Reposition the renderer canvas after rendring it once. */
+
+renderer = updateRenderer();
+t1 = performance.now();
+},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -24989,7 +25144,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53339" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53054" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
