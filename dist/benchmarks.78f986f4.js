@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,17 +184,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/benchmarks.css":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/benchmarks.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28455,7 +28455,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/localization/strings.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/localization/strings.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29111,7 +29111,7 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.SortingBenchmark = SortingBenchmark;
-},{"./sorting_benchmarks.css":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.css","react":"node_modules/react/index.js","./../../localization/strings":"views/benchmarks/localization/strings.js","./constants/constants":"views/benchmarks/subviews/sorting_benchmarks/constants/constants.js","./workers\\population_worker.js":[["population_worker.ba73efde.js","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"population_worker.ba73efde.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"./workers\\bubblesort_worker.js":[["bubblesort_worker.a00039d1.js","views/benchmarks/subviews/sorting_benchmarks/workers/bubblesort_worker.js"],"bubblesort_worker.a00039d1.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/bubblesort_worker.js"],"./workers\\quicksort_worker.js":[["quicksort_worker.183eb7c6.js","views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js"],"quicksort_worker.183eb7c6.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js"]}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
+},{"./sorting_benchmarks.css":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.css","react":"node_modules/react/index.js","./../../localization/strings":"views/benchmarks/localization/strings.js","./constants/constants":"views/benchmarks/subviews/sorting_benchmarks/constants/constants.js","./workers/population_worker.js":[["population_worker.ba73efde.js","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"population_worker.ba73efde.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"./workers/bubblesort_worker.js":[["bubblesort_worker.a00039d1.js","views/benchmarks/subviews/sorting_benchmarks/workers/bubblesort_worker.js"],"bubblesort_worker.a00039d1.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/bubblesort_worker.js"],"./workers/quicksort_worker.js":[["quicksort_worker.183eb7c6.js","views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js"],"quicksort_worker.183eb7c6.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js"]}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29124,6 +29124,7 @@ Constants.id = {};
 Constants.class = {};
 Constants.value = {};
 Constants.value.LargeArraySize = 100000;
+Constants.id.InfoLabel = "info-label";
 Constants.class.Hidden = "hidden";
 Constants.class.Visible = "visible";
 Constants.class.ListButton = "list-button";
@@ -29165,6 +29166,8 @@ var _contants = require("./constants/contants");
 
 var _constants = require("../../global/constants");
 
+var _strings = require("./localization/strings");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
@@ -29173,6 +29176,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+var localStrings = new _strings.Strings();
 var style = new _style.Style();
 style.applyStyle();
 
@@ -29212,6 +29216,14 @@ function handleStateChange(state) {
   }
 }
 
+function setIdle() {
+  document.getElementById(_contants.Constants.id.InfoLabel).innerHTML = localStrings.localized.Idle;
+}
+
+function setBusy() {
+  document.getElementById(_contants.Constants.id.InfoLabel).innerHTML = localStrings.localized.BusyIndicator;
+}
+
 function setSelectedButton(selectedButton) {
   var _iterator = _createForOfIteratorHelper(listButtons),
       _step;
@@ -29231,7 +29243,7 @@ function setSelectedButton(selectedButton) {
   selectedButton.classList.add(_constants.Constants.class.PixelButtonInverted);
   selectedButton.classList.remove(_constants.Constants.class.PixelButton);
 }
-},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../global/style":"global/style.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./subviews/sorting_benchmarks/sorting_benchmarks.js":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.js","./constants/contants":"views/benchmarks/constants/contants.js","../../global/constants":"global/constants.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../global/style":"global/style.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./subviews/sorting_benchmarks/sorting_benchmarks.js":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.js","./constants/contants":"views/benchmarks/constants/contants.js","../../global/constants":"global/constants.js","./localization/strings":"views/benchmarks/localization/strings.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -29259,7 +29271,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58395" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49349" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -29435,5 +29447,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/benchmarks.js"], null)
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/benchmarks.js"], null)
 //# sourceMappingURL=/benchmarks.78f986f4.js.map

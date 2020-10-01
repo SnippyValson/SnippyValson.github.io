@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,17 +184,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/gpujs_showcase/gpujs_showcase.css":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/gpujs_showcase/gpujs_showcase.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24839,6 +24839,7 @@ Constants.class.PixelButton = "pixel-button";
 Constants.class.PixelButtonInverted = "pixel-button-inverted";
 Constants.units.Pixel = "px";
 },{}],"views/gpujs_showcase/gpujs_showcase.js":[function(require,module,exports) {
+
 "use strict";
 
 require("./../../main.css");
@@ -24872,28 +24873,19 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 var animationHandle;
-var animationAction;
 var rendererOutlet = document.getElementById(_constants.Constants.id.RendererPanel);
 var rendererHeight = rendererOutlet.clientHeight - 20;
 var rendererWidth = rendererOutlet.clientWidth - 20;
 var gpuAutomataState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
 var gpuTempState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
-var automatonThreshold = 1;
-var automatonNumStates = 16;
-var automatonRange = 1;
 var style = new _style.Style();
-var rendererColors;
 var t1 = performance.now();
 var t2 = performance.now();
 var fps_t1 = performance.now();
 var fps_t2 = performance.now();
 var delay = 0;
-var numPoints = rendererHeight * rendererWidth;
 var listButtons = document.getElementsByClassName(_constants.Constants.class.ListButton);
-var processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
-var processGameOfLife = (0, _game_of_life_kernel.getGameOfLifeProcess)(rendererWidth, rendererHeight);
-var processNuemann = (0, _neumann_kernel.getNueMannProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
-var processCross = (0, _cross_kernel.getCrossProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+var process;
 var renderer;
 
 function setSelectedButton(selectedButton) {
@@ -24916,8 +24908,8 @@ function setSelectedButton(selectedButton) {
   selectedButton.classList.remove(_constants2.Constants.class.PixelButton);
 }
 
-function updateRenderer() {
-  var renderer = (0, _render_kernel.getRenderer)(rendererWidth, rendererHeight, rendererColors);
+function updateRenderer(width, height, colors) {
+  var renderer = (0, _render_kernel.getRenderer)(width, height, colors);
   var rendererCanvas = renderer.canvas;
   rendererOutlet.innerHTML = "";
   rendererOutlet.appendChild(renderer.canvas);
@@ -24926,10 +24918,10 @@ function updateRenderer() {
   return renderer;
 }
 
-function resetState() {
+function resetState(numStates) {
   for (var i = 0; i < rendererHeight; i++) {
     for (var j = 0; j < rendererWidth; j++) {
-      var state = Math.floor(Math.random() * automatonNumStates);
+      var state = Math.floor(Math.random() * numStates);
       gpuAutomataState[i][j] = state;
     }
   }
@@ -24942,26 +24934,6 @@ function renderAndSwap() {
   gpuTempState = t;
 }
 
-function drawMooreCycles() {
-  gpuTempState = processMoore(gpuAutomataState);
-  renderAndSwap();
-}
-
-function drawCrossCycles() {
-  gpuTempState = processCross(gpuAutomataState);
-  renderAndSwap();
-}
-
-function drawNuewMannCycles() {
-  gpuTempState = processNuemann(gpuAutomataState);
-  renderAndSwap();
-}
-
-function drawGameOfLife() {
-  gpuTempState = processGameOfLife(gpuAutomataState);
-  renderAndSwap();
-}
-
 function animate() {
   t2 = performance.now();
   fps_t2 = performance.now();
@@ -24969,15 +24941,12 @@ function animate() {
   if (fps_t2 - fps_t1 >= 1000) {
     delay = t2 - t1;
     fps_t1 = fps_t2;
-    document.getElementById(_constants.Constants.id.InfoLabel).innerHTML = "Processed & plotted ".concat((numPoints / 1000000).toFixed(2), "M points ").concat(Math.round(1000 / delay), " times/second. [").concat((numPoints * Math.round(1000 / delay) / 1000000).toFixed(2), "M points/second.] Phew!!!");
+    document.getElementById(_constants.Constants.id.InfoLabel).innerHTML = "Processed & plotted ".concat((rendererHeight * rendererWidth / 1000000).toFixed(2), "M points ").concat(Math.round(1000 / delay), " times/second. [").concat((rendererHeight * rendererWidth * Math.round(1000 / delay) / 1000000).toFixed(2), "M points/second.] Phew!!!");
   }
 
   t1 = t2;
-
-  if (animationAction) {
-    animationAction();
-  }
-
+  gpuTempState = process(gpuAutomataState);
+  renderAndSwap();
   animationHandle = requestAnimationFrame(animate);
 }
 
@@ -24992,108 +24961,94 @@ function onItemClicked(item, element) {
 
   switch (item) {
     case _constants.Constants.id.r1t1c16nm:
-      animationAction = drawMooreCycles;
-      automatonRange = 1;
-      automatonThreshold = 1;
-      automatonNumStates = 16;
-      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("moore", rendererWidth, rendererHeight, 1, 16, 1);
       break;
 
     case _constants.Constants.id.r1t1c16nn:
-      animationAction = drawNuewMannCycles;
-      automatonRange = 1;
-      automatonThreshold = 1;
-      automatonNumStates = 16;
-      processNuemann = (0, _neumann_kernel.getNueMannProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("neumann", rendererWidth, rendererHeight, 1, 16, 1);
       break;
 
     case _constants.Constants.id.r1t1c16nc:
-      animationAction = drawCrossCycles;
-      automatonRange = 1;
-      automatonThreshold = 1;
-      automatonNumStates = 16;
-      processCross = (0, _cross_kernel.getCrossProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("cross", rendererWidth, rendererHeight, 1, 16, 1);
       break;
 
     case _constants.Constants.id.r1t3c4nm:
-      animationAction = drawMooreCycles;
-      automatonRange = 1;
-      automatonThreshold = 3;
-      automatonNumStates = 4;
-      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("moore", rendererWidth, rendererHeight, 3, 4, 1);
       break;
 
     case _constants.Constants.id.r1t3c3nm:
-      animationAction = drawMooreCycles;
-      automatonRange = 1;
-      automatonThreshold = 3;
-      automatonNumStates = 3;
-      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("moore", rendererWidth, rendererHeight, 3, 3, 1);
       break;
 
     case _constants.Constants.id.gameoflife:
-      animationAction = drawGameOfLife;
-      automatonRange = 1;
-      automatonThreshold = 3;
-      automatonNumStates = 2;
-      processMoore = (0, _game_of_life_kernel.getGameOfLifeProcess)(rendererWidth, rendererHeight);
+      setProcess("gol", rendererWidth, rendererHeight, -1, 2, -1);
       break;
 
     case _constants.Constants.id.r2t11c3nm:
-      animationAction = drawMooreCycles;
-      automatonRange = 2;
-      automatonThreshold = 11;
-      automatonNumStates = 3;
-      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("moore", rendererWidth, rendererHeight, 11, 3, 2);
       break;
 
     case _constants.Constants.id.r2t5c8nm:
-      animationAction = drawMooreCycles;
-      automatonRange = 2;
-      automatonThreshold = 5;
-      automatonNumStates = 8;
-      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("moore", rendererWidth, rendererHeight, 5, 8, 2);
       break;
 
     case _constants.Constants.id.r3t15c3nm:
-      animationAction = drawMooreCycles;
-      automatonRange = 3;
-      automatonThreshold = 15;
-      automatonNumStates = 3;
-      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("moore", rendererWidth, rendererHeight, 15, 3, 3);
       break;
 
     case _constants.Constants.id.r2t9c4nm:
-      animationAction = drawMooreCycles;
-      automatonRange = 2;
-      automatonThreshold = 9;
-      automatonNumStates = 4;
-      processMoore = (0, _moore_kernel.getMooreProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("moore", rendererWidth, rendererHeight, 9, 4, 2);
       break;
 
     case _constants.Constants.id.r3t10c2nn:
-      animationAction = drawNuewMannCycles;
-      automatonRange = 3;
-      automatonThreshold = 10;
-      automatonNumStates = 2;
-      processNuemann = (0, _neumann_kernel.getNueMannProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("neumann", rendererWidth, rendererHeight, 10, 2, 3);
       break;
 
     case _constants.Constants.id.r2t5c3nn:
-      animationAction = drawNuewMannCycles;
-      automatonRange = 1;
-      automatonThreshold = 1;
-      automatonNumStates = 5;
-      processNuemann = (0, _neumann_kernel.getNueMannProcess)(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange);
+      setProcess("neumann", rendererWidth, rendererHeight, 1, 5, 1);
       break;
 
     default:
       break;
   }
+}
 
-  rendererColors = (0, _utils.getColors)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, automatonNumStates - 2);
-  renderer = updateRenderer();
-  resetState();
+function setProcess(processName, width, height, threshold, numStates, range) {
+  switch (processName) {
+    case "moore":
+      {
+        process = (0, _moore_kernel.getMooreProcess)(width, height, threshold, numStates, range);
+        reset(width, height, numStates);
+      }
+      break;
+
+    case "cross":
+      {
+        process = (0, _cross_kernel.getCrossProcess)(width, height, threshold, numStates, range);
+        reset(width, height, numStates);
+      }
+      ;
+      break;
+
+    case "neumann":
+      {
+        process = (0, _neumann_kernel.getNueMannProcess)(width, height, threshold, numStates, range);
+        reset(width, height, numStates);
+      }
+      break;
+
+    case "gol":
+      {
+        process = (0, _game_of_life_kernel.getGameOfLifeProcess)(width, height);
+        reset(width, height, numStates);
+      }
+      break;
+  }
+}
+
+function reset(width, height, numStates) {
+  renderer = updateRenderer(width, height, (0, _utils.getColors)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, numStates - 2));
+  resetState(numStates);
   renderer(gpuAutomataState);
 }
 
@@ -25108,15 +25063,14 @@ function onStartClicked() {
 }
 
 style.applyStyle();
-rendererColors = (0, _utils.getColors)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, automatonNumStates - 2);
-renderer = updateRenderer();
-resetState();
+renderer = updateRenderer(rendererWidth, rendererHeight, (0, _utils.getColors)(style.getCurrentPallet().background, style.getCurrentPallet().foreground, 16 - 2));
+resetState(16);
 renderer(gpuAutomataState);
 /* Reposition the renderer canvas after rendring it once. */
 
 renderer = updateRenderer();
 t1 = performance.now();
-},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -25144,7 +25098,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58395" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49349" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -25320,5 +25274,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/gpujs_showcase/gpujs_showcase.js"], null)
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/gpujs_showcase/gpujs_showcase.js"], null)
 //# sourceMappingURL=/gpujs_showcase.76dcdb6b.js.map

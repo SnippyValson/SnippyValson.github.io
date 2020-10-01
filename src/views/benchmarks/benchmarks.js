@@ -10,6 +10,12 @@ import { Constants } from "./constants/contants";
 import {
     Constants as GlobalConstants
   } from "../../global/constants";
+  import {
+    Strings
+} from "./localization/strings";
+
+var localStrings = new Strings();
+
 var style = new Style();
 style.applyStyle();
 ReactDOM.render(<SortingBenchmark onStateChanged = {handleStateChange} />, document.getElementById("renderer-panel"));
@@ -34,6 +40,16 @@ function handleStateChange(state){
         }break;
         default: break; 
     }
+}
+
+function setIdle() {
+    document.getElementById(Constants.id.InfoLabel).innerHTML =
+        localStrings.localized.Idle;
+}
+
+function setBusy() {
+    document.getElementById(Constants.id.InfoLabel).innerHTML =
+        localStrings.localized.BusyIndicator;
 }
 
 function setSelectedButton(selectedButton) {
