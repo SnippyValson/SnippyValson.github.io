@@ -6,10 +6,18 @@ import {
   getNuemannNeighbours,
   getCrossNeighbours,
 } from "./libs/uitils.js";
-import { Style } from "./global/style.js";
-import { ConwaysGameOfLife } from "./automata/conwaysGameOfLife.js";
-import { CyclicCellularAutomata } from "./automata/cyclicCellularAutomata";
-import { MatrixTraversalVisualizer } from "./visualizers/matrixTraversalVisualizer";
+import {
+  Style
+} from "./global/style.js";
+import {
+  ConwaysGameOfLife
+} from "./automata/conwaysGameOfLife.js";
+import {
+  CyclicCellularAutomata
+} from "./automata/cyclicCellularAutomata";
+import {
+  MatrixTraversalVisualizer
+} from "./visualizers/matrixTraversalVisualizer";
 
 var background = document.getElementById("background-canvas");
 var backgroundContext = background.getContext("2d");
@@ -51,7 +59,7 @@ function initBackgroundAnimation() {
     if (automatonIndex == 6) {
       numDivs = 20;
     } else {
-        numDivs = 150;
+      numDivs = 150;
     }
     cols = numDivs;
     blockSize = width / cols;
@@ -62,8 +70,8 @@ function initBackgroundAnimation() {
     }
     if (automatonIndex == 6) {
       numDivs = 20;
-    } else{
-        numDivs = 150;
+    } else {
+      numDivs = 150;
     }
     rows = numDivs;
     blockSize = height / rows;
@@ -210,6 +218,7 @@ function initBackgroundAnimation() {
   var ft1 = Date.now();
   var ft2 = Date.now();
   var fps = 0;
+
   function live() {
     t2 = Date.now();
     ft2 = Date.now();
@@ -231,17 +240,20 @@ function initBackgroundAnimation() {
 initBackgroundAnimation();
 
 window.onresize = handleResize;
+
 function handleResize() {
   initBackgroundAnimation();
 }
 
 window.onGreetingClicked = onGreetingClicked;
+
 function onGreetingClicked() {
   style.calculateNextPallet();
   initBackgroundAnimation();
 }
 
 window.showWorks = showWorks;
+
 function showWorks(event) {
   var works = document.getElementById("works");
   if (works.classList.contains("fade-out")) {
@@ -252,6 +264,7 @@ function showWorks(event) {
 }
 
 window.closeWorks = closeWorks;
+
 function closeWorks(event) {
   console.log(event);
   var works = document.getElementById("works");
