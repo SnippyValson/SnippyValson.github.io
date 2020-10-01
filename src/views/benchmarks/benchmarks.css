@@ -11,70 +11,40 @@
   max-width: 335px;
 }
 
-.section {
-  margin: 10px;
-  padding: 10px;
-}
-
-.section-button {
-  display: block;
-  margin-top: 20px;
-}
-
-.check-box {
-    float: right;
-}
-
-.visible {
-    display: inline;
-}
-
-.hidden {
-    display: none;
-}
-
 #side-panel {
-    width: var(--side-panel-with);
-    height: calc(100% - calc(var(--top-bar-height) + 50px));
-    margin: 5px;
-    position: relative;
-    float: left;
-    overflow-y: scroll;
-  }
-  
-  #renderer-panel {
-    position: relative;
-    float: right;
-    margin: 5px;
-    width: calc(100% - calc(var(--side-panel-with) + 30px));
-    height: calc(100% - calc(var(--top-bar-height) + 50px));
-    overflow-y: scroll;
-  }
-  
-  #top-bar {
-    height: var(--top-bar-height);
-    padding-top: 25px;
-    padding-bottom: 10px;
-    padding-left: 5px;
-  }
-  
-  #start-button {
-    margin-left: 5px;
-  }
-  
-  #info-label {
-    margin-left: 25px;
-  }
+  width: var(--side-panel-with);
+  height: calc(100% - calc(var(--top-bar-height) + 50px));
+  margin: 5px;
+  position: relative;
+  float: left;
+  overflow-y: scroll;
+}
 
-  #content-div {
-      margin-top: 100px;
-  }
+#renderer-panel {
+  position: relative;
+  float: right;
+  margin: 5px;
+  width: calc(100% - calc(var(--side-panel-with) + 30px));
+  height: calc(100% - calc(var(--top-bar-height) + 50px));
+  overflow-y: scroll;
+}
 
-  .dialog-button {
-      float: right;
-      margin-left: 20px;
-  }
-  
-  .message {
-      margin-bottom: 50px;
-  }
+#top-bar {
+  height: var(--top-bar-height);
+  padding-top: 25px;
+  padding-bottom: 10px;
+  padding-left: 5px;
+}
+
+#start-button {
+  margin-left: 5px;
+}
+
+#info-label {
+  margin-left: 25px;
+}
+
+#content-div {
+  margin-top: 100px;
+}
+

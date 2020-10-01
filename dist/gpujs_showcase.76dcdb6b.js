@@ -24675,7 +24675,7 @@ var _gpu = require("gpu.js");
 var gpu = new _gpu.GPU();
 
 function getRenderer(rendererWidth, rendererHeight, colors) {
-  var rndrr = gpu.createKernel(function (stateMatrix) {
+  var renderer = gpu.createKernel(function (stateMatrix) {
     var i = this.thread.y;
     var j = this.thread.x;
 
@@ -24713,7 +24713,7 @@ function getRenderer(rendererWidth, rendererHeight, colors) {
       this.color(this.constants.color15r, this.constants.color15g, this.constants.color15b);
     }
   }).setOutput([rendererWidth, rendererHeight]).setGraphical(true).setConstants(colors);
-  return rndrr;
+  return renderer;
 }
 },{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"views/gpujs_showcase/constants/constants.js":[function(require,module,exports) {
 "use strict";
@@ -24969,10 +24969,10 @@ function animate() {
   if (fps_t2 - fps_t1 >= 1000) {
     delay = t2 - t1;
     fps_t1 = fps_t2;
+    document.getElementById(_constants.Constants.id.InfoLabel).innerHTML = "Processed & plotted ".concat((numPoints / 1000000).toFixed(2), "M points ").concat(Math.round(1000 / delay), " times/second. [").concat((numPoints * Math.round(1000 / delay) / 1000000).toFixed(2), "M points/second.] Phew!!!");
   }
 
   t1 = t2;
-  document.getElementById(_constants.Constants.id.InfoLabel).innerHTML = "Processed & plotted ".concat((numPoints / 1000000).toFixed(2), "M points ").concat(Math.round(1000 / delay), " times/second. [").concat((numPoints * Math.round(1000 / delay) / 1000000).toFixed(2), "M points/second.] Phew!!!");
 
   if (animationAction) {
     animationAction();
@@ -25144,7 +25144,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53054" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58395" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

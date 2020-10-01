@@ -1,11 +1,11 @@
 import { GPU } from "gpu.js";
-var gpu = new GPU();
+const gpu = new GPU();
 
 export function getRenderer(rendererWidth, rendererHeight, colors) {
-    var rndrr = gpu
+    let renderer = gpu
       .createKernel(function (stateMatrix) {
-        var i = this.thread.y;
-        var j = this.thread.x;
+        let i = this.thread.y;
+        let j = this.thread.x;
         if (stateMatrix[i][j] === 0) {
           this.color(
             this.constants.color0r,
@@ -107,5 +107,5 @@ export function getRenderer(rendererWidth, rendererHeight, colors) {
       .setOutput([rendererWidth, rendererHeight])
       .setGraphical(true)
       .setConstants(colors);
-      return rndrr;
+      return renderer;
     }

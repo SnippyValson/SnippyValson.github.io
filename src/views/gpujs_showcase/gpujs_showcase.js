@@ -66,8 +66,8 @@ function setSelectedButton(selectedButton) {
 }
 
 function updateRenderer() {
-  var renderer = getRenderer(rendererWidth, rendererHeight, rendererColors);
-  var rendererCanvas = renderer.canvas;
+  let renderer = getRenderer(rendererWidth, rendererHeight, rendererColors);
+  let rendererCanvas = renderer.canvas;
   rendererOutlet.innerHTML = "";
   rendererOutlet.appendChild(renderer.canvas);
   rendererCanvas.style.marginTop = `${
@@ -80,8 +80,8 @@ function updateRenderer() {
 }
 
 function resetState() {
-  for (var i = 0; i < rendererHeight; i++) {
-    for (var j = 0; j < rendererWidth; j++) {
+  for (let i = 0; i < rendererHeight; i++) {
+    for (let j = 0; j < rendererWidth; j++) {
       let state = Math.floor(Math.random() * automatonNumStates);
       gpuAutomataState[i][j] = state;
     }
@@ -121,14 +121,14 @@ function animate() {
   if (fps_t2 - fps_t1 >= 1000) {
     delay = t2 - t1;
     fps_t1 = fps_t2;
+    document.getElementById(Constants.id.InfoLabel).innerHTML = `Processed & plotted ${(
+      numPoints / 1000000
+    ).toFixed(2)}M points ${Math.round(1000 / delay)} times/second. [${(
+      (numPoints * Math.round(1000 / delay)) /
+      1000000
+    ).toFixed(2)}M points/second.] Phew!!!`;
   }
   t1 = t2;
-  document.getElementById(Constants.id.InfoLabel).innerHTML = `Processed & plotted ${(
-    numPoints / 1000000
-  ).toFixed(2)}M points ${Math.round(1000 / delay)} times/second. [${(
-    (numPoints * Math.round(1000 / delay)) /
-    1000000
-  ).toFixed(2)}M points/second.] Phew!!!`;
   if (animationAction) {
     animationAction();
   }

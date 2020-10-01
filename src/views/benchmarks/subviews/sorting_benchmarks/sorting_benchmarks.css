@@ -1,0 +1,31 @@
+.section-button {
+    display: block;
+    margin-top: 20px;
+}
+
+.check-box {
+    float: right;
+}
+
+.section {
+    margin: 10px;
+    padding: 10px;
+}
+
+.visible {
+    display: inline;
+}
+
+.hidden {
+    display: none;
+}
+
+.message {
+    margin-bottom: 50px;
+}
+
+.dialog-button {
+    float: right;
+    margin-left: 20px;
+}
+  

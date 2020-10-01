@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"views/benchmarks/workers/bubblesort_worker.js":[function(require,module,exports) {
+})({"views/benchmarks/subviews/sorting_benchmarks/workers/bubblesort_worker.js":[function(require,module,exports) {
 onmessage = function onmessage(e) {
   var array = e.data.array;
 
@@ -161,7 +161,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53054" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58395" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -337,5 +337,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/workers/bubblesort_worker.js"], null)
-//# sourceMappingURL=/bubblesort_worker.50de8120.js.map
+},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/subviews/sorting_benchmarks/workers/bubblesort_worker.js"], null)
+//# sourceMappingURL=/bubblesort_worker.a00039d1.js.map

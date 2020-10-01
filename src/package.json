@@ -11,6 +11,8 @@
   "dependencies": {
     "colors.js": "^1.2.4",
     "gpu.js": "^2.10.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "three": "^0.120.1",
     "three-orbit-controls": "^82.1.0",
     "three.js": "^0.77.1"
