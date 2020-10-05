@@ -5,7 +5,8 @@ import {
 } from "../../global/style";
 import React from "react";
 import ReactDOM from "react-dom";
-import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmarks.js";
+import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmarks";
+import { GpuJsBenchmarks } from "./subviews/gpujs_benchmarks/gpujs_benchmarks";
 import { Constants } from "./constants/contants";
 import {
     Constants as GlobalConstants
@@ -18,7 +19,7 @@ var localStrings = new Strings();
 
 var style = new Style();
 style.applyStyle();
-ReactDOM.render(<SortingBenchmark onStateChanged = {handleStateChange} />, document.getElementById("renderer-panel"));
+ReactDOM.render(<GpuJsBenchmarks onStateChanged = {handleStateChange} />, document.getElementById("renderer-panel"));
 var listButtons = document.getElementsByClassName(Constants.class.ListButton);
 
 window.onItemClicked = onItemClicked;

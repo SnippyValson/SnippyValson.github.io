@@ -296,24 +296,24 @@ export class SortingBenchmark extends React.Component {
     render() {
        return (
         <div>
-            <div class={`pixel-div center-div pixel-dialog unselectable ${this.state.showMessage ? 'fade-in' : 'fade-out'}`}>
-                <button class="pixel-button top-right" onClick={this.messageAcknowledged.bind(this)}>x</button>
-                <p class="pixel-text-medium">Message</p>
+            <div className={`pixel-div center-div pixel-dialog unselectable ${this.state.showMessage ? 'fade-in' : 'fade-out'}`}>
+                <button className="pixel-button top-right" onClick={this.messageAcknowledged.bind(this)}>x</button>
+                <p className="pixel-text-medium">Message</p>
                 <div id="content-div">
-                    <p class="pixel-text-medium message">{`${this.state.message}`}</p>
-                    <button class="pixel-button dialog-button" onClick={this.messageAcknowledged.bind(this)}>Ok</button>
+                    <p className="pixel-text-medium message">{`${this.state.message}`}</p>
+                    <button className="pixel-button dialog-button" onClick={this.messageAcknowledged.bind(this)}>Ok</button>
                 </div>
             </div>
-            <div class={`pixel-div center-div pixel-dialog unselectable ${this.state.showDialog ? 'fade-in' : 'fade-out'}`} id="okcanceldialog">
-                <button class="pixel-button top-right" onClick={this.dialogResult.bind(this, 'closes')}>x</button>
-                <p class="pixel-text-medium">Message</p>
+            <div className={`pixel-div center-div pixel-dialog unselectable ${this.state.showDialog ? 'fade-in' : 'fade-out'}`} id="okcanceldialog">
+                <button className="pixel-button top-right" onClick={this.dialogResult.bind(this, 'closes')}>x</button>
+                <p className="pixel-text-medium">Message</p>
                 <div id="content-div">
-                    <p class="pixel-text-medium message" id="okcanceldialog-content">{this.state.message}</p>
-                    <button class="pixel-button dialog-button" onClick={this.dialogResult.bind(this, 'cancel')}>Cancel</button>
-                    <button class="pixel-button dialog-button" onClick={this.dialogResult.bind(this, 'ok')}>Ok</button>
+                    <p className="pixel-text-medium message" id="okcanceldialog-content">{this.state.message}</p>
+                    <button className="pixel-button dialog-button" onClick={this.dialogResult.bind(this, 'cancel')}>Cancel</button>
+                    <button className="pixel-button dialog-button" onClick={this.dialogResult.bind(this, 'ok')}>Ok</button>
                 </div>
             </div>
-            <div class="modal" id="modal-shadow"></div>
+            <div className="modal" id="modal-shadow"></div>
             <div className="pixel-div section">
                 <label className="pixel-text-medium">Populate the array. Click start to populate the array with random values.</label>
                 <div className="top-offset">
