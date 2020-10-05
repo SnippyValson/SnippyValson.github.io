@@ -25,7 +25,9 @@ window.onItemClicked = onItemClicked;
 function onItemClicked(item, button) {
     setSelectedButton(button);
     switch (item) {
-        case "sorting-benchmarks": {}
+        case "sorting-benchmarks": {
+            ReactDOM.render(<SortingBenchmark onStateChanged = {handleStateChange} />, document.getElementById("renderer-panel"));
+        }
         break;
     }
 }
