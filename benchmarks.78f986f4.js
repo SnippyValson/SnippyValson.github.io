@@ -53331,7 +53331,78 @@ function getColors(color1, color2, numStops) {
   };
   return colorsRgb;
 }
-},{"./../../libs/uitils.js":"libs/uitils.js"}],"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.js":[function(require,module,exports) {
+},{"./../../libs/uitils.js":"libs/uitils.js"}],"views/gpujs_showcase/kernels/moore_kernel.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getMooreProcess = getMooreProcess;
+
+var _gpu = require("gpu.js");
+
+var gpu = new _gpu.GPU();
+
+function getMooreProcess(rendererWidth, rendererHeight, automatonThreshold, automatonNumStates, automatonRange) {
+  return gpu.createKernel(function (stateMatrix) {
+    var i = this.thread.y;
+    var j = this.thread.x;
+    var r = this.constants.rendererHeight;
+    var c = this.constants.rendererWidth;
+    var count = 0;
+    var nextState = (stateMatrix[i][j] + 1) % this.constants.numStates;
+    count = checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, this.constants.range);
+
+    if (count >= this.constants.threshold) {
+      return nextState;
+    } else {
+      return stateMatrix[i][j];
+    }
+  }).setOutput([rendererWidth, rendererHeight]).setConstants({
+    rendererWidth: rendererWidth,
+    rendererHeight: rendererHeight,
+    threshold: automatonThreshold,
+    numStates: automatonNumStates,
+    range: automatonRange
+  }).setFunctions([checkMooreNeighbourhood]);
+}
+
+function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
+  var count = 0;
+
+  for (var offset = 1; offset <= range; offset++) {
+    if (j + offset < c) {
+      if (stateMatrix[i][j + offset] == nextState) {
+        count++;
+      }
+    }
+
+    if (j - offset >= 0) {
+      if (stateMatrix[i][j - offset] == nextState) {
+        count++;
+      }
+    }
+  }
+
+  for (var iOffset = 1; iOffset <= range; iOffset++) {
+    for (var jOffset = -range; jOffset <= range; jOffset++) {
+      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+
+      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+    }
+  }
+
+  return count;
+}
+},{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53354,6 +53425,8 @@ var _utils = require("../../../gpujs_showcase/utils");
 var _style = require("../../../../global/style");
 
 var _uitils = require("./../../../../libs/uitils");
+
+var _moore_kernel = require("../../../gpujs_showcase/kernels/moore_kernel");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -53393,68 +53466,155 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this);
 
-    _defineProperty(_assertThisInitialized(_this), "currentFps", void 0);
-
     _defineProperty(_assertThisInitialized(_this), "style", void 0);
 
     _defineProperty(_assertThisInitialized(_this), "gpuAutomataState", void 0);
 
     _defineProperty(_assertThisInitialized(_this), "gpuTempState", void 0);
 
-    _defineProperty(_assertThisInitialized(_this), "rendererCanvas", void 0);
-
     _defineProperty(_assertThisInitialized(_this), "renderer", void 0);
+
+    _defineProperty(_assertThisInitialized(_this), "gridHeight", 3162);
+
+    _defineProperty(_assertThisInitialized(_this), "gridWidth", 3162);
+
+    _defineProperty(_assertThisInitialized(_this), "process", void 0);
+
+    _defineProperty(_assertThisInitialized(_this), "animationHandle", void 0);
+
+    _defineProperty(_assertThisInitialized(_this), "fps_t1", performance.now());
+
+    _defineProperty(_assertThisInitialized(_this), "fps_t2", performance.now());
+
+    _defineProperty(_assertThisInitialized(_this), "t1", performance.now());
+
+    _defineProperty(_assertThisInitialized(_this), "t2", performance.now());
+
+    _defineProperty(_assertThisInitialized(_this), "delay", 0);
 
     _this.currentFps = "XX fps";
     _this.style = new _style.Style();
-    _this.gpuAutomataState = (0, _uitils.Array2D)(2000, 2000);
-    _this.gpuTempState = (0, _uitils.Array2D)(2000, 2000);
+
+    _this.style.applyStyle();
+
+    _this.gpuAutomataState = (0, _uitils.Array2D)(_this.gridWidth, _this.gridHeight);
+    _this.gpuTempState = (0, _uitils.Array2D)(_this.gridWidth, _this.gridHeight);
+    _this.state = {
+      rendererCanvas: undefined,
+      currentFps: 0
+    };
+    _this.canvasHolderRef = _react.default.createRef();
+    _this.process = (0, _moore_kernel.getMooreProcess)(_this.gridWidth, _this.gridHeight, 1, 16, 1);
+
+    _this.UpdateRenderer.bind(_assertThisInitialized(_this));
+
+    _this.animate.bind(_assertThisInitialized(_this));
+
     return _this;
   }
 
   _createClass(GpuJsBenchmarks, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.renderer = this.UpdateRenderer(2000, 2000, (0, _utils.getColors)(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14));
+      var colors = (0, _utils.getColors)(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14);
+      this.renderer = this.UpdateRenderer(this.gridWidth, this.gridHeight, colors);
     }
   }, {
     key: "UpdateRenderer",
     value: function UpdateRenderer(width, height, colors) {
+      var _this2 = this;
+
       var renderer = (0, _render_kernel.getRenderer)(width, height, colors);
       var rendererCanvas = renderer.canvas;
-      this.rendererCanvas = rendererCanvas;
+      rendererCanvas.style.maxWidth = '200px';
+      rendererCanvas.style.maxHeight = '200px';
+      rendererCanvas.style.margin = "10px";
+      this.setState({
+        rendererCanvas: rendererCanvas
+      }, function () {
+        console.log(_this2.state.rendererCanvas);
+
+        _this2.canvasHolderRef.current.appendChild(_this2.state.rendererCanvas);
+      });
       return renderer;
     }
   }, {
     key: "resetState",
     value: function resetState(numStates) {
-      for (var i = 0; i < rendererHeight; i++) {
-        for (var j = 0; j < rendererWidth; j++) {
+      for (var i = 0; i < this.gridHeight; i++) {
+        for (var j = 0; j < this.gridHeight; j++) {
           var state = Math.floor(Math.random() * numStates);
-          gpuAutomataState[i][j] = state;
+          this.gpuAutomataState[i][j] = state;
         }
       }
 
       this.renderer(this.gpuAutomataState);
     }
   }, {
+    key: "animate",
+    value: function animate() {
+      this.t2 = performance.now();
+      this.fps_t2 = performance.now();
+
+      if (this.fps_t2 - this.fps_t1 >= 1000) {
+        this.delay = this.t2 - this.t1;
+        this.fps_t1 = this.fps_t2;
+        this.setState({
+          currentFps: Math.round(1000 / this.delay)
+        });
+      }
+
+      this.t1 = this.t2;
+      this.gpuTempState = this.process(this.gpuAutomataState);
+      this.renderAndSwap();
+      this.animationHandle = requestAnimationFrame(this.animate.bind(this));
+    }
+  }, {
+    key: "renderAndSwap",
+    value: function renderAndSwap() {
+      this.renderer(this.gpuTempState);
+      var t = this.gpuTempState;
+      this.gpuAutomataState = this.gpuTempState;
+      this.gpuTempState = t;
+    }
+  }, {
     key: "onStartClicked",
     value: function onStartClicked() {
-      console.log("Start clicked.");
-      console.log();
+      this.resetState(16);
+
+      if (this.animationHandle) {
+        cancelAnimationFrame(animationHandle);
+      }
+
+      this.t1 = performance.now();
+      this.fps_t1 = performance.now();
+      this.animationHandle = requestAnimationFrame(this.animate.bind(this));
     }
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
+      return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-div section"
+      }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button pixel-text-medium start-button",
         onClick: this.onStartClicked.bind(this)
       }, "Start"), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium fps-label"
-      }, "FPS : ", this.currentFps)), /*#__PURE__*/_react.default.createElement("div", {
+      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("div", {
         ref: this.canvasHolderRef,
         className: "render-panel"
-      }, this.rendererCanvas));
+      }), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium fps-label"
+      }, "Average FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-div section"
+      }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
+        className: "pixel-button pixel-text-medium start-button",
+        onClick: this.onStartClicked.bind(this)
+      }, "Start"), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium fps-label"
+      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("div", null), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium fps-label"
+      }, "Average FPS : ", this.state.currentFps)));
     }
   }]);
 
@@ -53462,7 +53622,7 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.GpuJsBenchmarks = GpuJsBenchmarks;
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","../../../../main.css":"main.css","./gpujs_benchmarks.css":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css","./../../../gpujs_showcase/kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","../../../gpujs_showcase/utils":"views/gpujs_showcase/utils.js","../../../../global/style":"global/style.js","./../../../../libs/uitils":"libs/uitils.js"}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","../../../../main.css":"main.css","./gpujs_benchmarks.css":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css","./../../../gpujs_showcase/kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","../../../gpujs_showcase/utils":"views/gpujs_showcase/utils.js","../../../../global/style":"global/style.js","./../../../../libs/uitils":"libs/uitils.js","../../../gpujs_showcase/kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js"}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53628,7 +53788,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58918" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54207" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
