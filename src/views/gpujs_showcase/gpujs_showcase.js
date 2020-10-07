@@ -108,6 +108,7 @@ function animate() {
 window.onItemClicked = onItemClicked;
 function onItemClicked(item, element) {
   setSelectedButton(element);
+  document.getElementById("start-button").innerHTML = "Start";
   if (animationHandle) {
     cancelAnimationFrame(animationHandle);
   }
@@ -154,23 +155,27 @@ function onItemClicked(item, element) {
 }
 
 function setProcess(processName, width, height, threshold, numStates, range) {
-  switch(processName) {
-    case "moore" : {
+  switch (processName) {
+    case "moore": {
       process = getMooreProcess(width, height, threshold, numStates, range);
       reset(width, height, numStates);
-    } break;
-    case "cross" : {
-      process = getCrossProcess(width, height, threshold, numStates, range);
-      reset(width, height, numStates);
-    }; break;
-    case "neumann" : {
-      process = getNueMannProcess(width, height, threshold, numStates, range);
-      reset(width, height, numStates);
-    } break;
-    case "gol" : {
-      process = getGameOfLifeProcess(width, height);
-      reset(width, height, numStates);
-    }break;
+    }
+    break;
+  case "cross": {
+    process = getCrossProcess(width, height, threshold, numStates, range);
+    reset(width, height, numStates);
+  };
+  break;
+  case "neumann": {
+    process = getNueMannProcess(width, height, threshold, numStates, range);
+    reset(width, height, numStates);
+  }
+  break;
+  case "gol": {
+    process = getGameOfLifeProcess(width, height);
+    reset(width, height, numStates);
+  }
+  break;
   }
 }
 
@@ -181,11 +186,20 @@ function reset(width, height, numStates) {
 }
 
 window.onStartClicked = onStartClicked;
+
 function onStartClicked() {
-  if (animationHandle) {
-    cancelAnimationFrame(animationHandle);
+  if (document.getElementById("start-button").innerHTML == "Start") {
+    document.getElementById("start-button").innerHTML = "Stop";
+    if (animationHandle) {
+      cancelAnimationFrame(animationHandle);
+    }
+    animationHandle = requestAnimationFrame(animate);
+  } else {
+    document.getElementById("start-button").innerHTML = "Start";
+    if (animationHandle) {
+      cancelAnimationFrame(animationHandle);
+    }
   }
-  animationHandle = requestAnimationFrame(animate);
 }
 
 style.applyStyle();
@@ -195,3 +209,5 @@ renderer(gpuAutomataState);
 /* Reposition the renderer canvas after rendring it once. */
 renderer = updateRenderer();
 t1 = performance.now();
+setProcess("moore", rendererWidth, rendererHeight, 1, 16, 1);
+setSelectedButton(document.getElementById(Constants.id.r1t1c16nm));

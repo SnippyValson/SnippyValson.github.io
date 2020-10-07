@@ -73,6 +73,11 @@
   border-color: var(--pixel-foreground);
 }
 
+.nav-button {
+  margin-top: 10px;
+  margin-right: -20px;
+}
+
 .pixel-button:active {
   outline: none;
 }

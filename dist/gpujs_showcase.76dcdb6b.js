@@ -24958,6 +24958,7 @@ window.onItemClicked = onItemClicked;
 
 function onItemClicked(item, element) {
   setSelectedButton(element);
+  document.getElementById("start-button").innerHTML = "Start";
 
   if (animationHandle) {
     cancelAnimationFrame(animationHandle);
@@ -25059,11 +25060,21 @@ function reset(width, height, numStates) {
 window.onStartClicked = onStartClicked;
 
 function onStartClicked() {
-  if (animationHandle) {
-    cancelAnimationFrame(animationHandle);
-  }
+  if (document.getElementById("start-button").innerHTML == "Start") {
+    document.getElementById("start-button").innerHTML = "Stop";
 
-  animationHandle = requestAnimationFrame(animate);
+    if (animationHandle) {
+      cancelAnimationFrame(animationHandle);
+    }
+
+    animationHandle = requestAnimationFrame(animate);
+  } else {
+    document.getElementById("start-button").innerHTML = "Start";
+
+    if (animationHandle) {
+      cancelAnimationFrame(animationHandle);
+    }
+  }
 }
 
 style.applyStyle();
@@ -25074,6 +25085,8 @@ renderer(gpuAutomataState);
 
 renderer = updateRenderer();
 t1 = performance.now();
+setProcess("moore", rendererWidth, rendererHeight, 1, 16, 1);
+setSelectedButton(document.getElementById(_constants.Constants.id.r1t1c16nm));
 },{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

@@ -53476,8 +53476,6 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "gpuRenderer", void 0);
 
-    _defineProperty(_assertThisInitialized(_this), "multiGpuRenderer", void 0);
-
     _defineProperty(_assertThisInitialized(_this), "gridHeight", 2000);
 
     _defineProperty(_assertThisInitialized(_this), "gridWidth", 2000);
@@ -53496,8 +53494,6 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "delay", 0);
 
-    _defineProperty(_assertThisInitialized(_this), "mode", "single-thread");
-
     _defineProperty(_assertThisInitialized(_this), "liveRender", true);
 
     _defineProperty(_assertThisInitialized(_this), "numFinished", 0);
@@ -53506,71 +53502,23 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "temp", []);
 
+    _defineProperty(_assertThisInitialized(_this), "processRunning", false);
+
     _this.currentFps = "XX fps";
     _this.style = new _style.Style();
 
     _this.style.applyStyle();
 
-    _this.gpuAutomataState = (0, _uitils.Array2D)(_this.gridWidth, _this.gridHeight);
-    _this.gpuTempState = (0, _uitils.Array2D)(_this.gridWidth, _this.gridHeight);
     _this.state = {
-      currentFps: 0
+      currentFps: 0,
+      sGpuButtonText: "Start",
+      mGpuButtonText: "Start"
     };
     _this.gpuCanvasHolderRef = _react.default.createRef();
-    _this.process = (0, _moore_kernel.getMooreProcess)(_this.gridWidth, _this.gridHeight, 1, 16, 1);
 
     _this.UpdateRenderer.bind(_assertThisInitialized(_this));
 
     _this.animate.bind(_assertThisInitialized(_this));
-
-    var _loop = function _loop(i) {
-      var gpuW = new Worker("/gpu_worker.54550945.js");
-
-      gpuW.onmessage = function (e) {
-        this.numFinished++;
-        this.temp[i] = e.data;
-
-        if (this.numFinished == navigator.hardwareConcurrency) {
-          for (var k = 0; k < this.temp[0].length - 2; k++) {
-            this.gpuTempState.push(this.temp[0][k]);
-          }
-
-          for (var j = 1; j < navigator.hardwareConcurrency - 1; j++) {
-            for (var _k = 1; _k < this.temp[j].length - 1; _k++) {
-              this.gpuTempState.push(this.temp[j][_k]);
-            }
-          }
-
-          for (var _k2 = 2; _k2 < this.temp[navigator.hardwareConcurrency - 1].length; _k2++) {
-            this.gpuTempState.push(this.temp[navigator.hardwareConcurrency - 1][_k2]);
-          }
-
-          this.renderAndSwap(this.gpuRenderer);
-          this.gpuTempState = [];
-          this.temp = [];
-          this.numFinished = 0;
-          this.t2 = Date.now();
-          this.fps_t2 = Date.now();
-
-          if (this.fps_t2 - this.fps_t1 >= 1000) {
-            this.delay = this.t2 - this.t1;
-            this.fps_t1 = this.fps_t2;
-            this.setState({
-              currentFps: Math.round(1000 / this.delay)
-            });
-          }
-
-          this.t1 = this.t2;
-          this.animationHandle = requestAnimationFrame(this.workerAnimate.bind(this));
-        }
-      }.bind(_assertThisInitialized(_this));
-
-      _this.gpuWorkers.push(gpuW);
-    };
-
-    for (var i = 0; i < navigator.hardwareConcurrency; i++) {
-      _loop(i);
-    }
 
     return _this;
   }
@@ -53578,9 +53526,67 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
   _createClass(GpuJsBenchmarks, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      this.gpuAutomataState = (0, _uitils.Array2D)(this.gridWidth, this.gridHeight);
+      this.gpuTempState = (0, _uitils.Array2D)(this.gridWidth, this.gridHeight);
+      this.process = (0, _moore_kernel.getMooreProcess)(this.gridWidth, this.gridHeight, 1, 16, 1);
+      this.createGpuWorkers();
       var colors = (0, _utils.getColors)(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14);
       this.gpuRenderer = this.UpdateRenderer(this.gridWidth, this.gridHeight, colors, this.gpuCanvasHolderRef);
       this.resetState(16, this.gpuRenderer);
+    }
+  }, {
+    key: "createGpuWorkers",
+    value: function createGpuWorkers() {
+      var _this2 = this;
+
+      var _loop = function _loop(i) {
+        var gpuW = new Worker("/gpu_worker.54550945.js");
+
+        gpuW.onmessage = function (e) {
+          this.numFinished++;
+          this.temp[i] = e.data;
+
+          if (this.numFinished == navigator.hardwareConcurrency) {
+            for (var k = 0; k < this.temp[0].length - 2; k++) {
+              this.gpuTempState.push(this.temp[0][k]);
+            }
+
+            for (var j = 1; j < navigator.hardwareConcurrency - 1; j++) {
+              for (var _k = 1; _k < this.temp[j].length - 1; _k++) {
+                this.gpuTempState.push(this.temp[j][_k]);
+              }
+            }
+
+            for (var _k2 = 2; _k2 < this.temp[navigator.hardwareConcurrency - 1].length; _k2++) {
+              this.gpuTempState.push(this.temp[navigator.hardwareConcurrency - 1][_k2]);
+            }
+
+            this.renderAndSwap(this.gpuRenderer);
+            this.gpuTempState = [];
+            this.temp = [];
+            this.numFinished = 0;
+            this.t2 = Date.now();
+            this.fps_t2 = Date.now();
+
+            if (this.fps_t2 - this.fps_t1 >= 1000) {
+              this.delay = this.t2 - this.t1;
+              this.fps_t1 = this.fps_t2;
+              this.setState({
+                currentFps: Math.round(1000 / this.delay)
+              });
+            }
+
+            this.t1 = this.t2;
+            this.animationHandle = requestAnimationFrame(this.workerAnimate.bind(this));
+          }
+        }.bind(_this2);
+
+        _this2.gpuWorkers.push(gpuW);
+      };
+
+      for (var i = 0; i < navigator.hardwareConcurrency; i++) {
+        _loop(i);
+      }
     }
   }, {
     key: "UpdateRenderer",
@@ -53604,6 +53610,7 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
       }
 
       renderer(this.gpuAutomataState);
+      console.log("Reset called");
     }
   }, {
     key: "animate",
@@ -53637,35 +53644,100 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
       this.gpuTempState = t;
     }
   }, {
-    key: "onStartClicked",
-    value: function onStartClicked(mode) {
+    key: "prepareToStart",
+    value: function prepareToStart() {
       this.resetState(16, this.gpuRenderer);
 
       if (this.animationHandle) {
-        cancelAnimationFrame(animationHandle);
+        cancelAnimationFrame(this.animationHandle);
       }
 
       this.t1 = performance.now();
       this.fps_t1 = performance.now();
-      this.mode = mode;
+    }
+  }, {
+    key: "onStartClicked",
+    value: function onStartClicked(mode) {
+      var _this3 = this;
 
-      if (mode == "single-thread") {
-        this.animationHandle = requestAnimationFrame(this.animate.bind(this, this.liveRender));
-      } else if (mode == "multi-thread") {
-        for (var i = 0; i < navigator.hardwareConcurrency; i++) {
-          this.gpuWorkers[i].postMessage({
-            mode: "create",
-            state: this.gpuAutomataState,
-            rendererHeight: 2 + this.gridHeight / navigator.hardwareConcurrency,
-            rendererWidth: this.gridWidth,
-            automatonNumStates: 16,
-            automatonRange: 1,
-            automatonThreshold: 1
-          });
-        }
+      switch (mode) {
+        case "single-thread":
+          {
+            if (this.state.sGpuButtonText === "Start") {
+              if (this.processRunning) {
+                alert("Please stop the running operation.");
+                return;
+              }
 
-        this.gpuTempState = [];
-        this.animationHandle = requestAnimationFrame(this.workerAnimate.bind(this));
+              this.prepareToStart();
+              this.animationHandle = requestAnimationFrame(this.animate.bind(this, this.liveRender));
+              this.setState({
+                sGpuButtonText: "Stop"
+              });
+              this.processRunning = true;
+            } else {
+              if (this.animationHandle) {
+                cancelAnimationFrame(this.animationHandle);
+              }
+
+              this.resetState(16, this.gpuRenderer);
+              this.setState({
+                sGpuButtonText: "Start"
+              });
+              this.processRunning = false;
+            }
+          }
+          break;
+
+        case "multi-thread":
+          {
+            if (this.state.mGpuButtonText === "Start") {
+              if (this.processRunning) {
+                alert("Please stop the running operation.");
+                return;
+              }
+
+              this.prepareToStart();
+
+              if (this.gpuWorkers.length === 0) {
+                this.createGpuWorkers();
+              }
+
+              this.gpuWorkers.forEach(function (gw) {
+                gw.postMessage({
+                  mode: "create",
+                  state: _this3.gpuAutomataState,
+                  rendererHeight: 2 + _this3.gridHeight / navigator.hardwareConcurrency,
+                  rendererWidth: _this3.gridWidth,
+                  automatonNumStates: 16,
+                  automatonRange: 1,
+                  automatonThreshold: 1
+                });
+              });
+              this.gpuTempState = [];
+              this.animationHandle = requestAnimationFrame(this.workerAnimate.bind(this));
+              this.setState({
+                mGpuButtonText: "Stop"
+              });
+              this.processRunning = true;
+            } else {
+              this.gpuWorkers.forEach(function (gw) {
+                gw.terminate();
+              });
+              this.gpuWorkers = [];
+
+              if (this.animationHandle) {
+                cancelAnimationFrame(this.animationHandle);
+              }
+
+              this.resetState(16, this.gpuRenderer);
+              this.setState({
+                mGpuButtonText: "Start"
+              });
+              this.processRunning = false;
+            }
+          }
+          break;
       }
     }
     /* Multi threaded code. */
@@ -53675,13 +53747,13 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
     value: function workerAnimate() {
       var index = 0;
       var t = [];
-      var ze = [];
+      var zet = [];
 
       for (var z = 0; z < this.gridWidth; z++) {
-        ze.push(-1);
+        zet.push(-1);
       }
 
-      t.push(ze);
+      t.push(zet);
       this.gpuAutomataState.slice(index, 1 + index + this.gridHeight / navigator.hardwareConcurrency).forEach(function (st) {
         t.push(st);
       });
@@ -53699,36 +53771,66 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
         index += this.gridHeight / navigator.hardwareConcurrency;
       }
 
+      var zeb = [];
+
+      for (var _z = 0; _z < this.gridWidth; _z++) {
+        zeb.push(-1);
+      }
+
+      var stt = this.gpuAutomataState.slice(index - 2, index + this.gridHeight / navigator.hardwareConcurrency);
+      stt[0] = zeb;
       this.gpuWorkers[navigator.hardwareConcurrency - 1].postMessage({
         mode: "process",
-        state: this.gpuAutomataState.slice(index - 2, index + this.gridHeight / navigator.hardwareConcurrency)
+        state: stt
       });
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      if (this.animationHandle) {
+        cancelAnimationFrame(this.animationHandle);
+      }
+
+      this.gpuAutomataState = [];
+      this.gpuTempState = [];
+      this.gpuRenderer = undefined;
+      this.gpuWorkers.forEach(function (gw) {
+        gw.terminate();
+      });
+      this.gpuWorkers = [];
+      this.process = undefined;
     }
   }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+        className: "container"
+      }, /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium fps-label"
+      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("div", {
         ref: this.gpuCanvasHolderRef,
         className: "render-panel"
       }), /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
       }, /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium description-label"
-      }, "GPU.js single threaded."), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
+      }, "GPU.js single threaded."), /*#__PURE__*/_react.default.createElement("div", {
+        className: "middle-section"
+      }, /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button pixel-text-medium start-button",
         onClick: this.onStartClicked.bind(this, "single-thread")
-      }, "Start"), /*#__PURE__*/_react.default.createElement("label", {
-        className: "pixel-text-medium fps-label"
-      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("label", {
+      }, this.state.sGpuButtonText)), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium fps-label"
       }, "Average FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
-      }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
+      }, /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium description-label"
+      }, "GPU.js multi threaded."), /*#__PURE__*/_react.default.createElement("div", {
+        className: "middle-section"
+      }, /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button pixel-text-medium start-button",
         onClick: this.onStartClicked.bind(this, "multi-thread")
-      }, "Start"), /*#__PURE__*/_react.default.createElement("label", {
-        className: "pixel-text-medium fps-label"
-      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("label", {
+      }, this.state.mGpuButtonText)), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium fps-label"
       }, "Average FPS : ", this.state.currentFps)));
     }
@@ -53809,7 +53911,7 @@ var localStrings = new _strings.Strings();
 var style = new _style.Style();
 style.applyStyle();
 
-_reactDom.default.render( /*#__PURE__*/_react.default.createElement(_gpujs_benchmarks.GpuJsBenchmarks, {
+_reactDom.default.render( /*#__PURE__*/_react.default.createElement(_sorting_benchmarks.SortingBenchmark, {
   onStateChanged: handleStateChange
 }), document.getElementById("renderer-panel"));
 
@@ -53823,6 +53925,14 @@ function onItemClicked(item, button) {
     case "sorting-benchmarks":
       {
         _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_sorting_benchmarks.SortingBenchmark, {
+          onStateChanged: handleStateChange
+        }), document.getElementById("renderer-panel"));
+      }
+      break;
+
+    case "matrix-benchmarks":
+      {
+        _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_gpujs_benchmarks.GpuJsBenchmarks, {
           onStateChanged: handleStateChange
         }), document.getElementById("renderer-panel"));
       }
@@ -53876,6 +53986,8 @@ function setSelectedButton(selectedButton) {
   selectedButton.classList.add(_constants.Constants.class.PixelButtonInverted);
   selectedButton.classList.remove(_constants.Constants.class.PixelButton);
 }
+
+setSelectedButton(document.getElementById("sort-section"));
 },{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../global/style":"global/style.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./subviews/sorting_benchmarks/sorting_benchmarks":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.js","./subviews/gpujs_benchmarks/gpujs_benchmarks":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.js","./constants/contants":"views/benchmarks/constants/contants.js","../../global/constants":"global/constants.js","./localization/strings":"views/benchmarks/localization/strings.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

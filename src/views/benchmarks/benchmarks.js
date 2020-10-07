@@ -16,10 +16,9 @@ import {
 } from "./localization/strings";
 
 var localStrings = new Strings();
-
 var style = new Style();
 style.applyStyle();
-ReactDOM.render(<GpuJsBenchmarks onStateChanged = {handleStateChange} />, document.getElementById("renderer-panel"));
+ReactDOM.render(<SortingBenchmark onStateChanged = {handleStateChange} />, document.getElementById("renderer-panel"));
 var listButtons = document.getElementsByClassName(Constants.class.ListButton);
 
 window.onItemClicked = onItemClicked;
@@ -28,6 +27,10 @@ function onItemClicked(item, button) {
     switch (item) {
         case "sorting-benchmarks": {
             ReactDOM.render(<SortingBenchmark onStateChanged = {handleStateChange} />, document.getElementById("renderer-panel"));
+        }
+        break;
+        case "matrix-benchmarks": {
+            ReactDOM.render(<GpuJsBenchmarks onStateChanged = {handleStateChange} />, document.getElementById("renderer-panel"));
         }
         break;
     }
@@ -62,5 +65,7 @@ function setSelectedButton(selectedButton) {
     }
     selectedButton.classList.add(GlobalConstants.class.PixelButtonInverted);
     selectedButton.classList.remove(GlobalConstants.class.PixelButton);
-  }
+}
+
+setSelectedButton(document.getElementById("sort-section"));
   

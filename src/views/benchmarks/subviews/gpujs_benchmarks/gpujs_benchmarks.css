@@ -4,6 +4,7 @@
 
 .fps-label {
     margin-left: 20px;
+    margin-top: 20px;
 }
 
 .start-button {
@@ -14,4 +15,13 @@
 .description-label {
     margin-top: 20px;
     margin-left: 20px;
+}
+
+.middle-section {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.container {
+    margin-top: 20px;
 }
