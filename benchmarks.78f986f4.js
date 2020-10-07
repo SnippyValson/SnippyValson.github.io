@@ -52945,45 +52945,49 @@ var _gpu = require("gpu.js");
 var gpu = new _gpu.GPU();
 
 function getRenderer(rendererWidth, rendererHeight, colors) {
-  var renderer = gpu.createKernel(function (stateMatrix) {
-    var i = this.thread.y;
-    var j = this.thread.x;
+  try {
+    var renderer = gpu.createKernel(function (stateMatrix) {
+      var i = this.thread.y;
+      var j = this.thread.x;
 
-    if (stateMatrix[i][j] === 0) {
-      this.color(this.constants.color0r, this.constants.color0g, this.constants.color0b);
-    } else if (stateMatrix[i][j] === 1) {
-      this.color(this.constants.color1r, this.constants.color1g, this.constants.color1b);
-    } else if (stateMatrix[i][j] === 2) {
-      this.color(this.constants.color2r, this.constants.color2g, this.constants.color2b);
-    } else if (stateMatrix[i][j] === 3) {
-      this.color(this.constants.color3r, this.constants.color3g, this.constants.color3b);
-    } else if (stateMatrix[i][j] === 4) {
-      this.color(this.constants.color4r, this.constants.color4g, this.constants.color4b);
-    } else if (stateMatrix[i][j] === 5) {
-      this.color(this.constants.color5r, this.constants.color5g, this.constants.color5b);
-    } else if (stateMatrix[i][j] === 6) {
-      this.color(this.constants.color6r, this.constants.color6g, this.constants.color6b);
-    } else if (stateMatrix[i][j] === 7) {
-      this.color(this.constants.color7r, this.constants.color7g, this.constants.color7b);
-    } else if (stateMatrix[i][j] === 8) {
-      this.color(this.constants.color8r, this.constants.color8g, this.constants.color8b);
-    } else if (stateMatrix[i][j] === 9) {
-      this.color(this.constants.color9r, this.constants.color9g, this.constants.color9b);
-    } else if (stateMatrix[i][j] === 10) {
-      this.color(this.constants.color10r, this.constants.color10g, this.constants.color10b);
-    } else if (stateMatrix[i][j] === 11) {
-      this.color(this.constants.color11r, this.constants.color11g, this.constants.color11b);
-    } else if (stateMatrix[i][j] === 12) {
-      this.color(this.constants.color12r, this.constants.color12g, this.constants.color12b);
-    } else if (stateMatrix[i][j] === 13) {
-      this.color(this.constants.color13r, this.constants.color13g, this.constants.color13b);
-    } else if (stateMatrix[i][j] === 14) {
-      this.color(this.constants.color14r, this.constants.color14g, this.constants.color14b);
-    } else if (stateMatrix[i][j] === 15) {
-      this.color(this.constants.color15r, this.constants.color15g, this.constants.color15b);
-    }
-  }).setOutput([rendererWidth, rendererHeight]).setGraphical(true).setConstants(colors);
-  return renderer;
+      if (stateMatrix[i][j] === 0) {
+        this.color(this.constants.color0r, this.constants.color0g, this.constants.color0b);
+      } else if (stateMatrix[i][j] === 1) {
+        this.color(this.constants.color1r, this.constants.color1g, this.constants.color1b);
+      } else if (stateMatrix[i][j] === 2) {
+        this.color(this.constants.color2r, this.constants.color2g, this.constants.color2b);
+      } else if (stateMatrix[i][j] === 3) {
+        this.color(this.constants.color3r, this.constants.color3g, this.constants.color3b);
+      } else if (stateMatrix[i][j] === 4) {
+        this.color(this.constants.color4r, this.constants.color4g, this.constants.color4b);
+      } else if (stateMatrix[i][j] === 5) {
+        this.color(this.constants.color5r, this.constants.color5g, this.constants.color5b);
+      } else if (stateMatrix[i][j] === 6) {
+        this.color(this.constants.color6r, this.constants.color6g, this.constants.color6b);
+      } else if (stateMatrix[i][j] === 7) {
+        this.color(this.constants.color7r, this.constants.color7g, this.constants.color7b);
+      } else if (stateMatrix[i][j] === 8) {
+        this.color(this.constants.color8r, this.constants.color8g, this.constants.color8b);
+      } else if (stateMatrix[i][j] === 9) {
+        this.color(this.constants.color9r, this.constants.color9g, this.constants.color9b);
+      } else if (stateMatrix[i][j] === 10) {
+        this.color(this.constants.color10r, this.constants.color10g, this.constants.color10b);
+      } else if (stateMatrix[i][j] === 11) {
+        this.color(this.constants.color11r, this.constants.color11g, this.constants.color11b);
+      } else if (stateMatrix[i][j] === 12) {
+        this.color(this.constants.color12r, this.constants.color12g, this.constants.color12b);
+      } else if (stateMatrix[i][j] === 13) {
+        this.color(this.constants.color13r, this.constants.color13g, this.constants.color13b);
+      } else if (stateMatrix[i][j] === 14) {
+        this.color(this.constants.color14r, this.constants.color14g, this.constants.color14b);
+      } else if (stateMatrix[i][j] === 15) {
+        this.color(this.constants.color15r, this.constants.color15g, this.constants.color15b);
+      }
+    }).setOutput([rendererWidth, rendererHeight]).setGraphical(true).setConstants(colors);
+    return renderer;
+  } catch (e) {
+    console.log(e);
+  }
 }
 },{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"libs/uitils.js":[function(require,module,exports) {
 "use strict";
@@ -53412,8 +53416,6 @@ exports.GpuJsBenchmarks = void 0;
 
 var _react = _interopRequireDefault(require("react"));
 
-var _reactDom = _interopRequireDefault(require("react-dom"));
-
 require("../../../../main.css");
 
 require("./gpujs_benchmarks.css");
@@ -53472,11 +53474,13 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "gpuTempState", void 0);
 
-    _defineProperty(_assertThisInitialized(_this), "renderer", void 0);
+    _defineProperty(_assertThisInitialized(_this), "gpuRenderer", void 0);
 
-    _defineProperty(_assertThisInitialized(_this), "gridHeight", 3162);
+    _defineProperty(_assertThisInitialized(_this), "multiGpuRenderer", void 0);
 
-    _defineProperty(_assertThisInitialized(_this), "gridWidth", 3162);
+    _defineProperty(_assertThisInitialized(_this), "gridHeight", 2000);
+
+    _defineProperty(_assertThisInitialized(_this), "gridWidth", 2000);
 
     _defineProperty(_assertThisInitialized(_this), "process", void 0);
 
@@ -53492,6 +53496,16 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "delay", 0);
 
+    _defineProperty(_assertThisInitialized(_this), "mode", "single-thread");
+
+    _defineProperty(_assertThisInitialized(_this), "liveRender", true);
+
+    _defineProperty(_assertThisInitialized(_this), "numFinished", 0);
+
+    _defineProperty(_assertThisInitialized(_this), "gpuWorkers", []);
+
+    _defineProperty(_assertThisInitialized(_this), "temp", []);
+
     _this.currentFps = "XX fps";
     _this.style = new _style.Style();
 
@@ -53500,15 +53514,63 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
     _this.gpuAutomataState = (0, _uitils.Array2D)(_this.gridWidth, _this.gridHeight);
     _this.gpuTempState = (0, _uitils.Array2D)(_this.gridWidth, _this.gridHeight);
     _this.state = {
-      rendererCanvas: undefined,
       currentFps: 0
     };
-    _this.canvasHolderRef = _react.default.createRef();
+    _this.gpuCanvasHolderRef = _react.default.createRef();
     _this.process = (0, _moore_kernel.getMooreProcess)(_this.gridWidth, _this.gridHeight, 1, 16, 1);
 
     _this.UpdateRenderer.bind(_assertThisInitialized(_this));
 
     _this.animate.bind(_assertThisInitialized(_this));
+
+    var _loop = function _loop(i) {
+      var gpuW = new Worker("/gpu_worker.54550945.js");
+
+      gpuW.onmessage = function (e) {
+        this.numFinished++;
+        this.temp[i] = e.data;
+
+        if (this.numFinished == navigator.hardwareConcurrency) {
+          for (var k = 0; k < this.temp[0].length - 2; k++) {
+            this.gpuTempState.push(this.temp[0][k]);
+          }
+
+          for (var j = 1; j < navigator.hardwareConcurrency - 1; j++) {
+            for (var _k = 1; _k < this.temp[j].length - 1; _k++) {
+              this.gpuTempState.push(this.temp[j][_k]);
+            }
+          }
+
+          for (var _k2 = 2; _k2 < this.temp[navigator.hardwareConcurrency - 1].length; _k2++) {
+            this.gpuTempState.push(this.temp[navigator.hardwareConcurrency - 1][_k2]);
+          }
+
+          this.renderAndSwap(this.gpuRenderer);
+          this.gpuTempState = [];
+          this.temp = [];
+          this.numFinished = 0;
+          this.t2 = Date.now();
+          this.fps_t2 = Date.now();
+
+          if (this.fps_t2 - this.fps_t1 >= 1000) {
+            this.delay = this.t2 - this.t1;
+            this.fps_t1 = this.fps_t2;
+            this.setState({
+              currentFps: Math.round(1000 / this.delay)
+            });
+          }
+
+          this.t1 = this.t2;
+          this.animationHandle = requestAnimationFrame(this.workerAnimate.bind(this));
+        }
+      }.bind(_assertThisInitialized(_this));
+
+      _this.gpuWorkers.push(gpuW);
+    };
+
+    for (var i = 0; i < navigator.hardwareConcurrency; i++) {
+      _loop(i);
+    }
 
     return _this;
   }
@@ -53517,30 +53579,23 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       var colors = (0, _utils.getColors)(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14);
-      this.renderer = this.UpdateRenderer(this.gridWidth, this.gridHeight, colors);
+      this.gpuRenderer = this.UpdateRenderer(this.gridWidth, this.gridHeight, colors, this.gpuCanvasHolderRef);
+      this.resetState(16, this.gpuRenderer);
     }
   }, {
     key: "UpdateRenderer",
-    value: function UpdateRenderer(width, height, colors) {
-      var _this2 = this;
-
+    value: function UpdateRenderer(width, height, colors, ref) {
       var renderer = (0, _render_kernel.getRenderer)(width, height, colors);
       var rendererCanvas = renderer.canvas;
-      rendererCanvas.style.maxWidth = '200px';
-      rendererCanvas.style.maxHeight = '200px';
+      rendererCanvas.style.maxWidth = "250px";
+      rendererCanvas.style.maxHeight = "250px";
       rendererCanvas.style.margin = "10px";
-      this.setState({
-        rendererCanvas: rendererCanvas
-      }, function () {
-        console.log(_this2.state.rendererCanvas);
-
-        _this2.canvasHolderRef.current.appendChild(_this2.state.rendererCanvas);
-      });
+      ref.current.appendChild(rendererCanvas);
       return renderer;
     }
   }, {
     key: "resetState",
-    value: function resetState(numStates) {
+    value: function resetState(numStates, renderer) {
       for (var i = 0; i < this.gridHeight; i++) {
         for (var j = 0; j < this.gridHeight; j++) {
           var state = Math.floor(Math.random() * numStates);
@@ -53548,11 +53603,11 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
         }
       }
 
-      this.renderer(this.gpuAutomataState);
+      renderer(this.gpuAutomataState);
     }
   }, {
     key: "animate",
-    value: function animate() {
+    value: function animate(liveRender) {
       this.t2 = performance.now();
       this.fps_t2 = performance.now();
 
@@ -53566,21 +53621,25 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 
       this.t1 = this.t2;
       this.gpuTempState = this.process(this.gpuAutomataState);
-      this.renderAndSwap();
-      this.animationHandle = requestAnimationFrame(this.animate.bind(this));
+
+      if (liveRender) {
+        this.renderAndSwap(this.gpuRenderer);
+      }
+
+      this.animationHandle = requestAnimationFrame(this.animate.bind(this, this.liveRender));
     }
   }, {
     key: "renderAndSwap",
-    value: function renderAndSwap() {
-      this.renderer(this.gpuTempState);
+    value: function renderAndSwap(renderer) {
+      renderer(this.gpuTempState);
       var t = this.gpuTempState;
       this.gpuAutomataState = this.gpuTempState;
       this.gpuTempState = t;
     }
   }, {
     key: "onStartClicked",
-    value: function onStartClicked() {
-      this.resetState(16);
+    value: function onStartClicked(mode) {
+      this.resetState(16, this.gpuRenderer);
 
       if (this.animationHandle) {
         cancelAnimationFrame(animationHandle);
@@ -53588,31 +53647,88 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 
       this.t1 = performance.now();
       this.fps_t1 = performance.now();
-      this.animationHandle = requestAnimationFrame(this.animate.bind(this));
+      this.mode = mode;
+
+      if (mode == "single-thread") {
+        this.animationHandle = requestAnimationFrame(this.animate.bind(this, this.liveRender));
+      } else if (mode == "multi-thread") {
+        for (var i = 0; i < navigator.hardwareConcurrency; i++) {
+          this.gpuWorkers[i].postMessage({
+            mode: "create",
+            state: this.gpuAutomataState,
+            rendererHeight: 2 + this.gridHeight / navigator.hardwareConcurrency,
+            rendererWidth: this.gridWidth,
+            automatonNumStates: 16,
+            automatonRange: 1,
+            automatonThreshold: 1
+          });
+        }
+
+        this.gpuTempState = [];
+        this.animationHandle = requestAnimationFrame(this.workerAnimate.bind(this));
+      }
+    }
+    /* Multi threaded code. */
+
+  }, {
+    key: "workerAnimate",
+    value: function workerAnimate() {
+      var index = 0;
+      var t = [];
+      var ze = [];
+
+      for (var z = 0; z < this.gridWidth; z++) {
+        ze.push(-1);
+      }
+
+      t.push(ze);
+      this.gpuAutomataState.slice(index, 1 + index + this.gridHeight / navigator.hardwareConcurrency).forEach(function (st) {
+        t.push(st);
+      });
+      this.gpuWorkers[0].postMessage({
+        mode: "process",
+        state: t
+      });
+      index += this.gridHeight / navigator.hardwareConcurrency;
+
+      for (var i = 1; i < navigator.hardwareConcurrency - 1; i++) {
+        this.gpuWorkers[i].postMessage({
+          mode: "process",
+          state: this.gpuAutomataState.slice(index - 1, index + 1 + this.gridHeight / navigator.hardwareConcurrency)
+        });
+        index += this.gridHeight / navigator.hardwareConcurrency;
+      }
+
+      this.gpuWorkers[navigator.hardwareConcurrency - 1].postMessage({
+        mode: "process",
+        state: this.gpuAutomataState.slice(index - 2, index + this.gridHeight / navigator.hardwareConcurrency)
+      });
     }
   }, {
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+        ref: this.gpuCanvasHolderRef,
+        className: "render-panel"
+      }), /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
-      }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
+      }, /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium description-label"
+      }, "GPU.js single threaded."), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button pixel-text-medium start-button",
-        onClick: this.onStartClicked.bind(this)
+        onClick: this.onStartClicked.bind(this, "single-thread")
       }, "Start"), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium fps-label"
-      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("div", {
-        ref: this.canvasHolderRef,
-        className: "render-panel"
-      }), /*#__PURE__*/_react.default.createElement("label", {
+      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium fps-label"
       }, "Average FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
       }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button pixel-text-medium start-button",
-        onClick: this.onStartClicked.bind(this)
+        onClick: this.onStartClicked.bind(this, "multi-thread")
       }, "Start"), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium fps-label"
-      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("div", null), /*#__PURE__*/_react.default.createElement("label", {
+      }, "FPS : ", this.state.currentFps)), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium fps-label"
       }, "Average FPS : ", this.state.currentFps)));
     }
@@ -53622,7 +53738,7 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.GpuJsBenchmarks = GpuJsBenchmarks;
-},{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","../../../../main.css":"main.css","./gpujs_benchmarks.css":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css","./../../../gpujs_showcase/kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","../../../gpujs_showcase/utils":"views/gpujs_showcase/utils.js","../../../../global/style":"global/style.js","./../../../../libs/uitils":"libs/uitils.js","../../../gpujs_showcase/kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js"}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../../../../main.css":"main.css","./gpujs_benchmarks.css":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css","./../../../gpujs_showcase/kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","../../../gpujs_showcase/utils":"views/gpujs_showcase/utils.js","../../../../global/style":"global/style.js","./../../../../libs/uitils":"libs/uitils.js","../../../gpujs_showcase/kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./workers\\gpu_worker.js":[["gpu_worker.54550945.js","views/benchmarks/subviews/gpujs_benchmarks/workers/gpu_worker.js"],"gpu_worker.54550945.js.map","views/benchmarks/subviews/gpujs_benchmarks/workers/gpu_worker.js"]}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53788,7 +53904,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54207" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51507" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
