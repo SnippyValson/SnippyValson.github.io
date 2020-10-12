@@ -2,4 +2,4 @@
 
 Source code for my github page.
 
-https:snippyvalson.github.io
+https://snippyvalson.github.io
