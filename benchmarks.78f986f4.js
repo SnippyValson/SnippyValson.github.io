@@ -28706,6 +28706,7 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "handleQuickSortWorkerMessage",
     value: function handleQuickSortWorkerMessage(e) {
+      console.table(e.data);
       this.endTime = performance.now();
       this.setIdle();
       this.setState({
@@ -54016,7 +54017,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51507" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63878" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

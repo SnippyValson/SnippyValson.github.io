@@ -120,67 +120,38 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js":[function(require,module,exports) {
 onmessage = function onmessage(e) {
   var array = e.data.array;
-  QuickSort(array, 0, array.length - 1);
+  quickSort(array, 0, array.length - 1);
   postMessage(array);
-}; // Find a "pivot" element in the array to compare all other
-// elements against and then shift elements before or after
-// pivot depending on their values
+};
 
-
-function QuickSort(arr) {
-  var left = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-  var right = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : arr.length - 1;
-  var len = arr.length,
-      index;
-
-  if (len > 1) {
-    index = partition(arr, left, right);
-
-    if (left < index - 1) {
-      QuickSort(arr, left, index - 1);
-    }
-
-    if (index < right) {
-      QuickSort(arr, index, right);
-    }
+function quickSort(array, low, high) {
+  if (low < high) {
+    var pivot = partition(array, low, high);
+    quickSort(array, low, pivot - 1);
+    quickSort(array, pivot + 1, high);
   }
-
-  return arr;
 }
 
-function partition(arr, left, right) {
-  var middle = Math.floor((right + left) / 2),
-      pivot = arr[middle],
-      i = left,
-      // Start pointer at the first item in the array
-  j = right; // Start pointer at the last item in the array
+function partition(array, low, high) {
+  var pivot = array[high];
+  var i = low - 1;
 
-  while (i <= j) {
-    // Move left pointer to the right until the value at the
-    // left is greater than the pivot value
-    while (arr[i] < pivot) {
+  for (var j = low; j < high; j++) {
+    if (array[j] < pivot) {
       i++;
-    } // Move right pointer to the left until the value at the
-    // right is less than the pivot value
 
-
-    while (arr[j] > pivot) {
-      j--;
-    } // If the left pointer is less than or equal to the 
-    // right pointer, then swap values
-
-
-    if (i <= j) {
-      var _ref = [arr[j], arr[i]];
-      arr[i] = _ref[0];
-      arr[j] = _ref[1];
-      // ES6 destructuring swap
-      i++;
-      j--;
+      if (i != j) {
+        var _temp = array[j];
+        array[j] = array[i];
+        array[i] = _temp;
+      }
     }
   }
 
-  return i;
+  var temp = array[i + 1];
+  array[i + 1] = array[high];
+  array[high] = temp;
+  return i + 1;
 }
 },{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
@@ -210,7 +181,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51507" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63878" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
