@@ -264,34 +264,33 @@ export class SortingBenchmark extends React.Component {
         }
     }
 
-    mergeSortedArrays(a, b) {
-        let count = a.length + b.length;
-        let index = 0;
-        let aIndex = 0;
-        let bIndex = 0;
-        var result = [];
-        while (index < count) {
-            if (a[aIndex] <= b[bIndex]) {
-                result[index++] = a[aIndex];
-                aIndex++;
-            } else {
-                result[index++] = b[bIndex];
-                bIndex++;
-            }
-            if (aIndex == a.length - 1 || bIndex == b.length - 1) {
-                break;
-            }
-        }
-        if (aIndex == a.length - 1) {
-            for (let i = bIndex; i < b.length; i++) {
-                result[index++] = b[i];
-            }
-        } else if (bIndex == b.length - 1) {
-            for (let i = aIndex; i < a.length; i++) {
-                result[index++] = a[i];
-            }
-        }
-        return result;
+    mergeSortedArrays(leftArray, rightArray) {
+       let leftIndex = 0;
+       let rightIndex = 0;
+       let resultIndex = 0;
+       let result = [];
+       while(leftIndex < leftArray.length && rightIndex < rightArray.length) {
+           if(leftArray[leftIndex] <= rightArray[rightIndex]) {
+               result[resultIndex] = leftArray[leftIndex];
+               leftIndex++;
+           }
+           else {
+               result[resultIndex] = rightArray[rightIndex];
+               rightIndex++;
+           }
+           resultIndex++;
+       }
+       while(leftIndex < leftArray.length) {
+           result[resultIndex] = leftArray[leftIndex];
+           leftIndex++;
+           resultIndex++;
+       }
+       while(rightIndex < length) {
+            result[resultIndex] = rightArray[rightIndex];
+            rightIndex++;
+            resultIndex++;
+       }
+       return result;
     }
 
     render() {
