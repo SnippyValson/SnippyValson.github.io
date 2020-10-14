@@ -99,4 +99,53 @@ function selectionSort(array) {
     }
   }
 }
+
+function merge(array, l, m, r) {
+  let len1 = m - l + 1;
+  let len2 = r - m;
+  let L = [];
+  let R = [];
+
+  for(let i = 0; i < len1; i++ ) {
+    L[i] = array[l+i];
+  }
+
+  for(let j = 0; j < len2; j++) {
+    R[j] = array[m + l + j];
+  }
+
+  let i = 0;
+  let j = 0;
+  let k = l;
+  
+  while(i < len1 && j< len2) {
+    if(L[i] <= R[j]){
+      array[k] = L[i];
+    }
+    else{
+      array[k] = R[j];
+    }
+    k++;
+  }
+
+  while(i < len1) {
+    array[k] = L[i];
+    i++;
+    k++;
+  }
+
+  while(j < len2) {
+    array[k] = R[j];
+    j++;
+    k++;
+  }
+}
  
+function mergeSort(array, l, r) {
+  if( l < r ) {
+    let m = (l + (r - l)) / 2;
+    mergeSort(array, l, m);
+    mergeSort(array, m+1, r);
+    merge(array, l, m, r);
+  }
+}

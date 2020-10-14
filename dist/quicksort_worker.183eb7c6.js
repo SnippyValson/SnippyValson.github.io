@@ -237,6 +237,56 @@ function selectionSort(array) {
     }
   }
 }
+
+function merge(array, l, m, r) {
+  var len1 = m - l + 1;
+  var len2 = r - m;
+  var L = [];
+  var R = [];
+
+  for (var _i = 0; _i < len1; _i++) {
+    L[_i] = array[l + _i];
+  }
+
+  for (var _j = 0; _j < len2; _j++) {
+    R[_j] = array[m + l + _j];
+  }
+
+  var i = 0;
+  var j = 0;
+  var k = l;
+
+  while (i < len1 && j < len2) {
+    if (L[i] <= R[j]) {
+      array[k] = L[i];
+    } else {
+      array[k] = R[j];
+    }
+
+    k++;
+  }
+
+  while (i < len1) {
+    array[k] = L[i];
+    i++;
+    k++;
+  }
+
+  while (j < len2) {
+    array[k] = R[j];
+    j++;
+    k++;
+  }
+}
+
+function mergeSort(array, l, r) {
+  if (l < r) {
+    var m = (l + (r - l)) / 2;
+    mergeSort(array, l, m);
+    mergeSort(array, m + 1, r);
+    merge(array, l, m, r);
+  }
+}
 },{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
