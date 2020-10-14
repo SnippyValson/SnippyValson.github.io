@@ -95,6 +95,7 @@ export class SortingBenchmark extends React.Component {
     }
 
     handleQuickSortWorkerMessage(e) {
+        console.table(e.data);
         this.endTime = performance.now();
         this.setIdle();
         this.setState({ quickSortResult : `${this.endTime - this.startTime} ms`, quickSortDone : true });
