@@ -28952,35 +28952,34 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "mergeSortedArrays",
-    value: function mergeSortedArrays(a, b) {
-      var count = a.length + b.length;
-      var index = 0;
-      var aIndex = 0;
-      var bIndex = 0;
+    value: function mergeSortedArrays(leftArray, rightArray) {
+      var leftIndex = 0;
+      var rightIndex = 0;
+      var resultIndex = 0;
       var result = [];
 
-      while (index < count) {
-        if (a[aIndex] <= b[bIndex]) {
-          result[index++] = a[aIndex];
-          aIndex++;
+      while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
+        if (leftArray[leftIndex] <= rightArray[rightIndex]) {
+          result[resultIndex] = leftArray[leftIndex];
+          leftIndex++;
         } else {
-          result[index++] = b[bIndex];
-          bIndex++;
+          result[resultIndex] = rightArray[rightIndex];
+          rightIndex++;
         }
 
-        if (aIndex == a.length - 1 || bIndex == b.length - 1) {
-          break;
-        }
+        resultIndex++;
       }
 
-      if (aIndex == a.length - 1) {
-        for (var i = bIndex; i < b.length; i++) {
-          result[index++] = b[i];
-        }
-      } else if (bIndex == b.length - 1) {
-        for (var _i = aIndex; _i < a.length; _i++) {
-          result[index++] = a[_i];
-        }
+      while (leftIndex < leftArray.length) {
+        result[resultIndex] = leftArray[leftIndex];
+        leftIndex++;
+        resultIndex++;
+      }
+
+      while (rightIndex < length) {
+        result[resultIndex] = rightArray[rightIndex];
+        rightIndex++;
+        resultIndex++;
       }
 
       return result;

@@ -120,16 +120,24 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js":[function(require,module,exports) {
 onmessage = function onmessage(e) {
   var array = e.data.array;
-  quickSort(array, 0, array.length - 1);
+  quickSortFast(array, 0, array.length - 1);
   postMessage(array);
 };
 
 function quickSort(array, low, high) {
   if (low < high) {
     var pivot = partition(array, low, high);
-    quickSort(array, low, pivot - 1);
-    quickSort(array, pivot + 1, high);
+
+    if (low < pivot - 1) {
+      quickSort(array, low, pivot - 1);
+    }
+
+    if (high > pivot + 1) {
+      quickSort(array, pivot + 1, high);
+    }
   }
+
+  return array;
 }
 
 function partition(array, low, high) {
@@ -152,6 +160,82 @@ function partition(array, low, high) {
   array[i + 1] = array[high];
   array[high] = temp;
   return i + 1;
+}
+
+function quickSortFast(array, left, right) {
+  var pivot;
+
+  if (array.length > 1) {
+    pivot = partitionFast(array, left, right);
+
+    if (left < pivot - 1) {
+      quickSortFast(array, left, pivot - 1);
+    }
+
+    if (pivot < right) {
+      quickSortFast(array, pivot, right);
+    }
+  }
+
+  return array;
+}
+
+function partitionFast(array, left, right) {
+  var pivot = array[Math.floor((right + left) / 2)];
+  var i = left;
+  var j = right;
+
+  while (i <= j) {
+    while (array[i] < pivot) {
+      i++;
+    }
+
+    while (array[j] > pivot) {
+      j--;
+    }
+
+    if (i <= j) {
+      var temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+      i++;
+      j--;
+    }
+  }
+
+  return i;
+}
+
+function insertionSort(array) {
+  for (var i = 1; i < arr.length; i++) {
+    var key = arr[i];
+    var j = i - 1;
+
+    while (j >= 0 && arr[j] > key) {
+      array[j + 1] = array[j];
+      j = j - 1;
+    }
+
+    array[j + 1] = key;
+  }
+}
+
+function selectionSort(array) {
+  for (var i = 0; i < array.length - 1; i++) {
+    var minIndex = i;
+
+    for (var j = i + 1; j < array.length; j++) {
+      if (array[j] < array[minIndex]) {
+        minIndex = j;
+      }
+    }
+
+    if (minIndex != i) {
+      var temp = array[i];
+      array[i] = array[minIndex];
+      array[minIndex] = temp;
+    }
+  }
 }
 },{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
