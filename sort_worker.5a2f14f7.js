@@ -117,12 +117,20 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js":[function(require,module,exports) {
-onmessage = function onmessage(e) {
-  var array = e.data.array;
-  quickSortFast(array, 0, array.length - 1);
-  postMessage(array);
-};
+})({"views/benchmarks/subviews/sorting_benchmarks/workers/sort_methods.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.quickSort = quickSort;
+exports.quickSortFast = quickSortFast;
+exports.bubbleSort = bubbleSort;
+exports.insertionSort = insertionSort;
+exports.selectionSort = selectionSort;
+exports.mergeSort = mergeSort;
+exports.radixSort = radixSort;
+exports.heapSort = heapSort;
 
 function quickSort(array, low, high) {
   if (low < high) {
@@ -206,12 +214,24 @@ function partitionFast(array, left, right) {
   return i;
 }
 
+function bubbleSort(array) {
+  for (var i = 0; i < array.length; i++) {
+    for (var j = 0; j < array.length - i - 1; j++) {
+      if (array[j] > array[j + 1]) {
+        var temp = array[j];
+        array[j] = array[j + 1];
+        array[j + 1] = temp;
+      }
+    }
+  }
+}
+
 function insertionSort(array) {
-  for (var i = 1; i < arr.length; i++) {
-    var key = arr[i];
+  for (var i = 1; i < array.length; i++) {
+    var key = array[i];
     var j = i - 1;
 
-    while (j >= 0 && arr[j] > key) {
+    while (j >= 0 && array[j] > key) {
       array[j + 1] = array[j];
       j = j - 1;
     }
@@ -238,56 +258,174 @@ function selectionSort(array) {
   }
 }
 
-function merge(array, l, m, r) {
-  var len1 = m - l + 1;
-  var len2 = r - m;
-  var L = [];
-  var R = [];
+function merge(array1, array2) {
+  var sorted = [];
 
-  for (var _i = 0; _i < len1; _i++) {
-    L[_i] = array[l + _i];
-  }
-
-  for (var _j = 0; _j < len2; _j++) {
-    R[_j] = array[m + l + _j];
-  }
-
-  var i = 0;
-  var j = 0;
-  var k = l;
-
-  while (i < len1 && j < len2) {
-    if (L[i] <= R[j]) {
-      array[k] = L[i];
+  while (array1.length && array2.length) {
+    if (array1[0] < array2[0]) {
+      sorted.push(array1.shift());
     } else {
-      array[k] = R[j];
+      sorted.push(array2.shift());
     }
-
-    k++;
   }
 
-  while (i < len1) {
-    array[k] = L[i];
-    i++;
-    k++;
-  }
-
-  while (j < len2) {
-    array[k] = R[j];
-    j++;
-    k++;
-  }
+  return sorted.concat(array1.slice().concat(array2.slice()));
 }
 
 function mergeSort(array, l, r) {
-  if (l < r) {
-    var m = (l + (r - l)) / 2;
-    mergeSort(array, l, m);
-    mergeSort(array, m + 1, r);
-    merge(array, l, m, r);
+  if (array.length <= 1) {
+    return array;
+  }
+
+  var middle = Math.floor(array.length / 2),
+      left = mergeSort(array.slice(0, middle)),
+      right = mergeSort(array.slice(middle));
+  return merge(left, right);
+}
+
+function radixSort(array) {
+  console.log("Radix sort");
+  var maxLength = largestNum(array);
+
+  for (var i = 0; i < maxLength; i++) {
+    var buckets = Array.from({
+      length: 10
+    }, function () {
+      return [];
+    });
+
+    for (var j = 0; j < array.length; j++) {
+      var num = getNum(array[j], i);
+      if (num != undefined) buckets[num].push(array[j]);
+    }
+
+    array = buckets.flat();
+  }
+
+  return array;
+}
+
+function getNum(num, index) {
+  var strNum = String(num);
+  var end = strNum.length - 1;
+  var foundNum = strNum[end - index];
+
+  if (foundNum === undefined) {
+    return 0;
+  } else {
+    return foundNum;
   }
 }
-},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+
+function largestNum(array) {
+  var largest = "0";
+  array.forEach(function (num) {
+    var strNum = String(num);
+
+    if (strNum.length > largest.length) {
+      largest = strNum;
+    }
+  });
+  return largest.length;
+}
+
+function heapify(array, index, arrayLength) {
+  var left = 2 * index + 1;
+  var right = 2 * index + 2;
+  var max = index;
+
+  if (left < arrayLength && array[left] > array[max]) {
+    max = left;
+  }
+
+  if (right < arrayLength && array[right] > array[max]) {
+    max = right;
+  }
+
+  if (max != index) {
+    swap(array, index, max);
+    heapify(array, max);
+  }
+}
+
+function swap(array, a, b) {
+  var temp = array[a];
+  array[a] = array[b];
+  array[b] = temp;
+}
+
+function heapSort(array) {
+  var arrayLength = array.length;
+
+  for (var i = Math.floor(array.length / 2); i >= 0; i--) {
+    heapify(array, i, arrayLength);
+  }
+
+  for (var _i = array.length - 1; _i > 0; _i--) {
+    swap(array, 0, _i);
+    arrayLength--;
+    heapify(array, 0, arrayLength);
+  }
+}
+},{}],"views/benchmarks/subviews/sorting_benchmarks/workers/sort_worker.js":[function(require,module,exports) {
+"use strict";
+
+var _sort_methods = require("./sort_methods");
+
+onmessage = function onmessage(e) {
+  var array = e.data.array;
+  var sortType = e.data.sortType;
+
+  switch (sortType) {
+    case 0:
+      {
+        (0, _sort_methods.quickSortFast)(array, 0, array.length - 1);
+      }
+      break;
+
+    case 1:
+      {
+        (0, _sort_methods.bubbleSort)(array);
+      }
+      break;
+
+    case 2:
+      {
+        (0, _sort_methods.insertionSort)(array);
+      }
+      break;
+
+    case 3:
+      {
+        (0, _sort_methods.selectionSort)(array);
+      }
+      break;
+
+    case 4:
+      {
+        (0, _sort_methods.mergeSort)(array, 0, array.length - 1);
+      }
+      break;
+
+    case 5:
+      {
+        (0, _sort_methods.radixSort)(array);
+      }
+      break;
+
+    case 6:
+      {
+        (0, _sort_methods.heapSort)(array);
+      }
+      break;
+  }
+
+  postMessage({
+    array: array,
+    sortType: sortType
+  });
+};
+},{"./sort_methods":"views/benchmarks/subviews/sorting_benchmarks/workers/sort_methods.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -315,7 +453,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63878" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54160" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -491,5 +629,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js"], null)
-//# sourceMappingURL=/quicksort_worker.183eb7c6.js.map
+},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/subviews/sorting_benchmarks/workers/sort_worker.js"], null)
+//# sourceMappingURL=/sort_worker.5a2f14f7.js.map

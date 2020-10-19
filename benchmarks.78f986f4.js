@@ -28572,8 +28572,6 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "populationWorker", void 0);
 
-    _defineProperty(_assertThisInitialized(_this), "bubbleSortWorker", void 0);
-
     _defineProperty(_assertThisInitialized(_this), "startTime", void 0);
 
     _defineProperty(_assertThisInitialized(_this), "endTime", void 0);
@@ -28584,11 +28582,9 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "dialogCanceledAction", void 0);
 
-    _defineProperty(_assertThisInitialized(_this), "quickSortWorker", void 0);
+    _defineProperty(_assertThisInitialized(_this), "sortWorker", void 0);
 
-    _defineProperty(_assertThisInitialized(_this), "bubbleSortWorkers", []);
-
-    _defineProperty(_assertThisInitialized(_this), "quickSortWorkers", []);
+    _defineProperty(_assertThisInitialized(_this), "sortWorkers", []);
 
     _defineProperty(_assertThisInitialized(_this), "handleArraySizeChange", function (e) {
       _this.setState({
@@ -28604,11 +28600,21 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
       populated: false,
       bubbleSortResult: "",
       bubbleSortDone: false,
+      insertionSortResult: "",
+      insertionSortDone: false,
+      selectionSortResult: "",
+      selectionSortDone: false,
       showMessage: false,
       message: "",
       showDialog: false,
       quickSortDone: false,
       quickSortResult: "",
+      mergeSortDone: false,
+      mergeSortResult: "",
+      radixSortDone: false,
+      radixSortResult: "",
+      heapSortDone: false,
+      heapSortResult: "",
       multiBubbleSortDone: false,
       multiBubbleSortResult: "",
       multiQuickSortDone: false,
@@ -28616,19 +28622,17 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
     };
     _this.populationWorker = new Worker("/population_worker.ba73efde.js");
     _this.populationWorker.onmessage = _this.handlePopulationWorkerMessage.bind(_assertThisInitialized(_this));
-    _this.bubbleSortWorker = new Worker("/bubblesort_worker.a00039d1.js");
-    _this.bubbleSortWorker.onmessage = _this.handleBubbleSortWorkerMessage.bind(_assertThisInitialized(_this));
-    _this.quickSortWorker = new Worker("/quicksort_worker.183eb7c6.js");
-    _this.quickSortWorker.onmessage = _this.handleQuickSortWorkerMessage.bind(_assertThisInitialized(_this));
+    _this.sortWorker = new Worker("/sort_worker.5a2f14f7.js");
+    _this.sortWorker.onmessage = _this.handleSortWorkerMessage.bind(_assertThisInitialized(_this));
 
     for (var i = 0; i < navigator.hardwareConcurrency; i++) {
-      var bubbleWorker = new Worker("/bubblesort_worker.a00039d1.js");
+      var sortWorker = new Worker("/sort_worker.5a2f14f7.js");
 
-      bubbleWorker.onmessage = function (e) {
+      sortWorker.onmessage = function (e) {
         if (this.numFinised == 0) {
-          this.merged = e.data;
+          this.merged = e.data.array;
         } else {
-          this.merged = this.mergeSortedArrays(this.merged, e.data);
+          this.merged = this.mergeSortedArrays(this.merged, e.data.array);
         }
 
         this.numFinised++;
@@ -28636,37 +28640,30 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         if (this.numFinised == navigator.hardwareConcurrency) {
           this.endTime = performance.now();
           this.setIdle();
-          this.setState({
-            multiBubbleSortResult: "".concat(this.endTime - this.startTime, " ms"),
-            multiBubbleSortDone: true
-          });
+
+          switch (e.data.sortType) {
+            case 0:
+              {
+                this.setState({
+                  multiQuickSortResult: "".concat(this.endTime - this.startTime, " ms"),
+                  multiQuickSortDone: true
+                });
+              }
+              break;
+
+            case 1:
+              {
+                this.setState({
+                  multiBubbleSortResult: "".concat(this.endTime - this.startTime, " ms"),
+                  multiBubbleSortDone: true
+                });
+              }
+              break;
+          }
         }
       }.bind(_assertThisInitialized(_this));
 
-      _this.bubbleSortWorkers.push(bubbleWorker);
-
-      var quickWorker = new Worker("/quicksort_worker.183eb7c6.js");
-
-      quickWorker.onmessage = function (e) {
-        if (this.numFinised == 0) {
-          this.merged = e.data;
-        } else {
-          this.merged = this.mergeSortedArrays(this.merged, e.data);
-        }
-
-        this.numFinised++;
-
-        if (this.numFinised == navigator.hardwareConcurrency) {
-          this.endTime = performance.now();
-          this.setIdle();
-          this.setState({
-            multiQuickSortResult: "".concat(this.endTime - this.startTime, " ms"),
-            multiQuickSortDone: true
-          });
-        }
-      }.bind(_assertThisInitialized(_this));
-
-      _this.quickSortWorkers.push(quickWorker);
+      _this.sortWorkers.push(sortWorker);
     }
 
     _this.showMessage.bind(_assertThisInitialized(_this));
@@ -28694,25 +28691,76 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
       });
     }
   }, {
-    key: "handleBubbleSortWorkerMessage",
-    value: function handleBubbleSortWorkerMessage(e) {
+    key: "handleSortWorkerMessage",
+    value: function handleSortWorkerMessage(e) {
+      console.table(e.data.array);
       this.endTime = performance.now();
       this.setIdle();
-      this.setState({
-        bubbleSortResult: "".concat(this.endTime - this.startTime, " ms"),
-        bubbleSortDone: true
-      });
-    }
-  }, {
-    key: "handleQuickSortWorkerMessage",
-    value: function handleQuickSortWorkerMessage(e) {
-      console.table(e.data);
-      this.endTime = performance.now();
-      this.setIdle();
-      this.setState({
-        quickSortResult: "".concat(this.endTime - this.startTime, " ms"),
-        quickSortDone: true
-      });
+
+      switch (e.data.sortType) {
+        case 0:
+          {
+            this.setState({
+              quickSortResult: "".concat(this.endTime - this.startTime, " ms"),
+              quickSortDone: true
+            });
+          }
+          break;
+
+        case 1:
+          {
+            this.setState({
+              bubbleSortResult: "".concat(this.endTime - this.startTime, " ms"),
+              bubbleSortDone: true
+            });
+          }
+          break;
+
+        case 2:
+          {
+            this.setState({
+              insertionSortResult: "".concat(this.endTime - this.startTime, " ms"),
+              insertionSortDone: true
+            });
+          }
+          break;
+
+        case 3:
+          {
+            this.setState({
+              selectionSortResult: "".concat(this.endTime - this.startTime, " ms"),
+              selectionSortDone: true
+            });
+          }
+          break;
+
+        case 4:
+          {
+            this.setState({
+              mergeSortResult: "".concat(this.endTime - this.startTime, " ms"),
+              mergeSortDone: true
+            });
+          }
+          break;
+
+        case 5:
+          {
+            this.setState({
+              radixSortResult: "".concat(this.endTime - this.startTime, " ms"),
+              radixSortDone: true
+            });
+          }
+          break;
+
+        case 6:
+          {
+            this.setState({
+              heapSortResult: "".concat(this.endTime - this.startTime, " ms"),
+              heapSortDone: true
+            });
+          }
+          break;
+      }
     }
   }, {
     key: "populateArray",
@@ -28724,47 +28772,13 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
       this.populationWorker.postMessage(this.state.arraySize);
     }
   }, {
-    key: "bubbleSortArray",
-    value: function bubbleSortArray() {
+    key: "sortArray",
+    value: function sortArray(sortType) {
       if (this.array == undefined || this.array.length == 0) {
         this.showMessage(this.localStrings.localized.GenerateDataPrompt);
         return;
       } else if (this.array.length > _constants.Constants.value.LargeArraySize) {
-        this.dialogOkAction = this.executeBubbleSort;
-
-        this.dialogClosedAction = function () {};
-
-        this.dialogCanceledAction = function () {};
-
-        this.setState({
-          message: this.localStrings.localized.LargeArrayWarning,
-          showDialog: true
-        });
-        return;
-      } else {
-        this.executeBubbleSort();
-      }
-    }
-  }, {
-    key: "executeBubbleSort",
-    value: function executeBubbleSort() {
-      this.setBusy();
-      this.setState({
-        bubbleSortDone: false
-      });
-      this.startTime = performance.now();
-      this.bubbleSortWorker.postMessage({
-        array: this.array
-      });
-    }
-  }, {
-    key: "quickSortArray",
-    value: function quickSortArray() {
-      if (this.array == undefined || this.array.length == 0) {
-        this.showMessage(this.localStrings.localized.GenerateDataPrompt);
-        return;
-      } else if (this.array.length > _constants.Constants.value.LargeArraySize) {
-        this.dialogOkAction = this.executeQuickSort;
+        this.dialogOkAction = this.executeSort.bind(this, sortType);
 
         this.dialogClosedAction = function () {};
 
@@ -28777,82 +28791,29 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         return;
       }
 
-      this.executeQuickSort();
+      this.executeSort(sortType);
     }
   }, {
-    key: "executeQuickSort",
-    value: function executeQuickSort() {
+    key: "executeSort",
+    value: function executeSort(sortType) {
       this.setBusy();
       this.setState({
         quickSortDone: false
       });
       this.startTime = performance.now();
-      this.quickSortWorker.postMessage({
-        array: this.array
+      this.sortWorker.postMessage({
+        array: this.array,
+        sortType: sortType
       });
     }
   }, {
-    key: "multiBubbleSortArray",
-    value: function multiBubbleSortArray() {
-      if (this.array == undefined || this.array.length == 0) {
-        this.showMessage(localStrings.localized.GenerateDataPrompt);
-        return;
-      } else if (this.array.length > _constants.Constants.value.LargeArraySize) {
-        this.dialogOkAction = this.executeMultiBubbleSort;
-
-        this.dialogClosedAction = function () {};
-
-        this.dialogCanceledAction = function () {};
-
-        this.setState({
-          message: this.localStrings.localized.LargeArrayWarning,
-          showDialog: true
-        });
-        return;
-      }
-
-      this.executeMultiBubbleSort();
-    }
-  }, {
-    key: "executeMultiBubbleSort",
-    value: function executeMultiBubbleSort() {
-      this.startTime = performance.now();
-      this.merged = [];
-      this.numFinised = 0;
-      this.setBusy();
-      this.setState({
-        multiBubbleSortDone: false
-      });
-      var index = 0;
-      var numSlices = navigator.hardwareConcurrency;
-      var sliceLength = Math.floor(this.state.arraySize / navigator.hardwareConcurrency);
-      var remaining = this.state.arraySize % navigator.hardwareConcurrency;
-
-      if (remaining != 0) {
-        numSlices--;
-      }
-
-      for (var i = 0; i < numSlices; i++) {
-        this.bubbleSortWorkers[i].postMessage({
-          array: this.array.slice(index, index + sliceLength)
-        });
-        index += sliceLength;
-      }
-
-      if (remaining != 0) {
-        this.bubbleSortWorkers[navigator.hardwareConcurrency - 1].postMessage({
-          array: this.array.slice(index, index + sliceLength + remaining)
-        });
-      }
-    }
-  }, {
-    key: "multiQuickSortArray",
-    value: function multiQuickSortArray() {
+    key: "multiSortArray",
+    value: function multiSortArray(sortType) {
       if (this.array == undefined || this.array.length == 0) {
         this.showMessage(this.localStrings.localized.GenerateDataPrompt);
         return;
       } else if (this.array.length > _constants.Constants.value.LargeArraySize) {
-        this.dialogOkAction = this.executeMultiQuickSort;
+        this.dialogOkAction = this.executeMultiSort;
 
         this.dialogClosedAction = function () {};
 
@@ -28865,11 +28826,11 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         return;
       }
 
-      this.executeMultiQuickSort();
+      this.executeMultiSort(sortType);
     }
   }, {
-    key: "executeMultiQuickSort",
-    value: function executeMultiQuickSort() {
+    key: "executeMultiSort",
+    value: function executeMultiSort(sortType) {
       this.startTime = performance.now();
       this.numFinised = 0;
       this.merged = [];
@@ -28887,14 +28848,15 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
       }
 
       for (var i = 0; i < numSlices; i++) {
-        this.quickSortWorkers[i].postMessage({
-          array: this.array.slice(index, index + sliceLength)
+        this.sortWorkers[i].postMessage({
+          array: this.array.slice(index, index + sliceLength),
+          sortType: sortType
         });
         index += sliceLength;
       }
 
       if (remaining != 0) {
-        this.quickSortWorkers[navigator.hardwareConcurrency - 1].postMessage({
+        this.sortWorkers[navigator.hardwareConcurrency - 1].postMessage({
           array: this.array.slice(index, index + sliceLength + remaining)
         });
       }
@@ -29057,7 +29019,37 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         id: "bubblesort-result"
       }, "Result : ".concat(this.state.bubbleSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button section-button",
-        onClick: this.bubbleSortArray.bind(this)
+        onClick: this.sortArray.bind(this, 1)
+      }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-div section"
+      }, /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium"
+      }, "Insertion sort."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium"
+      }, "Sort the array using insertion sort alogrithm. Click start."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-big check-box ".concat(this.state.insertionSortDone ? 'visible' : 'hidden'),
+        id: "quick-sort-done"
+      }, "\u2611"), /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium",
+        id: "quicksort-result"
+      }, "Result : ".concat(this.state.insertionSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
+        className: "pixel-button section-button",
+        onClick: this.sortArray.bind(this, 2)
+      }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-div section"
+      }, /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium"
+      }, "Selection sort."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium"
+      }, "Sort the array using selection sort alogrithm. Click start."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-big check-box ".concat(this.state.selectionSortDone ? 'visible' : 'hidden'),
+        id: "quick-sort-done"
+      }, "\u2611"), /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium",
+        id: "quicksort-result"
+      }, "Result : ".concat(this.state.selectionSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
+        className: "pixel-button section-button",
+        onClick: this.sortArray.bind(this, 3)
       }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
       }, /*#__PURE__*/_react.default.createElement("p", {
@@ -29072,12 +29064,61 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         id: "quicksort-result"
       }, "Result : ".concat(this.state.quickSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button section-button",
-        onClick: this.quickSortArray.bind(this)
+        onClick: this.sortArray.bind(this, 0)
       }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
       }, /*#__PURE__*/_react.default.createElement("p", {
         className: "pixel-text-medium"
-      }, "Bubble sort (Multithreaded)."), /*#__PURE__*/_react.default.createElement("label", {
+      }, "Merge sort."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium"
+      }, "Sort the array using merge sort alogrithm. Click start."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-big check-box ".concat(this.state.mergeSortDone ? 'visible' : 'hidden'),
+        id: "quick-sort-done"
+      }, "\u2611"), /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium",
+        id: "quicksort-result"
+      }, "Result : ".concat(this.state.mergeSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
+        className: "pixel-button section-button",
+        onClick: this.sortArray.bind(this, 4)
+      }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-div section"
+      }, /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium"
+      }, "Radix sort."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium"
+      }, "Sort the array using radix sort alogrithm. Click start."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-big check-box ".concat(this.state.radixSortDone ? 'visible' : 'hidden'),
+        id: "quick-sort-done"
+      }, "\u2611"), /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium",
+        id: "quicksort-result"
+      }, "Result : ".concat(this.state.radixSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
+        className: "pixel-button section-button",
+        onClick: this.sortArray.bind(this, 5)
+      }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-div section"
+      }, /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium"
+      }, "Heap sort."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-medium"
+      }, "Sort the array using heap sort alogrithm. Click start."), /*#__PURE__*/_react.default.createElement("label", {
+        className: "pixel-text-big check-box ".concat(this.state.heapSortDone ? 'visible' : 'hidden'),
+        id: "quick-sort-done"
+      }, "\u2611"), /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium",
+        id: "quicksort-result"
+      }, "Result : ".concat(this.state.heapSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
+        className: "pixel-button section-button",
+        onClick: this.sortArray.bind(this, 6)
+      }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
+        className: "section"
+      }, /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium"
+      }, "Multithreaded Sorting.")), /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-div section"
+      }, /*#__PURE__*/_react.default.createElement("p", {
+        className: "pixel-text-medium"
+      }, "Bubble sort (||)."), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium"
       }, "Sort the array using bubble sort alogrithm (Multithreaded). Click start."), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-big check-box ".concat(this.state.multiBubbleSortDone ? 'visible' : 'hidden'),
@@ -29087,12 +29128,12 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         id: "multi-bubblesort-result"
       }, "Result : ".concat(this.state.multiBubbleSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button section-button",
-        onClick: this.multiBubbleSortArray.bind(this)
+        onClick: this.multiSortArray.bind(this, 1)
       }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
       }, /*#__PURE__*/_react.default.createElement("p", {
         className: "pixel-text-medium"
-      }, "Quick sort (Multithreaded)."), /*#__PURE__*/_react.default.createElement("label", {
+      }, "Quick sort (||)."), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium"
       }, "Sort the array using quick sort alogrithm (Multithreaded). Click start."), /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-big check-box ".concat(this.state.multiQuickSortDone ? 'visible' : 'hidden'),
@@ -29102,7 +29143,7 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         id: "multi-quicksort-result"
       }, "Result : ".concat(this.state.multiQuickSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button section-button",
-        onClick: this.multiQuickSortArray.bind(this)
+        onClick: this.multiSortArray.bind(this, 0)
       }, "Start")));
     }
   }]);
@@ -29111,7 +29152,7 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.SortingBenchmark = SortingBenchmark;
-},{"./sorting_benchmarks.css":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.css","react":"node_modules/react/index.js","./../../localization/strings":"views/benchmarks/localization/strings.js","./constants/constants":"views/benchmarks/subviews/sorting_benchmarks/constants/constants.js","./workers\\population_worker.js":[["population_worker.ba73efde.js","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"population_worker.ba73efde.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"./workers\\bubblesort_worker.js":[["bubblesort_worker.a00039d1.js","views/benchmarks/subviews/sorting_benchmarks/workers/bubblesort_worker.js"],"bubblesort_worker.a00039d1.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/bubblesort_worker.js"],"./workers\\quicksort_worker.js":[["quicksort_worker.183eb7c6.js","views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js"],"quicksort_worker.183eb7c6.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/quicksort_worker.js"]}],"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css":[function(require,module,exports) {
+},{"./sorting_benchmarks.css":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.css","react":"node_modules/react/index.js","./../../localization/strings":"views/benchmarks/localization/strings.js","./constants/constants":"views/benchmarks/subviews/sorting_benchmarks/constants/constants.js","./workers\\population_worker.js":[["population_worker.ba73efde.js","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"population_worker.ba73efde.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"./workers\\sort_worker.js":[["sort_worker.5a2f14f7.js","views/benchmarks/subviews/sorting_benchmarks/workers/sort_worker.js"],"sort_worker.5a2f14f7.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/sort_worker.js"]}],"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
@@ -54016,7 +54057,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63878" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54160" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
