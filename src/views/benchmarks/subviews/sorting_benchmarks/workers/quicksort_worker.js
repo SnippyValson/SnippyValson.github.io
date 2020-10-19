@@ -149,3 +149,77 @@ function mergeSort(array, l, r) {
     merge(array, l, m, r);
   }
 }
+
+function radixSort(array) {
+  let maxLength = largestNum(array);
+  for(let i = 0; i < maxLength; i++) {
+    let buckets = Array.from({ length : 10 }, () => []);
+    for( let j = 0; j < array.length; j++) {
+      let num = getNum(arr[j], i);
+      if(num != undefined) buckets[num].push(array[j]);
+    }
+    array = buckets.flat();
+  }
+  return array;
+}
+
+function getNum(num, index) {
+  const strNum = String(num);
+  let end = strNum.length - 1;
+  const foundNum = strNum[end - index];
+  if(foundNum === undefined) {
+    return 0;
+  } else {
+    return foundNum;
+  }
+}
+
+function largestNum(array) {
+  let largest = "0";
+  array.forEach(num => {
+    const strNum = String(num);
+    if(strNum.length > largest.length)
+    { 
+      largest =  strNum;
+    }
+  });
+  return largest.length;
+}
+
+function heapify(array, index, arrayLength) {
+  var left = 2 * index + 1;
+  var right = 2 * index + 2;
+  var max = index;
+
+  if(left < arrayLength && array[left] > array[max]) {
+    max = left;
+  }
+
+  if(right < arrayLength && array[right] > array[max]) {
+    max = right;
+  }
+
+  if(max != index) {
+    swap(array, index, max);
+    heapify(array, max);
+  }
+}
+
+function swap(array, a, b) {
+  let temp = array[a];
+  array[a] = array[b];
+  array[b] = temp;
+}
+
+function heapSort(array) {
+  let arrayLength = array.length;
+  for(let i = Math.floor(array.length / 2); i >=0; i--) {
+    heapify(array, i, arrayLength);
+  }
+  for(let i = input.length - 1; i > 0; i--) {
+    swap(array, 0, i);
+    arrayLength--;
+    heapify(array, 0, arrayLength);
+  }
+}
+
