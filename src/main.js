@@ -57,7 +57,7 @@ function initBackgroundAnimation() {
       numDivs = 100;
     }
     if (automatonIndex == 6) {
-      numDivs = 20;
+      numDivs = 21;
     } else {
       numDivs = 150;
     }
@@ -69,7 +69,7 @@ function initBackgroundAnimation() {
       numDivs = 100;
     }
     if (automatonIndex == 6) {
-      numDivs = 20;
+      numDivs = 21;
     } else {
       numDivs = 150;
     }

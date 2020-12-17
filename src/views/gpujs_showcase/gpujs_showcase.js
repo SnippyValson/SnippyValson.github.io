@@ -33,8 +33,8 @@ import {
 
 var animationHandle;
 var rendererOutlet = document.getElementById(Constants.id.RendererPanel);
-var rendererHeight = rendererOutlet.clientHeight - 20;
-var rendererWidth = rendererOutlet.clientWidth - 20;
+var rendererHeight = rendererOutlet.clientHeight;
+var rendererWidth = rendererOutlet.clientWidth;
 var gpuAutomataState = Array2D(rendererHeight, rendererWidth);
 var gpuTempState = Array2D(rendererHeight, rendererWidth);
 var style = new Style();
@@ -58,15 +58,8 @@ function setSelectedButton(selectedButton) {
 
 function updateRenderer(width, height, colors) {
   let renderer = getRenderer(width, height, colors);
-  let rendererCanvas = renderer.canvas;
   rendererOutlet.innerHTML = "";
   rendererOutlet.appendChild(renderer.canvas);
-  rendererCanvas.style.marginTop = `${
-    (rendererOutlet.clientHeight - rendererCanvas.clientHeight) / 2
-  }${GlobalConstants.units.Pixel}`;
-  rendererCanvas.style.marginLeft = `${
-    (rendererOutlet.clientWidth - rendererCanvas.clientWidth) / 2
-  }${GlobalConstants.units.Pixel}`;
   return renderer;
 }
 

@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,17 +184,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/benchmarks.css":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/benchmarks.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -28455,7 +28455,7 @@ var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/localization/strings.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/benchmarks/localization/strings.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -29152,12 +29152,12 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.SortingBenchmark = SortingBenchmark;
-},{"./sorting_benchmarks.css":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.css","react":"node_modules/react/index.js","./../../localization/strings":"views/benchmarks/localization/strings.js","./constants/constants":"views/benchmarks/subviews/sorting_benchmarks/constants/constants.js","./workers\\population_worker.js":[["population_worker.ba73efde.js","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"population_worker.ba73efde.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"./workers\\sort_worker.js":[["sort_worker.5a2f14f7.js","views/benchmarks/subviews/sorting_benchmarks/workers/sort_worker.js"],"sort_worker.5a2f14f7.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/sort_worker.js"]}],"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css":[function(require,module,exports) {
+},{"./sorting_benchmarks.css":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.css","react":"node_modules/react/index.js","./../../localization/strings":"views/benchmarks/localization/strings.js","./constants/constants":"views/benchmarks/subviews/sorting_benchmarks/constants/constants.js","./workers/population_worker.js":[["population_worker.ba73efde.js","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"population_worker.ba73efde.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/population_worker.js"],"./workers/sort_worker.js":[["sort_worker.5a2f14f7.js","views/benchmarks/subviews/sorting_benchmarks/workers/sort_worker.js"],"sort_worker.5a2f14f7.js.map","views/benchmarks/subviews/sorting_benchmarks/workers/sort_worker.js"]}],"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/gpu.js/dist/gpu-browser.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"node_modules/gpu.js/dist/gpu-browser.js":[function(require,module,exports) {
 var define;
 var global = arguments[3];
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -53881,7 +53881,7 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.GpuJsBenchmarks = GpuJsBenchmarks;
-},{"react":"node_modules/react/index.js","../../../../main.css":"main.css","./gpujs_benchmarks.css":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css","./../../../gpujs_showcase/kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","../../../gpujs_showcase/utils":"views/gpujs_showcase/utils.js","../../../../global/style":"global/style.js","./../../../../libs/uitils":"libs/uitils.js","../../../gpujs_showcase/kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./workers\\gpu_worker.js":[["gpu_worker.54550945.js","views/benchmarks/subviews/gpujs_benchmarks/workers/gpu_worker.js"],"gpu_worker.54550945.js.map","views/benchmarks/subviews/gpujs_benchmarks/workers/gpu_worker.js"]}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","../../../../main.css":"main.css","./gpujs_benchmarks.css":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.css","./../../../gpujs_showcase/kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","../../../gpujs_showcase/utils":"views/gpujs_showcase/utils.js","../../../../global/style":"global/style.js","./../../../../libs/uitils":"libs/uitils.js","../../../gpujs_showcase/kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./workers/gpu_worker.js":[["gpu_worker.54550945.js","views/benchmarks/subviews/gpujs_benchmarks/workers/gpu_worker.js"],"gpu_worker.54550945.js.map","views/benchmarks/subviews/gpujs_benchmarks/workers/gpu_worker.js"]}],"views/benchmarks/constants/contants.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -54029,7 +54029,7 @@ function setSelectedButton(selectedButton) {
 }
 
 setSelectedButton(document.getElementById("sort-section"));
-},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../global/style":"global/style.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./subviews/sorting_benchmarks/sorting_benchmarks":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.js","./subviews/gpujs_benchmarks/gpujs_benchmarks":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.js","./constants/contants":"views/benchmarks/constants/contants.js","../../global/constants":"global/constants.js","./localization/strings":"views/benchmarks/localization/strings.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../global/style":"global/style.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./subviews/sorting_benchmarks/sorting_benchmarks":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.js","./subviews/gpujs_benchmarks/gpujs_benchmarks":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.js","./constants/contants":"views/benchmarks/constants/contants.js","../../global/constants":"global/constants.js","./localization/strings":"views/benchmarks/localization/strings.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -54057,7 +54057,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54160" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61160" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -54233,5 +54233,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/benchmarks.js"], null)
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/benchmarks.js"], null)
 //# sourceMappingURL=/benchmarks.78f986f4.js.map

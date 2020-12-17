@@ -44,6 +44,7 @@
   background: var(--pixel-background);
   color: var(--pixel-foreground);
   border-color: var(--pixel-foreground);
+  line-height: 1.0;
 }
 
 .pixel-text-medium {
@@ -52,6 +53,7 @@
   background: var(--pixel-background);
   color: var(--pixel-foreground);
   border-color: var(--pixel-foreground);
+  line-height: 1.6;
 }
 
 .pixel-text-small {
@@ -60,6 +62,7 @@
   background: var(--pixel-background);
   color: var(--pixel-foreground);
   border-color: var(--pixel-foreground);
+  line-height: 1.6;
 }
 
 .pixel-button {
@@ -167,17 +170,19 @@
 }
 
 .bottom-left {
-  position: absolute;
+  position: fixed;
   left: 10px;
-  top: calc(100vh - 80px);
+  bottom: 10px;
   padding: 25px;
+  max-width: 500px;
 }
 
 .bottom-right {
-  position: absolute;
-  left: calc(100vw - 160px);
-  top: calc(100vh - 80px);
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
   padding: 25px;
+  max-width: 500px;
 }
 
 .top-right {

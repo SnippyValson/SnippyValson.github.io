@@ -3,21 +3,24 @@
     --top-bar-height : 50px;
 }
 
-#side-panel {
-    width: var(--side-panel-with);
-    height: calc(100% - calc(var(--top-bar-height) + 50px));
-    margin: 5px;
+#content {
     position: relative;
-    float: left;
-    overflow-y : scroll;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: calc(100% - var(--top-bar-height) - 40px);
+}
+
+#side-panel {
+    flex: 0 0 var(--side-panel-with);
+    margin: 5px;
 }
 
 #renderer-panel {
-    position: relative;
-    float: right;
-    margin: 5px;
-    width: calc(100% - calc(var(--side-panel-with) + 30px));
-    height: calc(100% - calc(var(--top-bar-height) + 50px));
+    flex: 1 1 auto;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-bottom: 5px;
 }
 
 #top-bar {
@@ -31,8 +34,9 @@
     display: block;
     margin-top: 5px;
     margin-left: 5px;
+    margin-right: 5px;
+    width: calc(100% - 10px);
     min-width: 335px;
-    max-width: 335px;
 }
 
 #start-button {
