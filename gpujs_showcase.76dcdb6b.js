@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+})({"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -149,7 +149,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+},{}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -184,17 +184,17 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
+},{"./bundle-url":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"main.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/gpujs_showcase/gpujs_showcase.css":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"views/gpujs_showcase/gpujs_showcase.css":[function(require,module,exports) {
 var reloadCSS = require('_css_loader');
 
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
+},{"_css_loader":"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"global/colors.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -24878,8 +24878,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 var animationHandle;
 var rendererOutlet = document.getElementById(_constants.Constants.id.RendererPanel);
-var rendererHeight = rendererOutlet.clientHeight - 20;
-var rendererWidth = rendererOutlet.clientWidth - 20;
+var rendererHeight = rendererOutlet.clientHeight;
+var rendererWidth = rendererOutlet.clientWidth;
 var gpuAutomataState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
 var gpuTempState = (0, _uitils.Array2D)(rendererHeight, rendererWidth);
 var style = new _style.Style();
@@ -24914,11 +24914,8 @@ function setSelectedButton(selectedButton) {
 
 function updateRenderer(width, height, colors) {
   var renderer = (0, _render_kernel.getRenderer)(width, height, colors);
-  var rendererCanvas = renderer.canvas;
   rendererOutlet.innerHTML = "";
   rendererOutlet.appendChild(renderer.canvas);
-  rendererCanvas.style.marginTop = "".concat((rendererOutlet.clientHeight - rendererCanvas.clientHeight) / 2).concat(_constants2.Constants.units.Pixel);
-  rendererCanvas.style.marginLeft = "".concat((rendererOutlet.clientWidth - rendererCanvas.clientWidth) / 2).concat(_constants2.Constants.units.Pixel);
   return renderer;
 }
 
@@ -25087,7 +25084,7 @@ renderer = updateRenderer();
 t1 = performance.now();
 setProcess("moore", rendererWidth, rendererHeight, 1, 16, 1);
 setSelectedButton(document.getElementById(_constants.Constants.id.r1t1c16nm));
-},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -25115,7 +25112,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54160" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61160" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -25291,5 +25288,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/gpujs_showcase/gpujs_showcase.js"], null)
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/gpujs_showcase/gpujs_showcase.js"], null)
 //# sourceMappingURL=/gpujs_showcase.76dcdb6b.js.map

@@ -24029,7 +24029,7 @@ function checkMooreNeighbourhood(stateMatrix, i, j, r, c, nextState, range) {
 
   return count;
 }
-},{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"gpu.js":"node_modules/gpu.js/dist/gpu-browser.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -24057,7 +24057,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54160" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61160" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
@@ -24233,5 +24233,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["C:/Users/snippyvalson/AppData/Roaming/npm/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/subviews/gpujs_benchmarks/workers/gpu_worker.js"], null)
+},{}]},{},["../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","views/benchmarks/subviews/gpujs_benchmarks/workers/gpu_worker.js"], null)
 //# sourceMappingURL=/gpu_worker.54550945.js.map
