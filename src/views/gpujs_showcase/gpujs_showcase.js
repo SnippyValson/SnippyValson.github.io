@@ -1,206 +1,261 @@
 import "./../../main.css";
 import "./gpujs_showcase.css";
-import {
-  Style
-} from "../../global/style";
-import {
-  Array2D
-} from "./../../libs/uitils.js";
-import {
-  getMooreProcess
-} from "./kernels/moore_kernel";
-import {
-  getGameOfLifeProcess
-} from "./kernels/game_of_life_kernel";
-import {
-  getNueMannProcess
-} from "./kernels/neumann_kernel";
-import {
-  getCrossProcess
-} from "./kernels/cross_kernel";
-import {
-  getRenderer
-} from "./kernels/render_kernel";
-import {
-  Constants
-} from "./constants/constants";
-import {
-  getColors
-} from "./utils";
-import {
-  Constants as GlobalConstants
-} from "../../global/constants";
+import { Style } from "../../global/style";
+import { Array2D } from "./../../libs/uitils.js";
+import { getMooreProcess } from "./kernels/moore_kernel";
+import { getGameOfLifeProcess } from "./kernels/game_of_life_kernel";
+import { getNueMannProcess } from "./kernels/neumann_kernel";
+import { getCrossProcess } from "./kernels/cross_kernel";
+import { getRenderer } from "./kernels/render_kernel";
+import { Constants } from "./constants/constants";
+import { getColors } from "./utils";
+import { Constants as GlobalConstants } from "../../global/constants";
+import { Link } from "react-router-dom";
+import React from 'react';
 
-var animationHandle;
-var rendererOutlet = document.getElementById(Constants.id.RendererPanel);
-var rendererHeight = rendererOutlet.clientHeight;
-var rendererWidth = rendererOutlet.clientWidth;
-var gpuAutomataState = Array2D(rendererHeight, rendererWidth);
-var gpuTempState = Array2D(rendererHeight, rendererWidth);
-var style = new Style();
-var t1 = performance.now();
-var t2 = performance.now();
-var fps_t1 = performance.now();
-var fps_t2 = performance.now();
-var delay = 0;
-var listButtons = document.getElementsByClassName(Constants.class.ListButton);
-var process;
-var renderer;
+export class GpuJsShowCase extends React.Component {
 
-function setSelectedButton(selectedButton) {
-  for (let listButton of listButtons) {
-    listButton.classList.add(GlobalConstants.class.PixelButton);
-    listButton.classList.remove(GlobalConstants.class.PixelButtonInverted);
+  t1;
+  t2;
+  style;
+  delay;
+  fps_t1;
+  fps_t2;
+  process;
+  renderer;
+  listButtons;
+  gpuTempState;
+  rendererWidth;
+  rendererOutlet;
+  rendererHeight;
+  animationHandle;
+  gpuAutomataState;
+
+  constructor(props) {
+    super(props);
+    this.rendererOutlet = React.createRef();
+    this.t1 = performance.now();
+    this.t2 = performance.now();
+    this.fps_t1 = performance.now();
+    this.fps_t2 = performance.now();
+    this.delay = 0;
+    this.style = new Style();
+    this.state = { message : '*', buttonLabel : 'Start' };
+    this.onItemClicked = this.onItemClicked.bind(this);
+    this.onStartClicked = this.onStartClicked.bind(this);
+    this.animate = this.animate.bind(this);
+    this.updateRenderer = this.updateRenderer.bind(this);
+    this.renderAndSwap = this.renderAndSwap.bind(this);
   }
-  selectedButton.classList.add(GlobalConstants.class.PixelButtonInverted);
-  selectedButton.classList.remove(GlobalConstants.class.PixelButton);
-}
 
-function updateRenderer(width, height, colors) {
-  let renderer = getRenderer(width, height, colors);
-  rendererOutlet.innerHTML = "";
-  rendererOutlet.appendChild(renderer.canvas);
-  return renderer;
-}
+  componentDidMount() {
+     this.rendererHeight = this.rendererOutlet.current.clientHeight;
+     this.rendererWidth = this.rendererOutlet.current.clientWidth;
+     this.gpuAutomataState = Array2D(this.rendererHeight, this.rendererWidth);
+     this.gpuTempState = Array2D(this.rendererHeight, this.rendererWidth);
+     this.listButtons = document.getElementsByClassName(Constants.class.ListButton);
+     this.style.applyStyle();
+     this.renderer = this.updateRenderer(this.rendererWidth, this.rendererHeight, getColors(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 16 - 2));
+     this.resetState(16);
+     this.renderer(this.gpuAutomataState);
+     /* Reposition the renderer canvas after rendring it once. */
+     this.renderer = this.updateRenderer();
+     this.t1 = performance.now();
+     this.setProcess("moore", this.rendererWidth, this.rendererHeight, 1, 16, 1);
+     this.setSelectedButton(document.getElementById(Constants.id.r1t1c16nm));
+  }
 
-function resetState(numStates) {
-  for (let i = 0; i < rendererHeight; i++) {
-    for (let j = 0; j < rendererWidth; j++) {
-      let state = Math.floor(Math.random() * numStates);
-      gpuAutomataState[i][j] = state;
+  componentWillUnmount() {
+
+  }
+
+  setSelectedButton(selectedButton) {
+    for (let listButton of this.listButtons) {
+      listButton.classList.add(GlobalConstants.class.PixelButton);
+      listButton.classList.remove(GlobalConstants.class.PixelButtonInverted);
+    }
+    selectedButton.classList.add(GlobalConstants.class.PixelButtonInverted);
+    selectedButton.classList.remove(GlobalConstants.class.PixelButton);
+  }
+
+  /*
+   * Update the GpuJs canvas renderer with the new dimensions and colors. 
+   */
+  updateRenderer(width, height, colors) {
+    console.table(colors);
+    let renderer = getRenderer(width, height, colors);
+    this.rendererOutlet.current.appendChild(renderer.canvas);
+    return renderer;
+  }
+
+  /*
+   * Update the automata state matrix with new random values.
+   */
+  resetState(numStates) {
+    for (let i = 0; i < this.rendererHeight; i++) {
+      for (let j = 0; j < this.rendererWidth; j++) {
+        let state = Math.floor(Math.random() * numStates);
+        this.gpuAutomataState[i][j] = state;
+      }
     }
   }
-}
 
-function renderAndSwap() {
-  renderer(gpuTempState);
-  let t = gpuTempState;
-  gpuAutomataState = gpuTempState;
-  gpuTempState = t;
-}
-
-function animate() {
-  t2 = performance.now();
-  fps_t2 = performance.now();
-  if (fps_t2 - fps_t1 >= 1000) {
-    delay = t2 - t1;
-    fps_t1 = fps_t2;
-    document.getElementById(Constants.id.InfoLabel).innerHTML = `Processed & plotted ${(
-      (rendererHeight * rendererWidth) / 1000000
-    ).toFixed(2)}M points ${Math.round(1000 / delay)} times/second. [${(
-      ((rendererHeight * rendererWidth) * Math.round(1000 / delay)) /
-      1000000
-    ).toFixed(2)}M points/second.] Phew!!!`;
+  /*
+   * Render the update automata state on the canvas and copy it back into the original matrix.
+   */
+  renderAndSwap() {
+    this.renderer(this.gpuTempState);
+    let buffer = this.gpuTempState;
+    this.gpuAutomataState = this.gpuTempState;
+    this.gpuTempState = buffer;
   }
-  t1 = t2;
-  gpuTempState = process(gpuAutomataState);
-  renderAndSwap();
-  animationHandle = requestAnimationFrame(animate);
-}
 
-window.onItemClicked = onItemClicked;
-function onItemClicked(item, element) {
-  setSelectedButton(element);
-  document.getElementById("start-button").innerHTML = "Start";
-  if (animationHandle) {
-    cancelAnimationFrame(animationHandle);
-  }
-  switch (item) {
-    case Constants.id.r1t1c16nm:
-      setProcess("moore", rendererWidth, rendererHeight, 1, 16, 1);
-      break;
-    case Constants.id.r1t1c16nn:
-      setProcess("neumann", rendererWidth, rendererHeight, 1, 16, 1);
-      break;
-    case Constants.id.r1t1c16nc:
-      setProcess("cross", rendererWidth, rendererHeight, 1, 16, 1);
-      break;
-    case Constants.id.r1t3c4nm:
-      setProcess("moore", rendererWidth, rendererHeight, 3, 4, 1);
-      break;
-    case Constants.id.r1t3c3nm:
-      setProcess("moore", rendererWidth, rendererHeight, 3, 3, 1);
-      break;
-    case Constants.id.gameoflife:
-      setProcess("gol", rendererWidth, rendererHeight, -1, 2, -1);
-      break;
-    case Constants.id.r2t11c3nm:
-      setProcess("moore", rendererWidth, rendererHeight, 11, 3, 2);
-      break;
-    case Constants.id.r2t5c8nm:
-      setProcess("moore", rendererWidth, rendererHeight, 5, 8, 2);
-      break;
-    case Constants.id.r3t15c3nm:
-      setProcess("moore", rendererWidth, rendererHeight, 15, 3, 3);
-      break;
-    case Constants.id.r2t9c4nm:
-      setProcess("moore", rendererWidth, rendererHeight, 9, 4, 2);
-      break;
-    case Constants.id.r3t10c2nn:
-      setProcess("neumann", rendererWidth, rendererHeight, 10, 2, 3);
-      break;
-    case Constants.id.r2t5c3nn:
-      setProcess("neumann", rendererWidth, rendererHeight, 1, 5, 1);
-      break;
-    default:
-      break;
-  }
-}
-
-function setProcess(processName, width, height, threshold, numStates, range) {
-  switch (processName) {
-    case "moore": {
-      process = getMooreProcess(width, height, threshold, numStates, range);
-      reset(width, height, numStates);
+  animate() {
+    this.t2 = performance.now();
+    this.fps_t2 = performance.now();
+    if (this.fps_t2 - this.fps_t1 >= 1000) {
+      this.delay = this.t2 - this.t1;
+      this.fps_t1 = this.fps_t2;
+      let numPointsPerFrame = ((this.rendererHeight * this.rendererWidth) / 1000000).toFixed(2);
+      let framesPerSecond = Math.round(1000 / this.delay);
+      let numPointsPerSecond = (((this.rendererHeight * this.rendererWidth) * Math.round(1000 / this.delay)) / 1000000).toFixed(2);
+      let message = `Processed & plotted ${ numPointsPerFrame }M points ${ framesPerSecond } times/second. [${ numPointsPerSecond }M points/second.] Phew!!!`;
+      this.setState({ message : message });
     }
-    break;
-  case "cross": {
-    process = getCrossProcess(width, height, threshold, numStates, range);
-    reset(width, height, numStates);
-  };
-  break;
-  case "neumann": {
-    process = getNueMannProcess(width, height, threshold, numStates, range);
-    reset(width, height, numStates);
+    this.t1 = this.t2;
+    this.gpuTempState = this.process(this.gpuAutomataState);
+    this.renderAndSwap();
+    this.animationHandle = requestAnimationFrame(this.animate.bind(this));
   }
-  break;
-  case "gol": {
-    process = getGameOfLifeProcess(width, height);
-    reset(width, height, numStates);
-  }
-  break;
-  }
-}
 
-function reset(width, height, numStates) {
-  renderer = updateRenderer(width, height, getColors(style.getCurrentPallet().background, style.getCurrentPallet().foreground, numStates - 2));
-  resetState(numStates);
-  renderer(gpuAutomataState);
-}
-
-window.onStartClicked = onStartClicked;
-
-function onStartClicked() {
-  if (document.getElementById("start-button").innerHTML == "Start") {
-    document.getElementById("start-button").innerHTML = "Stop";
-    if (animationHandle) {
-      cancelAnimationFrame(animationHandle);
+  /*
+   * Specifes what process should be done on the automata state between renders.
+   */
+  setProcess(processName, width, height, threshold, numStates, range) {
+    switch (processName) {
+      case "moore": {
+        this.process = getMooreProcess(width, height, threshold, numStates, range);
+        this.reset(width, height, numStates);
+      }
+      break;
+      case "cross": {
+        this.process = getCrossProcess(width, height, threshold, numStates, range);
+        this.reset(width, height, numStates);
+      };
+      break;
+      case "neumann": {
+        this.process = getNueMannProcess(width, height, threshold, numStates, range);
+        this.reset(width, height, numStates);
+      }
+      break;
+      case "gol": {
+        this.process = getGameOfLifeProcess(width, height);
+        this.reset(width, height, numStates);
+      }
+      break;
     }
-    animationHandle = requestAnimationFrame(animate);
-  } else {
+  }
+
+  /*
+   * Reset the automata states and re-render it on the canvas.
+   */
+  reset(width, height, numStates) {
+    this.renderer = this.updateRenderer(width, height, getColors(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, numStates - 2));
+    this.resetState(numStates);
+    this.renderer(this.gpuAutomataState);
+  }
+
+  onItemClicked(event, item) {
+    let element = event.target;
+    this.setSelectedButton(element);
     document.getElementById("start-button").innerHTML = "Start";
-    if (animationHandle) {
-      cancelAnimationFrame(animationHandle);
+    if (this.animationHandle) {
+      cancelAnimationFrame(this.animationHandle);
+    }
+    switch (item) {
+      case Constants.id.r1t1c16nm:
+        this.setProcess("moore", this.rendererWidth, this.rendererHeight, 1, 16, 1);
+        break;
+      case Constants.id.r1t1c16nn:
+        this.setProcess("neumann", this.rendererWidth, this.rendererHeight, 1, 16, 1);
+        break;
+      case Constants.id.r1t1c16nc:
+        this.setProcess("cross", this.rendererWidth, this.rendererHeight, 1, 16, 1);
+        break;
+      case Constants.id.r1t3c4nm:
+        this.setProcess("moore", this.rendererWidth, this.rendererHeight, 3, 4, 1);
+        break;
+      case Constants.id.r1t3c3nm:
+        this.setProcess("moore", this.rendererWidth, this.rendererHeight, 3, 3, 1);
+        break;
+      case Constants.id.gameoflife:
+        this.setProcess("gol", this.rendererWidth, this.rendererHeight, -1, 2, -1);
+        break;
+      case Constants.id.r2t11c3nm:
+        this.setProcess("moore", this.rendererWidth, this.rendererHeight, 11, 3, 2);
+        break;
+      case Constants.id.r2t5c8nm:
+        this.setProcess("moore", this.rendererWidth, this.rendererHeight, 5, 8, 2);
+        break;
+      case Constants.id.r3t15c3nm:
+        this.setProcess("moore", this.rendererWidth, this.rendererHeight, 15, 3, 3);
+        break;
+      case Constants.id.r2t9c4nm:
+        this.setProcess("moore", this.rendererWidth, this.rendererHeight, 9, 4, 2);
+        break;
+      case Constants.id.r3t10c2nn:
+        this.setProcess("neumann", this.rendererWidth, this.rendererHeight, 10, 2, 3);
+        break;
+      case Constants.id.r2t5c3nn:
+        this.setProcess("neumann", this.rendererWidth, this.rendererHeight, 1, 5, 1);
+        break;
+      default:
+        break;
     }
   }
-}
 
-style.applyStyle();
-renderer = updateRenderer(rendererWidth, rendererHeight, getColors(style.getCurrentPallet().background, style.getCurrentPallet().foreground, 16 - 2));
-resetState(16);
-renderer(gpuAutomataState);
-/* Reposition the renderer canvas after rendring it once. */
-renderer = updateRenderer();
-t1 = performance.now();
-setProcess("moore", rendererWidth, rendererHeight, 1, 16, 1);
-setSelectedButton(document.getElementById(Constants.id.r1t1c16nm));
+  onStartClicked() {
+    if (this.state.buttonLabel == "Start") {
+      this.setState({ buttonLabel : "Stop" });
+      if (this.animationHandle) {
+        cancelAnimationFrame(this.animationHandle);
+      }
+      this.animationHandle = requestAnimationFrame(this.animate);
+    } else {
+      this.setState({ buttonLabel : "Start" });
+      if (this.animationHandle) {
+        cancelAnimationFrame(this.animationHandle);
+      }
+    }
+  }
+
+  render() {
+    return (
+      <div style = {{width : '100vw', height : '100vh'}}>
+        <div id="top-bar">
+            <Link className="pixel-button" to="/">Home</Link>
+            <button className="pixel-button" id="start-button" onClick={this.onStartClicked}>{this.state.buttonLabel}</button>
+            <label className="pixel-text-medium">{this.state.message}</label>
+        </div>
+        <div id="content">
+            <div id="side-panel" className="pixel-div">
+                <button className="pixel-button list-button" id="square-cycles" onClick={(e) => { this.onItemClicked(e, 'square-cycles'); }}> CCA - R1/T1/C16/NM </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'nuemann-cycles'); }}> CCA - R1/T1/C16/NN </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cross-cycles'); }}> CCA - R1/T1/C16/NC </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r1t3c4nm'); }}> CCA - R1/T3/C4/NM </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r1t3c3nm'); }}> CCA - R1/T3/C3/NM </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r2t11c3nm'); }}> CCA - R2/T11/C3/NM </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r2t5c8nm'); }}> CCA - R2/T5/C8/NM </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r3t15c3nm'); }}> CCA - R3/T15/C3/NM </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r2t9c4nm'); }}> CCA - R2/T9/C4/NM </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r3t10c2nn'); }}> CCA - R3/T10/C2/NN </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r2t5c3nn'); }}> CCA - R2/T5/C3/NN </button>
+                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'game-of-life'); }}> Game Of Life </button>
+            </div>
+            <div ref={this.rendererOutlet} className="renderer-panel">
+            </div>
+        </div>
+      </div>
+    );
+  }
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<link rel="stylesheet" href="/neo_command.f5920bbc.css"></head>
+<body class="pixel-body">
+    <div id="top-bar">
+        <a class="pixel-button" href="/index.html">Home</a>
+        <button class="pixel-button" id="start-button" onclick="onStartClicked()">Send</button>
+    </div>
+    <div id="content">
+        <div id="side-panel" class="pixel-div">
+            <button class="pixel-button list-button" id="square-cycles" onclick="onItemClicked('square-cycles', this)"> Static Color</button>
+            <button class="pixel-button list-button" onclick="onItemClicked('nuemann-cycles', this)"> Breathing </button>
+            <button class="pixel-button list-button" onclick="onItemClicked('cross-cycles', this)"> Hue Rainbow </button>
+            <button class="pixel-button list-button" onclick="onItemClicked('cca-r1t3c4nm', this)"> Gradients </button>
+        </div>
+        <div id="renderer-panel">
+            <canvas id="renderer-outlet"></canvas>
+        </div>
+    </div>
+    <script src="/neo_command.f5920bbc.js"></script>
+</body>
+</html>

@@ -16,7 +16,7 @@
     margin: 5px;
 }
 
-#renderer-panel {
+.renderer-panel {
     flex: 1 1 auto;
     margin-top: 5px;
     margin-right: 5px;

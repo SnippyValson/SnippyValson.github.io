@@ -1,4 +1,4 @@
-#threeview {
+.threeview {
     margin: 0;
     width: calc(100vw - 300px);
     height: calc(100vh - 300px);
