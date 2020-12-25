@@ -12,6 +12,7 @@ import { getColors } from "./utils";
 import { Constants as GlobalConstants } from "../../global/constants";
 import { Link } from "react-router-dom";
 import React from 'react';
+import { ButtonList } from './../../global/common_components/button_list'
 
 export class GpuJsShowCase extends React.Component {
 
@@ -21,6 +22,7 @@ export class GpuJsShowCase extends React.Component {
   delay;
   fps_t1;
   fps_t2;
+  list_items;
   process;
   renderer;
   listButtons;
@@ -46,6 +48,20 @@ export class GpuJsShowCase extends React.Component {
     this.animate = this.animate.bind(this);
     this.updateRenderer = this.updateRenderer.bind(this);
     this.renderAndSwap = this.renderAndSwap.bind(this);
+    this.list_items = [];
+    this.list_items.push({ tag : 'square-cycles', displayText : 'CCA - R1/T1/C16/NM' });
+    this.list_items.push({ tag : 'nuemann-cycles', displayText : 'CCA - R1/T1/C16/NN' });
+    this.list_items.push({ tag : 'cross-cycles', displayText : 'CCA - R1/T1/C16/NC' });
+    this.list_items.push({ tag : 'cca-r1t3c4nm', displayText : 'CCA - R1/T3/C4/NM' });
+    this.list_items.push({ tag : 'cca-r1t3c3nm', displayText : 'CCA - R1/T3/C3/NM' });
+    this.list_items.push({ tag : 'cca-r2t11c3nm', displayText : 'CCA - R2/T11/C3/NM' });
+    this.list_items.push({ tag : 'cca-r2t5c8nm', displayText : 'CCA - R2/T5/C8/NM' });
+    this.list_items.push({ tag : 'cca-r3t15c3nm', displayText : 'CCA - R3/T15/C3/NM' });
+    this.list_items.push({ tag : 'cca-r2t9c4nm', displayText : 'CCA - R2/T9/C4/NM' });
+    this.list_items.push({ tag : 'cca-r3t10c2nn', displayText : 'CCA - R3/T10/C2/NN' });
+    this.list_items.push({ tag : 'cca-r2t5c3nn', displayText : 'CCA - R2/T5/C3/NN' });
+    this.list_items.push({ tag : 'game-of-life', displayText : 'Game Of Life '});
+
   }
 
   componentDidMount() {
@@ -53,7 +69,6 @@ export class GpuJsShowCase extends React.Component {
      this.rendererWidth = this.rendererOutlet.current.clientWidth;
      this.gpuAutomataState = Array2D(this.rendererHeight, this.rendererWidth);
      this.gpuTempState = Array2D(this.rendererHeight, this.rendererWidth);
-     this.listButtons = document.getElementsByClassName(Constants.class.ListButton);
      this.style.applyStyle();
      this.renderer = this.updateRenderer(this.rendererWidth, this.rendererHeight, getColors(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 16 - 2));
      this.resetState(16);
@@ -62,27 +77,16 @@ export class GpuJsShowCase extends React.Component {
      this.renderer = this.updateRenderer();
      this.t1 = performance.now();
      this.setProcess("moore", this.rendererWidth, this.rendererHeight, 1, 16, 1);
-     this.setSelectedButton(document.getElementById(Constants.id.r1t1c16nm));
   }
 
   componentWillUnmount() {
 
   }
 
-  setSelectedButton(selectedButton) {
-    for (let listButton of this.listButtons) {
-      listButton.classList.add(GlobalConstants.class.PixelButton);
-      listButton.classList.remove(GlobalConstants.class.PixelButtonInverted);
-    }
-    selectedButton.classList.add(GlobalConstants.class.PixelButtonInverted);
-    selectedButton.classList.remove(GlobalConstants.class.PixelButton);
-  }
-
   /*
    * Update the GpuJs canvas renderer with the new dimensions and colors. 
    */
   updateRenderer(width, height, colors) {
-    console.table(colors);
     let renderer = getRenderer(width, height, colors);
     this.rendererOutlet.current.appendChild(renderer.canvas);
     return renderer;
@@ -166,9 +170,7 @@ export class GpuJsShowCase extends React.Component {
   }
 
   onItemClicked(event, item) {
-    let element = event.target;
-    this.setSelectedButton(element);
-    document.getElementById("start-button").innerHTML = "Start";
+    this.setState({ buttonLabel : "Start" });
     if (this.animationHandle) {
       cancelAnimationFrame(this.animationHandle);
     }
@@ -239,18 +241,7 @@ export class GpuJsShowCase extends React.Component {
         </div>
         <div id="content">
             <div id="side-panel" className="pixel-div">
-                <button className="pixel-button list-button" id="square-cycles" onClick={(e) => { this.onItemClicked(e, 'square-cycles'); }}> CCA - R1/T1/C16/NM </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'nuemann-cycles'); }}> CCA - R1/T1/C16/NN </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cross-cycles'); }}> CCA - R1/T1/C16/NC </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r1t3c4nm'); }}> CCA - R1/T3/C4/NM </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r1t3c3nm'); }}> CCA - R1/T3/C3/NM </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r2t11c3nm'); }}> CCA - R2/T11/C3/NM </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r2t5c8nm'); }}> CCA - R2/T5/C8/NM </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r3t15c3nm'); }}> CCA - R3/T15/C3/NM </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r2t9c4nm'); }}> CCA - R2/T9/C4/NM </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r3t10c2nn'); }}> CCA - R3/T10/C2/NN </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'cca-r2t5c3nn'); }}> CCA - R2/T5/C3/NN </button>
-                <button className="pixel-button list-button" onClick={(e) => { this.onItemClicked(e, 'game-of-life'); }}> Game Of Life </button>
+                <ButtonList onItemClicked = { this.onItemClicked } items = { this.list_items } ></ButtonList>
             </div>
             <div ref={this.rendererOutlet} className="renderer-panel">
             </div>

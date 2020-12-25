@@ -94624,7 +94624,138 @@ Constants.class.FadeIn = "fade-in";
 Constants.class.PixelButton = "pixel-button";
 Constants.class.PixelButtonInverted = "pixel-button-inverted";
 Constants.units.Pixel = "px";
-},{}],"views/gpujs_showcase/gpujs_showcase.js":[function(require,module,exports) {
+},{}],"global/common_components/button_list.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ButtonList = void 0;
+
+var _constants = require("../constants");
+
+require("../../main.css");
+
+var _react = _interopRequireDefault(require("react"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var ButtonList = /*#__PURE__*/function (_React$Component) {
+  _inherits(ButtonList, _React$Component);
+
+  var _super = _createSuper(ButtonList);
+
+  function ButtonList(props) {
+    var _this;
+
+    _classCallCheck(this, ButtonList);
+
+    _this = _super.call(this, props);
+
+    _defineProperty(_assertThisInitialized(_this), "referenceList", void 0);
+
+    _this.referenceList = [];
+    return _this;
+  }
+
+  _createClass(ButtonList, [{
+    key: "setSelectedButton",
+    value: function setSelectedButton(selectedButton) {
+      var _iterator = _createForOfIteratorHelper(this.referenceList),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var listButtonRef = _step.value;
+
+          if (!listButtonRef || !listButtonRef.current) {
+            return;
+          }
+
+          listButtonRef.current.classList.add(_constants.Constants.class.PixelButton);
+          listButtonRef.current.classList.remove(_constants.Constants.class.PixelButtonInverted);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      selectedButton.classList.add(_constants.Constants.class.PixelButtonInverted);
+      selectedButton.classList.remove(_constants.Constants.class.PixelButton);
+    }
+  }, {
+    key: "onButtonClicked",
+    value: function onButtonClicked(event, tag) {
+      this.setSelectedButton(event.target);
+      this.props.onItemClicked(event, tag);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      // Clear the list of references each time.
+      this.referenceList = [];
+      return /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-div"
+      }, this.props.items.map(function (item) {
+        // Keep a reference to all the buttons thats being created.
+        var ref = _react.default.createRef(); // Assign a unique key to all the buttons as well. 
+
+
+        var button = /*#__PURE__*/_react.default.createElement("button", {
+          className: "pixel-button list-button",
+          ref: ref,
+          key: item.tag,
+          onClick: function onClick(e) {
+            _this2.onButtonClicked(e, item.tag);
+          }
+        }, " ", item.displayText, " "); // Push the ref to a list, after the re has been assigned.
+
+
+        _this2.referenceList.push(ref);
+
+        return button;
+      }));
+    }
+  }]);
+
+  return ButtonList;
+}(_react.default.Component);
+
+exports.ButtonList = ButtonList;
+},{"../constants":"global/constants.js","../../main.css":"main.css","react":"node_modules/react/index.js"}],"views/gpujs_showcase/gpujs_showcase.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -94660,15 +94791,11 @@ var _reactRouterDom = require("react-router-dom");
 
 var _react = _interopRequireDefault(require("react"));
 
+var _button_list = require("./../../global/common_components/button_list");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -94716,6 +94843,8 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(_assertThisInitialized(_this), "fps_t2", void 0);
 
+    _defineProperty(_assertThisInitialized(_this), "list_items", void 0);
+
     _defineProperty(_assertThisInitialized(_this), "process", void 0);
 
     _defineProperty(_assertThisInitialized(_this), "renderer", void 0);
@@ -94750,6 +94879,68 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
     _this.animate = _this.animate.bind(_assertThisInitialized(_this));
     _this.updateRenderer = _this.updateRenderer.bind(_assertThisInitialized(_this));
     _this.renderAndSwap = _this.renderAndSwap.bind(_assertThisInitialized(_this));
+    _this.list_items = [];
+
+    _this.list_items.push({
+      tag: 'square-cycles',
+      displayText: 'CCA - R1/T1/C16/NM'
+    });
+
+    _this.list_items.push({
+      tag: 'nuemann-cycles',
+      displayText: 'CCA - R1/T1/C16/NN'
+    });
+
+    _this.list_items.push({
+      tag: 'cross-cycles',
+      displayText: 'CCA - R1/T1/C16/NC'
+    });
+
+    _this.list_items.push({
+      tag: 'cca-r1t3c4nm',
+      displayText: 'CCA - R1/T3/C4/NM'
+    });
+
+    _this.list_items.push({
+      tag: 'cca-r1t3c3nm',
+      displayText: 'CCA - R1/T3/C3/NM'
+    });
+
+    _this.list_items.push({
+      tag: 'cca-r2t11c3nm',
+      displayText: 'CCA - R2/T11/C3/NM'
+    });
+
+    _this.list_items.push({
+      tag: 'cca-r2t5c8nm',
+      displayText: 'CCA - R2/T5/C8/NM'
+    });
+
+    _this.list_items.push({
+      tag: 'cca-r3t15c3nm',
+      displayText: 'CCA - R3/T15/C3/NM'
+    });
+
+    _this.list_items.push({
+      tag: 'cca-r2t9c4nm',
+      displayText: 'CCA - R2/T9/C4/NM'
+    });
+
+    _this.list_items.push({
+      tag: 'cca-r3t10c2nn',
+      displayText: 'CCA - R3/T10/C2/NN'
+    });
+
+    _this.list_items.push({
+      tag: 'cca-r2t5c3nn',
+      displayText: 'CCA - R2/T5/C3/NN'
+    });
+
+    _this.list_items.push({
+      tag: 'game-of-life',
+      displayText: 'Game Of Life '
+    });
+
     return _this;
   }
 
@@ -94760,7 +94951,6 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
       this.rendererWidth = this.rendererOutlet.current.clientWidth;
       this.gpuAutomataState = (0, _uitils.Array2D)(this.rendererHeight, this.rendererWidth);
       this.gpuTempState = (0, _uitils.Array2D)(this.rendererHeight, this.rendererWidth);
-      this.listButtons = document.getElementsByClassName(_constants.Constants.class.ListButton);
       this.style.applyStyle();
       this.renderer = this.updateRenderer(this.rendererWidth, this.rendererHeight, (0, _utils.getColors)(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 16 - 2));
       this.resetState(16);
@@ -94770,32 +94960,10 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
       this.renderer = this.updateRenderer();
       this.t1 = performance.now();
       this.setProcess("moore", this.rendererWidth, this.rendererHeight, 1, 16, 1);
-      this.setSelectedButton(document.getElementById(_constants.Constants.id.r1t1c16nm));
     }
   }, {
     key: "componentWillUnmount",
     value: function componentWillUnmount() {}
-  }, {
-    key: "setSelectedButton",
-    value: function setSelectedButton(selectedButton) {
-      var _iterator = _createForOfIteratorHelper(this.listButtons),
-          _step;
-
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var listButton = _step.value;
-          listButton.classList.add(_constants2.Constants.class.PixelButton);
-          listButton.classList.remove(_constants2.Constants.class.PixelButtonInverted);
-        }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-
-      selectedButton.classList.add(_constants2.Constants.class.PixelButtonInverted);
-      selectedButton.classList.remove(_constants2.Constants.class.PixelButton);
-    }
     /*
      * Update the GpuJs canvas renderer with the new dimensions and colors. 
      */
@@ -94803,7 +94971,6 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "updateRenderer",
     value: function updateRenderer(width, height, colors) {
-      console.table(colors);
       var renderer = (0, _render_kernel.getRenderer)(width, height, colors);
       this.rendererOutlet.current.appendChild(renderer.canvas);
       return renderer;
@@ -94909,9 +95076,9 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "onItemClicked",
     value: function onItemClicked(event, item) {
-      var element = event.target;
-      this.setSelectedButton(element);
-      document.getElementById("start-button").innerHTML = "Start";
+      this.setState({
+        buttonLabel: "Start"
+      });
 
       if (this.animationHandle) {
         cancelAnimationFrame(this.animationHandle);
@@ -94996,8 +95163,6 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
-
       return /*#__PURE__*/_react.default.createElement("div", {
         style: {
           width: '100vw',
@@ -95019,68 +95184,10 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/_react.default.createElement("div", {
         id: "side-panel",
         className: "pixel-div"
-      }, /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        id: "square-cycles",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'square-cycles');
-        }
-      }, " CCA - R1/T1/C16/NM "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'nuemann-cycles');
-        }
-      }, " CCA - R1/T1/C16/NN "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cross-cycles');
-        }
-      }, " CCA - R1/T1/C16/NC "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cca-r1t3c4nm');
-        }
-      }, " CCA - R1/T3/C4/NM "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cca-r1t3c3nm');
-        }
-      }, " CCA - R1/T3/C3/NM "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cca-r2t11c3nm');
-        }
-      }, " CCA - R2/T11/C3/NM "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cca-r2t5c8nm');
-        }
-      }, " CCA - R2/T5/C8/NM "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cca-r3t15c3nm');
-        }
-      }, " CCA - R3/T15/C3/NM "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cca-r2t9c4nm');
-        }
-      }, " CCA - R2/T9/C4/NM "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cca-r3t10c2nn');
-        }
-      }, " CCA - R3/T10/C2/NN "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'cca-r2t5c3nn');
-        }
-      }, " CCA - R2/T5/C3/NN "), /*#__PURE__*/_react.default.createElement("button", {
-        className: "pixel-button list-button",
-        onClick: function onClick(e) {
-          _this2.onItemClicked(e, 'game-of-life');
-        }
-      }, " Game Of Life ")), /*#__PURE__*/_react.default.createElement("div", {
+      }, /*#__PURE__*/_react.default.createElement(_button_list.ButtonList, {
+        onItemClicked: this.onItemClicked,
+        items: this.list_items
+      })), /*#__PURE__*/_react.default.createElement("div", {
         ref: this.rendererOutlet,
         className: "renderer-panel"
       })));
@@ -95091,7 +95198,7 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.GpuJsShowCase = GpuJsShowCase;
-},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react":"node_modules/react/index.js"}],"main.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react":"node_modules/react/index.js","./../../global/common_components/button_list":"global/common_components/button_list.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -95406,7 +95513,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58026" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63528" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

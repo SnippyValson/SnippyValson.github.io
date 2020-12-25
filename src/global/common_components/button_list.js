@@ -6,13 +6,16 @@ export class ButtonList extends React.Component {
 
     referenceList;
 
-    constructor() {
+    constructor(props) {
         super(props);
         this.referenceList = [];
     }
 
     setSelectedButton(selectedButton) {
         for (let listButtonRef of this.referenceList) {
+            if(!listButtonRef || !listButtonRef.current){
+                return;
+            }
           listButtonRef.current.classList.add(GlobalConstants.class.PixelButton);
           listButtonRef.current.classList.remove(GlobalConstants.class.PixelButtonInverted);
         }
@@ -26,17 +29,22 @@ export class ButtonList extends React.Component {
     }
 
     render() {
+        // Clear the list of references each time.
+        this.referenceList = [];
         return (
             <div className="pixel-div">
                 {
                     this.props.items.map(
                         item => {
+                            // Keep a reference to all the buttons thats being created.
                             let ref = React.createRef();
-                            let button =  ( <button className="pixel-button list-button" ref= { ref } onClick={ (e) => { onButtonClicked(e, item.tag); } }> { item.dsplayText } </button> );
+                            // Assign a unique key to all the buttons as well. 
+                            let button =  ( <button className="pixel-button list-button" ref= { ref } key = { item.tag } onClick={ (e) => { this.onButtonClicked(e, item.tag); } }> { item.displayText } </button> );
+                            // Push the ref to a list, after the re has been assigned.
                             this.referenceList.push(ref);
                             return button;
                         }
-                    );
+                    )
                 }
             </div>
         );
