@@ -213,3 +213,8 @@
     min-width: 500px;
     min-height: 500px;
   }
+
+  #root {
+    width: 100%;
+    height: 100%;
+  }

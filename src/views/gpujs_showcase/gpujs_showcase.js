@@ -9,10 +9,9 @@ import { getCrossProcess } from "./kernels/cross_kernel";
 import { getRenderer } from "./kernels/render_kernel";
 import { Constants } from "./constants/constants";
 import { getColors } from "./utils";
-import { Constants as GlobalConstants } from "../../global/constants";
-import { Link } from "react-router-dom";
 import React from 'react';
-import { ButtonList } from './../../global/common_components/button_list'
+import { ButtonList } from './../../global/common_components/button_list';
+import { TopBar }  from './../../global/common_components/top_bar';
 
 export class GpuJsShowCase extends React.Component {
 
@@ -61,7 +60,6 @@ export class GpuJsShowCase extends React.Component {
     this.list_items.push({ tag : 'cca-r3t10c2nn', displayText : 'CCA - R3/T10/C2/NN' });
     this.list_items.push({ tag : 'cca-r2t5c3nn', displayText : 'CCA - R2/T5/C3/NN' });
     this.list_items.push({ tag : 'game-of-life', displayText : 'Game Of Life '});
-
   }
 
   componentDidMount() {
@@ -233,14 +231,15 @@ export class GpuJsShowCase extends React.Component {
 
   render() {
     return (
-      <div style = {{width : '100vw', height : '100vh'}}>
+      <div style = {{width : '100%', height : '100%'}}>
         <div id="top-bar">
-            <Link className="pixel-button" to="/">Home</Link>
+          <TopBar>
             <button className="pixel-button" id="start-button" onClick={this.onStartClicked}>{this.state.buttonLabel}</button>
-            <label className="pixel-text-medium">{this.state.message}</label>
+            <label className="pixel-text-medium" style={{ marginLeft : '10px' }}>{this.state.message}</label>
+          </TopBar>
         </div>
         <div id="content">
-            <div id="side-panel" className="pixel-div">
+            <div id="side-panel">
                 <ButtonList onItemClicked = { this.onItemClicked } items = { this.list_items } ></ButtonList>
             </div>
             <div ref={this.rendererOutlet} className="renderer-panel">

@@ -39,7 +39,7 @@ export class Home extends React.Component
         this.showWorks = this.showWorks.bind(this);
         this.closeWorks = this.closeWorks.bind(this);
         this.onGreetingClicked = this.onGreetingClicked.bind(this);
-        console.log('Home mounted.');
+        window.addEventListener("resize", this.handleResize.bind(this));
     }
 
     componentWillUnmount()
@@ -47,6 +47,7 @@ export class Home extends React.Component
         if (this.animationRequest != undefined) {
           window.cancelAnimationFrame(this.animationRequest);
         }
+        window.removeEventListener("resize", this.handleResize.bind(this));
     }
 
     initBackgroundAnimation() {
@@ -89,12 +90,12 @@ export class Home extends React.Component
           if (height < 1000) {
             this.numDivs = 100;
           }
-          if (automatonIndex == 6) {
+          if (this.automatonIndex == 6) {
             this.numDivs = 21;
           } else {
             this.numDivs = 150;
           }
-          rows = numDivs;
+          rows = this.numDivs;
           blockSize = height / rows;
           cols = width / blockSize;
         }
@@ -210,7 +211,7 @@ export class Home extends React.Component
     render()
         {   
             return(
-                <div>    
+                <div style = {{ width : "100%", height : "100%" }}>    
                     <canvas ref="backgroundCanvas"></canvas>
                     <div className="center-div unselectable pixel-div pixel-text-big" id="greeting" onClick={this.onGreetingClicked}>
                         <p>

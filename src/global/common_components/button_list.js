@@ -32,14 +32,14 @@ export class ButtonList extends React.Component {
         // Clear the list of references each time.
         this.referenceList = [];
         return (
-            <div className="pixel-div">
+            <div className="pixel-div" style={{ width : "100%", height : "100%" }}>
                 {
                     this.props.items.map(
                         item => {
                             // Keep a reference to all the buttons thats being created.
                             let ref = React.createRef();
                             // Assign a unique key to all the buttons as well. 
-                            let button =  ( <button className="pixel-button list-button" ref= { ref } key = { item.tag } onClick={ (e) => { this.onButtonClicked(e, item.tag); } }> { item.displayText } </button> );
+                            let button = ( <button className="pixel-button list-button"  ref= { ref } key = { item.tag } onClick={ (e) => { this.onButtonClicked(e, item.tag); } }> { item.displayText } </button> );
                             // Push the ref to a list, after the re has been assigned.
                             this.referenceList.push(ref);
                             return button;

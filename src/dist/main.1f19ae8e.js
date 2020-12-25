@@ -33375,7 +33375,7 @@ var Home = /*#__PURE__*/function (_React$Component) {
       this.showWorks = this.showWorks.bind(this);
       this.closeWorks = this.closeWorks.bind(this);
       this.onGreetingClicked = this.onGreetingClicked.bind(this);
-      console.log('Home mounted.');
+      window.addEventListener("resize", this.handleResize.bind(this));
     }
   }, {
     key: "componentWillUnmount",
@@ -33383,6 +33383,8 @@ var Home = /*#__PURE__*/function (_React$Component) {
       if (this.animationRequest != undefined) {
         window.cancelAnimationFrame(this.animationRequest);
       }
+
+      window.removeEventListener("resize", this.handleResize.bind(this));
     }
   }, {
     key: "initBackgroundAnimation",
@@ -33432,13 +33434,13 @@ var Home = /*#__PURE__*/function (_React$Component) {
           this.numDivs = 100;
         }
 
-        if (automatonIndex == 6) {
+        if (this.automatonIndex == 6) {
           this.numDivs = 21;
         } else {
           this.numDivs = 150;
         }
 
-        rows = numDivs;
+        rows = this.numDivs;
         blockSize = height / rows;
         cols = width / blockSize;
       }
@@ -33567,7 +33569,12 @@ var Home = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("canvas", {
+      return /*#__PURE__*/_react.default.createElement("div", {
+        style: {
+          width: "100%",
+          height: "100%"
+        }
+      }, /*#__PURE__*/_react.default.createElement("canvas", {
         ref: "backgroundCanvas"
       }), /*#__PURE__*/_react.default.createElement("div", {
         className: "center-div unselectable pixel-div pixel-text-big",
@@ -94728,7 +94735,11 @@ var ButtonList = /*#__PURE__*/function (_React$Component) {
       // Clear the list of references each time.
       this.referenceList = [];
       return /*#__PURE__*/_react.default.createElement("div", {
-        className: "pixel-div"
+        className: "pixel-div",
+        style: {
+          width: "100%",
+          height: "100%"
+        }
       }, this.props.items.map(function (item) {
         // Keep a reference to all the buttons thats being created.
         var ref = _react.default.createRef(); // Assign a unique key to all the buttons as well. 
@@ -94755,7 +94766,74 @@ var ButtonList = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.ButtonList = ButtonList;
-},{"../constants":"global/constants.js","../../main.css":"main.css","react":"node_modules/react/index.js"}],"views/gpujs_showcase/gpujs_showcase.js":[function(require,module,exports) {
+},{"../constants":"global/constants.js","../../main.css":"main.css","react":"node_modules/react/index.js"}],"global/common_components/top_bar.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.TopBar = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _reactRouterDom = require("react-router-dom");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+var TopBar = /*#__PURE__*/function (_React$Component) {
+  _inherits(TopBar, _React$Component);
+
+  var _super = _createSuper(TopBar);
+
+  function TopBar(props) {
+    _classCallCheck(this, TopBar);
+
+    return _super.call(this, props);
+  }
+
+  _createClass(TopBar, [{
+    key: "render",
+    value: function render() {
+      return /*#__PURE__*/_react.default.createElement("div", {
+        style: {
+          paddingTop: '25px',
+          paddingBottom: '10px',
+          paddingLeft: '5px'
+        }
+      }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
+        className: "pixel-button",
+        to: "/"
+      }, "Home"), this.props.children);
+    }
+  }]);
+
+  return TopBar;
+}(_react.default.Component);
+
+exports.TopBar = TopBar;
+},{"react":"node_modules/react/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js"}],"views/gpujs_showcase/gpujs_showcase.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -94785,13 +94863,11 @@ var _constants = require("./constants/constants");
 
 var _utils = require("./utils");
 
-var _constants2 = require("../../global/constants");
-
-var _reactRouterDom = require("react-router-dom");
-
 var _react = _interopRequireDefault(require("react"));
 
 var _button_list = require("./../../global/common_components/button_list");
+
+var _top_bar = require("./../../global/common_components/top_bar");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -95165,25 +95241,24 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
     value: function render() {
       return /*#__PURE__*/_react.default.createElement("div", {
         style: {
-          width: '100vw',
-          height: '100vh'
+          width: '100%',
+          height: '100%'
         }
       }, /*#__PURE__*/_react.default.createElement("div", {
         id: "top-bar"
-      }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
-        className: "pixel-button",
-        to: "/"
-      }, "Home"), /*#__PURE__*/_react.default.createElement("button", {
+      }, /*#__PURE__*/_react.default.createElement(_top_bar.TopBar, null, /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button",
         id: "start-button",
         onClick: this.onStartClicked
       }, this.state.buttonLabel), /*#__PURE__*/_react.default.createElement("label", {
-        className: "pixel-text-medium"
-      }, this.state.message)), /*#__PURE__*/_react.default.createElement("div", {
+        className: "pixel-text-medium",
+        style: {
+          marginLeft: '10px'
+        }
+      }, this.state.message))), /*#__PURE__*/_react.default.createElement("div", {
         id: "content"
       }, /*#__PURE__*/_react.default.createElement("div", {
-        id: "side-panel",
-        className: "pixel-div"
+        id: "side-panel"
       }, /*#__PURE__*/_react.default.createElement(_button_list.ButtonList, {
         onItemClicked: this.onItemClicked,
         items: this.list_items
@@ -95198,7 +95273,7 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.GpuJsShowCase = GpuJsShowCase;
-},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","../../global/constants":"global/constants.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react":"node_modules/react/index.js","./../../global/common_components/button_list":"global/common_components/button_list.js"}],"main.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./gpujs_showcase.css":"views/gpujs_showcase/gpujs_showcase.css","../../global/style":"global/style.js","./../../libs/uitils.js":"libs/uitils.js","./kernels/moore_kernel":"views/gpujs_showcase/kernels/moore_kernel.js","./kernels/game_of_life_kernel":"views/gpujs_showcase/kernels/game_of_life_kernel.js","./kernels/neumann_kernel":"views/gpujs_showcase/kernels/neumann_kernel.js","./kernels/cross_kernel":"views/gpujs_showcase/kernels/cross_kernel.js","./kernels/render_kernel":"views/gpujs_showcase/kernels/render_kernel.js","./constants/constants":"views/gpujs_showcase/constants/constants.js","./utils":"views/gpujs_showcase/utils.js","react":"node_modules/react/index.js","./../../global/common_components/button_list":"global/common_components/button_list.js","./../../global/common_components/top_bar":"global/common_components/top_bar.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
