@@ -1,6 +1,6 @@
 import "./../../main.css";
 import "./gpujs_showcase.css";
-import { Style } from "../../global/style";
+import { Style } from "../../common/style";
 import { Array2D } from "./../../libs/uitils.js";
 import { getMooreProcess } from "./kernels/moore_kernel";
 import { getGameOfLifeProcess } from "./kernels/game_of_life_kernel";
@@ -10,8 +10,8 @@ import { getRenderer } from "./kernels/render_kernel";
 import { Constants } from "./constants/constants";
 import { getColors } from "./utils";
 import React from 'react';
-import { ButtonList } from './../../global/common_components/button_list';
-import { TopBar }  from './../../global/common_components/top_bar';
+import { ButtonList } from './../../common/common_components/button_list';
+import { TopBar }  from './../../common/common_components/top_bar';
 
 export class GpuJsShowCase extends React.Component {
 
@@ -59,11 +59,11 @@ export class GpuJsShowCase extends React.Component {
     this.list_items.push({ tag : 'cca-r2t9c4nm', displayText : 'CCA - R2/T9/C4/NM' });
     this.list_items.push({ tag : 'cca-r3t10c2nn', displayText : 'CCA - R3/T10/C2/NN' });
     this.list_items.push({ tag : 'cca-r2t5c3nn', displayText : 'CCA - R2/T5/C3/NN' });
-    this.list_items.push({ tag : 'game-of-life', displayText : 'Game Of Life '});
+    this.list_items.push({ tag : 'game-of-life', displayText : 'Game Of Life'});
   }
 
   componentDidMount() {
-     this.rendererHeight = this.rendererOutlet.current.clientHeight;
+     this.rendererHeight = this.rendererOutlet.current.clientHeight - 20;
      this.rendererWidth = this.rendererOutlet.current.clientWidth;
      this.gpuAutomataState = Array2D(this.rendererHeight, this.rendererWidth);
      this.gpuTempState = Array2D(this.rendererHeight, this.rendererWidth);
@@ -167,7 +167,7 @@ export class GpuJsShowCase extends React.Component {
     this.renderer(this.gpuAutomataState);
   }
 
-  onItemClicked(event, item) {
+  onItemClicked(button, item) {
     this.setState({ buttonLabel : "Start" });
     if (this.animationHandle) {
       cancelAnimationFrame(this.animationHandle);
@@ -231,19 +231,17 @@ export class GpuJsShowCase extends React.Component {
 
   render() {
     return (
-      <div style = {{width : '100%', height : '100%'}}>
-        <div id="top-bar">
+      <div style = {{width : '99%', height : '99%', margin : '0px', padding : '0px'}} className = "pixel-app-container">
+        <div className="pixel-app-header">
           <TopBar>
-            <button className="pixel-button" id="start-button" onClick={this.onStartClicked}>{this.state.buttonLabel}</button>
+            <button className="pixel-button" style ={{ marginLeft : '5px'  }} id="start-button" onClick={this.onStartClicked}>{this.state.buttonLabel}</button>
             <label className="pixel-text-medium" style={{ marginLeft : '10px' }}>{this.state.message}</label>
           </TopBar>
         </div>
-        <div id="content">
-            <div id="side-panel">
-                <ButtonList onItemClicked = { this.onItemClicked } items = { this.list_items } ></ButtonList>
-            </div>
-            <div ref={this.rendererOutlet} className="renderer-panel">
-            </div>
+        <div className = "pixel-app-side-panel">
+            <ButtonList onItemClicked = { this.onItemClicked } items = { this.list_items }></ButtonList>
+        </div>
+        <div className = "pixel-app-content" ref={this.rendererOutlet}>
         </div>
       </div>
     );

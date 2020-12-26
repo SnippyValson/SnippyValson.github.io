@@ -3,9 +3,10 @@ import "../../../../main.css";
 import "./gpujs_benchmarks.css";
 import { getRenderer } from "./../../../gpujs_showcase/kernels/render_kernel";
 import { getColors } from "../../../gpujs_showcase/utils";
-import { Style } from "../../../../global/style";
+import { Style } from "../../../../common/style";
 import { Array2D } from "./../../../../libs/uitils";
 import { getMooreProcess } from "../../../gpujs_showcase/kernels/moore_kernel";
+
 export class GpuJsBenchmarks extends React.Component {
   style;
   gpuAutomataState;
@@ -15,10 +16,10 @@ export class GpuJsBenchmarks extends React.Component {
   gridWidth = 2000;
   process;
   animationHandle;
-  fps_t1 = performance.now();
-  fps_t2 = performance.now();
-  t1 = performance.now();
-  t2 = performance.now();
+  frameCounterT1 = performance.now();
+  frameCounterT2 = performance.now();
+  frameT1 = performance.now();
+  frameT2 = performance.now();
   delay = 0;
   liveRender = true;
   numFinished = 0;
@@ -96,8 +97,8 @@ export class GpuJsBenchmarks extends React.Component {
   UpdateRenderer(width, height, colors, ref) {
     let renderer = getRenderer(width, height, colors);
     let rendererCanvas = renderer.canvas;
-    rendererCanvas.style.maxWidth = "250px";
-    rendererCanvas.style.maxHeight = "250px";
+    rendererCanvas.style.width = "750px";
+    rendererCanvas.style.height = "750px";
     rendererCanvas.style.margin = "10px";
     ref.current.appendChild(rendererCanvas);
     return renderer;
@@ -111,18 +112,17 @@ export class GpuJsBenchmarks extends React.Component {
       }
     }
     renderer(this.gpuAutomataState);
-    console.log("Reset called");
   }
 
   animate(liveRender) {
-    this.t2 = performance.now();
-    this.fps_t2 = performance.now();
-    if (this.fps_t2 - this.fps_t1 >= 1000) {
-      this.delay = this.t2 - this.t1;
-      this.fps_t1 = this.fps_t2;
+    this.frameT2 = performance.now();
+    this.frameCounterT2 = performance.now();
+    if (this.frameCounterT2 - this.frameCounterT1 >= 1000) {
+      this.delay = this.frameT2 - this.frameT1;
+      this.frameCounterT1 = this.frameCounterT2;
       this.setState({ currentFps: Math.round(1000 / this.delay) });
     }
-    this.t1 = this.t2;
+    this.frameT1 = this.frameT2;
     this.gpuTempState = this.process(this.gpuAutomataState);
     if (liveRender) {
       this.renderAndSwap(this.gpuRenderer);
@@ -142,8 +142,8 @@ export class GpuJsBenchmarks extends React.Component {
     if (this.animationHandle) {
       cancelAnimationFrame(this.animationHandle);
     }
-    this.t1 = performance.now();
-    this.fps_t1 = performance.now();
+    this.frameT1 = performance.now();
+    this.frameCounterT1 = performance.now();
   }
 
   onStartClicked(mode) {
@@ -177,16 +177,16 @@ export class GpuJsBenchmarks extends React.Component {
           if(this.gpuWorkers.length === 0) {
             this.createGpuWorkers();
           }
-          this.gpuWorkers.forEach(gw => {
-            gw.postMessage({ mode: "create", state: this.gpuAutomataState, rendererHeight: 2 + this.gridHeight / navigator.hardwareConcurrency, rendererWidth: this.gridWidth, automatonNumStates: 16, automatonRange: 1, automatonThreshold: 1 });
+          this.gpuWorkers.forEach(gpuWorkers => {
+            gpuWorkers.postMessage({ mode: "create", state: this.gpuAutomataState, rendererHeight: 2 + this.gridHeight / navigator.hardwareConcurrency, rendererWidth: this.gridWidth, automatonNumStates: 16, automatonRange: 1, automatonThreshold: 1 });
           });
           this.gpuTempState = [];
           this.animationHandle = requestAnimationFrame(this.workerAnimate.bind(this));
           this.setState({ mGpuButtonText: "Stop" });
           this.processRunning = true;
         } else {
-          this.gpuWorkers.forEach(gw => {
-            gw.terminate();
+          this.gpuWorkers.forEach(gpuWorkers => {
+            gpuWorkers.terminate();
           });
           this.gpuWorkers = [];
           if (this.animationHandle) {
@@ -203,28 +203,36 @@ export class GpuJsBenchmarks extends React.Component {
   /* Multi threaded code. */
   workerAnimate() {
     var index = 0;
-    var t = [];
-    var zet = [];
+    
+    // The first slice should have -1s as the first row, since the radius 1 neighbrhood shouldn't be affected.
+    var firstSlice = [];
+    
+    // The row of -1s
+    var dummyRow = [];
     for (let z = 0; z < this.gridWidth; z++) {
-      zet.push(-1);
+      dummyRow.push(-1);
     }
-    t.push(zet);
-    this.gpuAutomataState.slice(index, 1 + index + this.gridHeight / navigator.hardwareConcurrency).forEach(st => {
-      t.push(st);
+    firstSlice.push(dummyRow);
+    this.gpuAutomataState.slice(index,  index + (this.gridHeight / navigator.hardwareConcurrency)).forEach(row => {
+      firstSlice.push(row);
     })
-    this.gpuWorkers[0].postMessage({ mode: "process", state: t });
+    this.gpuWorkers[0].postMessage({ mode: "process", state: firstSlice });
     index += this.gridHeight / navigator.hardwareConcurrency;
+    
+    // The rest of the slices can be normal.
     for (let i = 1; i < navigator.hardwareConcurrency - 1; i++) {
-      this.gpuWorkers[i].postMessage({ mode: "process", state: this.gpuAutomataState.slice(index - 1, index + 1 + this.gridHeight / navigator.hardwareConcurrency) });
+      this.gpuWorkers[i].postMessage({ mode: "process", state: this.gpuAutomataState.slice(index - 1, index  + (this.gridHeight / navigator.hardwareConcurrency)) });
       index += this.gridHeight / navigator.hardwareConcurrency;
     }
-    var zeb = [];
+   
+    // The last slice should have the first row as -1s as well.
+    var dummyRowForLast = [];
     for (let z = 0; z < this.gridWidth; z++) {
-      zeb.push(-1);
+      dummyRowForLast.push(-1);
     }
-    var stt = this.gpuAutomataState.slice(index - 2, index + this.gridHeight / navigator.hardwareConcurrency);
-    stt[0] = zeb;
-    this.gpuWorkers[navigator.hardwareConcurrency - 1].postMessage({ mode: "process", state: stt });
+    var lastSlice = this.gpuAutomataState.slice(index - 2, index + this.gridHeight / navigator.hardwareConcurrency);
+    lastSlice.push(dummyRowForLast);
+    this.gpuWorkers[navigator.hardwareConcurrency - 1].postMessage({ mode: "process", state: lastSlice });
   }
 
   componentWillUnmount() {
@@ -234,8 +242,8 @@ export class GpuJsBenchmarks extends React.Component {
     this.gpuAutomataState = [];
     this.gpuTempState = [];
     this.gpuRenderer = undefined;
-    this.gpuWorkers.forEach(gw => {
-      gw.terminate();
+    this.gpuWorkers.forEach(gpuWorkers => {
+      gpuWorkers.terminate();
     });
     this.gpuWorkers = [];
     this.process = undefined;
@@ -255,10 +263,7 @@ export class GpuJsBenchmarks extends React.Component {
             GPU.js single threaded.
           </label>
           <div className="middle-section">
-            <button
-              className="pixel-button pixel-text-medium start-button"
-              onClick={this.onStartClicked.bind(this, "single-thread")}
-            >
+            <button className="pixel-button pixel-text-medium start-button" onClick={this.onStartClicked.bind(this, "single-thread")}>
               {this.state.sGpuButtonText}
             </button>
           </div>
@@ -271,10 +276,7 @@ export class GpuJsBenchmarks extends React.Component {
             GPU.js multi threaded.
           </label>
           <div className="middle-section">
-            <button
-              className="pixel-button pixel-text-medium start-button"
-              onClick={this.onStartClicked.bind(this, "multi-thread")}
-            >
+            <button className="pixel-button pixel-text-medium start-button" onClick={this.onStartClicked.bind(this, "multi-thread")} >
               {this.state.mGpuButtonText}
             </button>
           </div>

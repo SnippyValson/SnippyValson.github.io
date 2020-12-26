@@ -29,6 +29,7 @@
   background: var(--pixel-background);
   width: 100vw;
   height: 100vh;
+  overflow : hidden;
 }
 
 .pixel-div {
@@ -132,6 +133,33 @@
 
 .pixel-input:focus {
   outline: none;
+}
+
+.pixel-app-container {
+  display: grid;
+  grid-template-columns: repeat(24, 1fr);
+  grid-template-rows: 70px auto;
+  gap: 10px;
+}
+
+.pixel-app-header {
+  grid-column: 1 / -1;
+  grid-row: 1;
+}
+
+.pixel-app-side-panel {
+  grid-column: 1 / 6;
+  grid-row: 2;
+  margin-left: 10px;
+  height: calc(100vh - 75px);
+  overflow-y: scroll;
+}
+
+.pixel-app-content {
+  grid-column: 6 / -1;
+  grid-row: 2;
+  height: calc(100vh - 75px);
+  overflow-y: scroll;
 }
 
 .fade-in {

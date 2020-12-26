@@ -1,8 +1,7 @@
 import "./../../main.css";
 import "./delta_animation.css";
-import { Style } from "../../global/style";
+import { Style } from "../../common/style";
 import * as THREE from "three";
-import { PointLightHelper } from "three";
 import React from 'react';
 import { Link } from 'react-router-dom';
 

@@ -2,7 +2,7 @@ import './home.css';
 import "../../main.css";
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Style } from "../../global/style.js";
+import { Style } from "../../common/style.js";
 import { ConwaysGameOfLife } from "../../automata/conwaysGameOfLife.js";
 import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata";
 import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer";
@@ -227,7 +227,7 @@ export class Home extends React.Component
                         <div style={{ marginTop: '90px' }}>
                             <Link className="pixel-button nav-button" to = "/time-based-animation" >Time based animation (3D)</Link>
                             <Link className="pixel-button nav-button" to = "/gpu-js-showcase">Gpu.js Showcase</Link>
-                            <a className="pixel-button nav-button" href="./views/benchmarks/benchmarks.html">Benchmarks</a>
+                            <Link className="pixel-button nav-button" to = "/benchmarks">Benchmarks</Link>
                             <a className="pixel-button nav-button" href="./views/code_bits/code_bits.html">Code Bits</a>
                             <a className="pixel-button nav-button" href="./views/neo_command/neo_command.html">Neo Command</a>
                         </div>

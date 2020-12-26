@@ -7,30 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="/main.1f19ae8e.css"></head>
 <body class="pixel-body">
-    <canvas id="background-canvas"></canvas>
-    <div class="center-div unselectable pixel-div pixel-text-big" id="greeting" onclick="onGreetingClicked()">
-        <p>
-            Hi! I'm Snippy Valson. <br> <br> Welcome to my webpage!
-        </p>
-        <div class="center-h-container">
-            <button class="pixel-button" onclick="showWorks(event)">My Works!</button>
-        </div>
-    </div>
-    <div class="center-div unselectable pixel-div pixel-text-big fade-out pixel-dialog" id="works">
-        <button class="pixel-button top-right" onclick="closeWorks(event)">x</button>
-        <p class="pixel-text-medium">Click the buttons to navigate.</p>
-        <div style="margin-top: 90px;">
-            <a class="pixel-button nav-button" href="/views\delta_animation\delta_animation.html">Time based animation (3D)</a>
-            <a class="pixel-button nav-button" href="/views\gpujs_showcase\gpujs_showcase.html">Gpu.js Showcase</a>
-            <a class="pixel-button nav-button" href="/views\benchmarks\benchmarks.html">Benchmarks</a>
-            <a class="pixel-button nav-button" href="/views\code_bits\code_bits.html">Code Bits</a>
-            <a class="pixel-button nav-button" href="/views\neo_command\neo_command.html">Neo Command</a>
-        </div>
-    </div>
-    <div class="bottom-left unselectable pixel-div pixel-text-medium" id="info">  
-    </div>
-    <div class="bottom-right unselectable pixel-div pixel-text-medium" id="fps">    
-    </div>
+    <div id="root"></div>
     <script src="/main.1f19ae8e.js"></script>
 </body>
 </html>

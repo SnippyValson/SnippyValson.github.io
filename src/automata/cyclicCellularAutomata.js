@@ -30,8 +30,8 @@ export class CyclicCellularAutomata extends Automaton {
                 }
             }
         } 
-        var t = this.tempState;
+        var buffer = this.tempState;
         this.tempState = this.state;
-        this.state = t;
+        this.state = buffer;
     }
 }

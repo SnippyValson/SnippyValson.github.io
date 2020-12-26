@@ -9,7 +9,7 @@ export class TopBar extends React.Component {
 
     render() {
         return (
-            <div style = {{ paddingTop: '25px', paddingBottom: '10px', paddingLeft: '5px' }}>
+            <div style = {{ paddingTop: '10px', paddingBottom: '10px', paddingLeft: '10px' }} >
                 <Link className="pixel-button" to="/">Home</Link>
                 {this.props.children}
             </div>  

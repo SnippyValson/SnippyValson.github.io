@@ -324,7 +324,7 @@ export class SortingBenchmark extends React.Component {
 
     render() {
        return (
-        <div>
+        <div style = {{ overflowY : 'auto',  width : '100%' }}>
             <div className={`pixel-div center-div pixel-dialog unselectable ${this.state.showMessage ? 'fade-in' : 'fade-out'}`}>
                 <button className="pixel-button top-right" onClick={this.messageAcknowledged.bind(this)}>x</button>
                 <p className="pixel-text-medium">Message</p>
