@@ -95047,6 +95047,9 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
       if (this.animationHandle) {
         cancelAnimationFrame(this.animationHandle);
       }
+
+      this.gpuAutomataState = [];
+      this.gpuTempState = [];
     }
     /*
      * Update the GpuJs canvas renderer with the new dimensions and colors. 
@@ -96124,6 +96127,13 @@ var GpuJsBenchmarks = /*#__PURE__*/function (_React$Component) {
       var colors = (0, _utils.getColors)(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14);
       this.gpuRenderer = this.UpdateRenderer(this.gridWidth, this.gridHeight, colors, this.gpuCanvasHolderRef);
       this.resetState(16, this.gpuRenderer);
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      if (this.animationHandle) {
+        cancelAnimationFrame(this.animationHandle);
+      }
     }
   }, {
     key: "createGpuWorkers",

@@ -57,6 +57,12 @@ export class GpuJsBenchmarks extends React.Component {
     this.resetState(16, this.gpuRenderer);
   }
 
+  componentWillUnmount() {
+    if (this.animationHandle) {
+      cancelAnimationFrame(this.animationHandle);
+    }
+  }
+
   createGpuWorkers() {
     for (let i = 0; i < navigator.hardwareConcurrency; i++) {
       let gpuW = new Worker("workers/gpu_worker.js");

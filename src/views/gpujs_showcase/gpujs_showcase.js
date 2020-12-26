@@ -81,6 +81,8 @@ export class GpuJsShowCase extends React.Component {
     if (this.animationHandle) {
       cancelAnimationFrame(this.animationHandle);
     }
+    this.gpuAutomataState = [];
+    this.gpuTempState = [];
   }
 
   /*
