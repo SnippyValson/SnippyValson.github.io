@@ -79,7 +79,7 @@
 
 .nav-button {
   margin-top: 10px;
-  margin-right: -20px;
+  margin-left: 10px;
 }
 
 .pixel-button:active {
@@ -284,6 +284,11 @@
 
 .check-box {
     float: right;
+}
+
+.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
 }
 
 .section {

@@ -7,6 +7,11 @@
     float: right;
 }
 
+.grid-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+}
+
 .section {
     margin: 10px;
     padding: 10px;

@@ -324,7 +324,7 @@ export class SortingBenchmark extends React.Component {
 
     render() {
        return (
-        <div style = {{ overflowY : 'auto',  width : '100%' }}>
+        <div className = "pixel-div">
             <div className={`pixel-div center-div pixel-dialog unselectable ${this.state.showMessage ? 'fade-in' : 'fade-out'}`}>
                 <button className="pixel-button top-right" onClick={this.messageAcknowledged.bind(this)}>x</button>
                 <p className="pixel-text-medium">Message</p>
@@ -343,81 +343,80 @@ export class SortingBenchmark extends React.Component {
                 </div>
             </div>
             <div className="modal" id="modal-shadow"></div>
-            <div className="pixel-div section">
-                <label className="pixel-text-medium">Populate the array. Click start to populate the array with random values.</label>
-                <div className="top-offset">
-                    <label className="pixel-text-medium unselectable">Count : </label>
-                    <input className="pixel-text-medium pixel-input" id="count" value = {this.state.value} onChange={this.handleArraySizeChange.bind(this)} placeholder= {this.state.arraySize}/>
+            <div className="grid-view">
+                <div className="pixel-div section">
+                    <label className="pixel-text-medium">Populate the array. Click start to populate the array with random values.</label>
+                    <div className="top-offset">
+                        <label className="pixel-text-medium unselectable">Count : </label>
+                        <input className="pixel-text-medium pixel-input" id="count" value = {this.state.value} onChange={this.handleArraySizeChange.bind(this)} placeholder= {this.state.arraySize}/>
+                    </div>
+                    <label className={`pixel-text-big check-box ${this.state.populated ? 'visible' : 'hidden' }`} id="populate-array-done">☑</label>
+                    <button className="pixel-button section-button" onClick={this.populateArray.bind(this)}>Generate</button>
                 </div>
-                <label className={`pixel-text-big check-box ${this.state.populated ? 'visible' : 'hidden' }`} id="populate-array-done">☑</label>
-                <button className="pixel-button section-button" onClick={this.populateArray.bind(this)}>Generate</button>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Bubble sort.</p>
-                <label className="pixel-text-medium">Sort the array using bubble sort alogrithm. Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.bubbleSortDone ? 'visible' : 'hidden' }`} id="bubble-sort-done">☑</label>
-                <p className="pixel-text-medium" id="bubblesort-result">{`Result : ${this.state.bubbleSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 1)}>Start</button>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Insertion sort.</p>
-                <label className="pixel-text-medium">Sort the array using insertion sort alogrithm. Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.insertionSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
-                <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.insertionSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 2)}>Start</button>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Selection sort.</p>
-                <label className="pixel-text-medium">Sort the array using selection sort alogrithm. Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.selectionSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
-                <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.selectionSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 3)}>Start</button>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Quick sort.</p>
-                <label className="pixel-text-medium">Sort the array using quick sort alogrithm. Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.quickSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
-                <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.quickSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 0)}>Start</button>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Merge sort.</p>
-                <label className="pixel-text-medium">Sort the array using merge sort alogrithm. Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.mergeSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
-                <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.mergeSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 4)}>Start</button>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Radix sort.</p>
-                <label className="pixel-text-medium">Sort the array using radix sort alogrithm. Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.radixSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
-                <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.radixSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 5)}>Start</button>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Heap sort.</p>
-                <label className="pixel-text-medium">Sort the array using heap sort alogrithm. Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.heapSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
-                <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.heapSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 6)}>Start</button>
-            </div>
-            <div className = "section">
-                <p className="pixel-text-medium">Multithreaded Sorting.</p>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Bubble sort (||).</p>
-                <label className="pixel-text-medium">Sort the array using bubble sort alogrithm (Multithreaded). Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.multiBubbleSortDone ? 'visible' : 'hidden' }`} id="bubble-sort-multi-done">☑</label>
-                <p className="pixel-text-medium" id="multi-bubblesort-result">{`Result : ${this.state.multiBubbleSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.multiSortArray.bind(this, 1)}>Start</button>
-            </div>
-            <div className="pixel-div section">
-                <p className="pixel-text-medium">Quick sort (||).</p>
-                <label className="pixel-text-medium">Sort the array using quick sort alogrithm (Multithreaded). Click start.</label>
-                <label className={`pixel-text-big check-box ${this.state.multiQuickSortDone ? 'visible' : 'hidden' }`} id="quick-sort-multi-done">☑</label>
-                <p className="pixel-text-medium" id="multi-quicksort-result">{`Result : ${this.state.multiQuickSortResult}`} </p>
-                <button className="pixel-button section-button" onClick={this.multiSortArray.bind(this, 0)}>Start</button>
-            </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Bubble sort.</p>
+                    <label className="pixel-text-medium">Sort the array using bubble sort alogrithm. Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.bubbleSortDone ? 'visible' : 'hidden' }`} id="bubble-sort-done">☑</label>
+                    <p className="pixel-text-medium" id="bubblesort-result">{`Result : ${this.state.bubbleSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 1)}>Start</button>
+                </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Insertion sort.</p>
+                    <label className="pixel-text-medium">Sort the array using insertion sort alogrithm. Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.insertionSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
+                    <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.insertionSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 2)}>Start</button>
+                </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Selection sort.</p>
+                    <label className="pixel-text-medium">Sort the array using selection sort alogrithm. Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.selectionSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
+                    <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.selectionSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 3)}>Start</button>
+                </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Quick sort.</p>
+                    <label className="pixel-text-medium">Sort the array using quick sort alogrithm. Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.quickSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
+                    <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.quickSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 0)}>Start</button>
+                </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Merge sort.</p>
+                    <label className="pixel-text-medium">Sort the array using merge sort alogrithm. Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.mergeSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
+                    <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.mergeSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 4)}>Start</button>
+                </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Radix sort.</p>
+                    <label className="pixel-text-medium">Sort the array using radix sort alogrithm. Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.radixSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
+                    <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.radixSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 5)}>Start</button>
+                </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Heap sort.</p>
+                    <label className="pixel-text-medium">Sort the array using heap sort alogrithm. Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.heapSortDone ? 'visible' : 'hidden' }`} id="quick-sort-done">☑</label>
+                    <p className="pixel-text-medium" id="quicksort-result">{`Result : ${this.state.heapSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.sortArray.bind(this, 6)}>Start</button>
+                </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Bubble sort (||).</p>
+                    <label className="pixel-text-medium">Sort the array using bubble sort alogrithm (Multithreaded). Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.multiBubbleSortDone ? 'visible' : 'hidden' }`} id="bubble-sort-multi-done">☑</label>
+                    <p className="pixel-text-medium" id="multi-bubblesort-result">{`Result : ${this.state.multiBubbleSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.multiSortArray.bind(this, 1)}>Start</button>
+                </div>
+                <div className="pixel-div section">
+                    <p className="pixel-text-medium">Quick sort (||).</p>
+                    <label className="pixel-text-medium">Sort the array using quick sort alogrithm (Multithreaded). Click start.</label>
+                    <label className={`pixel-text-big check-box ${this.state.multiQuickSortDone ? 'visible' : 'hidden' }`} id="quick-sort-multi-done">☑</label>
+                    <p className="pixel-text-medium" id="multi-quicksort-result">{`Result : ${this.state.multiQuickSortResult}`} </p>
+                    <button className="pixel-button section-button" onClick={this.multiSortArray.bind(this, 0)}>Start</button>
+                </div>
+            </div>   
         </div>
         );
     }

@@ -95043,7 +95043,11 @@ var GpuJsShowCase = /*#__PURE__*/function (_React$Component) {
     }
   }, {
     key: "componentWillUnmount",
-    value: function componentWillUnmount() {}
+    value: function componentWillUnmount() {
+      if (this.animationHandle) {
+        cancelAnimationFrame(this.animationHandle);
+      }
+    }
     /*
      * Update the GpuJs canvas renderer with the new dimensions and colors. 
      */
@@ -95786,10 +95790,7 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
     key: "render",
     value: function render() {
       return /*#__PURE__*/_react.default.createElement("div", {
-        style: {
-          overflowY: 'auto',
-          width: '100%'
-        }
+        className: "pixel-div"
       }, /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div center-div pixel-dialog unselectable ".concat(this.state.showMessage ? 'fade-in' : 'fade-out')
       }, /*#__PURE__*/_react.default.createElement("button", {
@@ -95827,6 +95828,8 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         className: "modal",
         id: "modal-shadow"
       }), /*#__PURE__*/_react.default.createElement("div", {
+        className: "grid-view"
+      }, /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
       }, /*#__PURE__*/_react.default.createElement("label", {
         className: "pixel-text-medium"
@@ -95952,10 +95955,6 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
         className: "pixel-button section-button",
         onClick: this.sortArray.bind(this, 6)
       }, "Start")), /*#__PURE__*/_react.default.createElement("div", {
-        className: "section"
-      }, /*#__PURE__*/_react.default.createElement("p", {
-        className: "pixel-text-medium"
-      }, "Multithreaded Sorting.")), /*#__PURE__*/_react.default.createElement("div", {
         className: "pixel-div section"
       }, /*#__PURE__*/_react.default.createElement("p", {
         className: "pixel-text-medium"
@@ -95985,7 +95984,7 @@ var SortingBenchmark = /*#__PURE__*/function (_React$Component) {
       }, "Result : ".concat(this.state.multiQuickSortResult), " "), /*#__PURE__*/_react.default.createElement("button", {
         className: "pixel-button section-button",
         onClick: this.multiSortArray.bind(this, 0)
-      }, "Start")));
+      }, "Start"))));
     }
   }]);
 

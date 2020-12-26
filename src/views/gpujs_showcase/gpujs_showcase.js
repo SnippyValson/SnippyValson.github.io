@@ -78,7 +78,9 @@ export class GpuJsShowCase extends React.Component {
   }
 
   componentWillUnmount() {
-
+    if (this.animationHandle) {
+      cancelAnimationFrame(this.animationHandle);
+    }
   }
 
   /*
