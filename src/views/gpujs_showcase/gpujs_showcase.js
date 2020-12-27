@@ -242,7 +242,7 @@ export class GpuJsShowCase extends React.Component {
             <label className="pixel-text-medium" style={{ marginLeft : '10px' }}>{this.state.message}</label>
           </TopBar>
         </div>
-        <div className = "pixel-app-side-panel">
+        <div className = "pixel-app-side-panel pixel-slide-out">
             <ButtonList onItemClicked = { this.onItemClicked } items = { this.list_items }></ButtonList>
         </div>
         <div className = "pixel-app-content" ref={this.rendererOutlet}>

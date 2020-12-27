@@ -1,11 +1,8 @@
 import "./sorting_benchmarks.css";
 import React from 'react';
-import {
-    Strings
-} from "./../../localization/strings";
-import {
-    Constants
-} from "./constants/constants";
+import { Strings } from "./../../localization/strings";
+import { Constants } from "./constants/constants";
+import debounce from 'lodash';
 
 export class SortingBenchmark extends React.Component {
         localStrings = new Strings();
@@ -111,6 +108,7 @@ export class SortingBenchmark extends React.Component {
             this.setState({
                 populated: true
             });
+            
         }
 
         handleSortWorkerMessage(e) {
