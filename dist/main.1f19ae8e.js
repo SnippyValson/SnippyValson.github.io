@@ -115685,6 +115685,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _reactDom = _interopRequireDefault(require("react-dom"));
 
+var _reactRouterDom = require("react-router-dom");
+
 var _sorting_benchmarks = require("./subviews/sorting_benchmarks/sorting_benchmarks");
 
 var _gpujs_benchmarks = require("./subviews/gpujs_benchmarks/gpujs_benchmarks");
@@ -115765,10 +115767,7 @@ var Benchmarks = /*#__PURE__*/function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       this.style.applyStyle();
-
-      _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_sorting_benchmarks.SortingBenchmark, {
-        onStateChanged: this.handleStateChange
-      }), document.getElementById("renderer-panel"));
+      this.onItemClicked(null, 'sorting-benchmarks');
     }
   }, {
     key: "componentWillUnmount",
@@ -115776,20 +115775,18 @@ var Benchmarks = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "onItemClicked",
     value: function onItemClicked(button, item) {
+      var match = this.props.match;
+
       switch (item) {
         case "sorting-benchmarks":
           {
-            _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_sorting_benchmarks.SortingBenchmark, {
-              onStateChanged: this.handleStateChange
-            }), document.getElementById("renderer-panel"));
+            this.props.history.push("".concat(match.url, "/sorting-benchmarks"));
           }
           break;
 
         case "matrix-benchmarks":
           {
-            _reactDom.default.render( /*#__PURE__*/_react.default.createElement(_gpujs_benchmarks.GpuJsBenchmarks, {
-              onStateChanged: this.handleStateChange
-            }), document.getElementById("renderer-panel"));
+            this.props.history.push("".concat(match.url, "/matrix-benchmarks"));
           }
           break;
       }
@@ -115831,6 +115828,7 @@ var Benchmarks = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var match = this.props.match;
       return /*#__PURE__*/_react.default.createElement("div", {
         style: {
           width: '99%',
@@ -115852,9 +115850,16 @@ var Benchmarks = /*#__PURE__*/function (_React$Component) {
         onItemClicked: this.onItemClicked,
         items: this.list_items
       })), /*#__PURE__*/_react.default.createElement("div", {
-        className: "pixel-app-content",
-        id: "renderer-panel"
-      }));
+        className: "pixel-app-content"
+      }, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+        path: "".concat(match.url, "/sorting-benchmarks")
+      }, /*#__PURE__*/_react.default.createElement(_sorting_benchmarks.SortingBenchmark, {
+        onStateChanged: this.handleStateChange
+      })), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+        path: "".concat(match.url, "/matrix-benchmarks")
+      }, /*#__PURE__*/_react.default.createElement(_gpujs_benchmarks.GpuJsBenchmarks, {
+        onStateChanged: this.handleStateChange
+      })))));
     }
   }]);
 
@@ -115862,7 +115867,7 @@ var Benchmarks = /*#__PURE__*/function (_React$Component) {
 }(_react.default.Component);
 
 exports.Benchmarks = Benchmarks;
-},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../common/style":"common/style.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./subviews/sorting_benchmarks/sorting_benchmarks":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.js","./subviews/gpujs_benchmarks/gpujs_benchmarks":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.js","./localization/strings":"views/benchmarks/localization/strings.js","./../../common/common_components/top_bar":"common/common_components/top_bar.js","./../../common/common_components/button_list":"common/common_components/button_list.js"}],"main.js":[function(require,module,exports) {
+},{"./../../main.css":"main.css","./benchmarks.css":"views/benchmarks/benchmarks.css","../../common/style":"common/style.js","react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","./subviews/sorting_benchmarks/sorting_benchmarks":"views/benchmarks/subviews/sorting_benchmarks/sorting_benchmarks.js","./subviews/gpujs_benchmarks/gpujs_benchmarks":"views/benchmarks/subviews/gpujs_benchmarks/gpujs_benchmarks.js","./localization/strings":"views/benchmarks/localization/strings.js","./../../common/common_components/top_bar":"common/common_components/top_bar.js","./../../common/common_components/button_list":"common/common_components/button_list.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -115881,16 +115886,20 @@ var _reactRouterDom = require("react-router-dom");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_reactDom.default.render( /*#__PURE__*/_react.default.createElement(_reactRouterDom.HashRouter, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+_reactDom.default.render( /*#__PURE__*/_react.default.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
   exact: true,
-  path: "/"
-}, /*#__PURE__*/_react.default.createElement(_home.Home, null)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
-  path: "/time-based-animation"
-}, /*#__PURE__*/_react.default.createElement(_delta_animation.DeltaAnimation, null)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
-  path: "/gpu-js-showcase"
-}, /*#__PURE__*/_react.default.createElement(_gpujs_showcase.GpuJsShowCase, null)), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
-  path: "/benchmarks"
-}, /*#__PURE__*/_react.default.createElement(_benchmarks.Benchmarks, null)))), document.getElementById('root'));
+  path: "/",
+  component: _home.Home
+}), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+  path: "/time-based-animation",
+  component: _delta_animation.DeltaAnimation
+}), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+  path: "/gpu-js-showcase",
+  component: _gpujs_showcase.GpuJsShowCase
+}), /*#__PURE__*/_react.default.createElement(_reactRouterDom.Route, {
+  path: "/benchmarks",
+  component: _benchmarks.Benchmarks
+}))), document.getElementById('root'));
 },{"react":"node_modules/react/index.js","react-dom":"node_modules/react-dom/index.js","./views/home/home":"views/home/home.js","./views/delta_animation/delta_animation":"views/delta_animation/delta_animation.js","./views/gpujs_showcase/gpujs_showcase":"views/gpujs_showcase/gpujs_showcase.js","./views/benchmarks/benchmarks":"views/benchmarks/benchmarks.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js"}],"../../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';

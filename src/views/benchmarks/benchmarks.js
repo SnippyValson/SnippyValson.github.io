@@ -3,11 +3,13 @@ import "./benchmarks.css";
 import { Style } from "../../common/style";
 import React from "react";
 import ReactDOM from "react-dom";
+import { Switch, HashRouter, Route, Link, withRouter } from "react-router-dom"
 import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmarks";
 import { GpuJsBenchmarks } from "./subviews/gpujs_benchmarks/gpujs_benchmarks";
 import { Strings } from "./localization/strings";
 import { TopBar } from './../../common/common_components/top_bar';
 import { ButtonList } from './../../common/common_components/button_list';
+
 
 export class Benchmarks extends React.Component {
     
@@ -29,7 +31,7 @@ export class Benchmarks extends React.Component {
 
     componentDidMount() {
         this.style.applyStyle();
-        ReactDOM.render(<SortingBenchmark onStateChanged = {this.handleStateChange} />, document.getElementById("renderer-panel"));
+        this.onItemClicked(null, 'sorting-benchmarks');
     }
 
     componentWillUnmount() {
@@ -37,13 +39,14 @@ export class Benchmarks extends React.Component {
     }
 
     onItemClicked(button, item) {
+        let {match} = this.props;
         switch (item) {
             case "sorting-benchmarks": {
-                ReactDOM.render(<SortingBenchmark onStateChanged = {this.handleStateChange} />, document.getElementById("renderer-panel"));
+                this.props.history.push(`${match.url}/sorting-benchmarks`)
             }
             break;
             case "matrix-benchmarks": {
-                ReactDOM.render(<GpuJsBenchmarks onStateChanged = {this.handleStateChange} />, document.getElementById("renderer-panel"));
+               this.props.history.push(`${match.url}/matrix-benchmarks`)
             }
             break;
         }
@@ -70,6 +73,7 @@ export class Benchmarks extends React.Component {
     }
 
     render(){
+        let {match} = this.props;
         return (
             <div style = {{width : '99%', height : '99%', margin : '0px', padding : '0px'}} className = "pixel-app-container">
                 <div className = "pixel-app-header">
@@ -80,8 +84,16 @@ export class Benchmarks extends React.Component {
                 <div className = "pixel-app-side-panel">
                     <ButtonList onItemClicked = { this.onItemClicked } items = { this.list_items }></ButtonList>
                 </div>
-                 <div className="pixel-app-content" id="renderer-panel">   
-                </div> 
+                 <div className="pixel-app-content" >   
+                    <Switch>
+                        <Route path={`${match.url}/sorting-benchmarks`} >
+                            <SortingBenchmark onStateChanged = {this.handleStateChange} />
+                        </Route>
+                        <Route path={`${match.url}/matrix-benchmarks`} >
+                            <GpuJsBenchmarks onStateChanged = {this.handleStateChange} />
+                        </Route>
+                    </Switch>
+                 </div> 
             </div>
         );
     }
