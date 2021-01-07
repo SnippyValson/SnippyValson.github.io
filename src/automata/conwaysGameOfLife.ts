@@ -1,22 +1,22 @@
 import { drawBlock } from '../libs/uitils.js'
-import { Automaton } from './automaton.js';
+import { Automaton } from './automaton.ts';
 
 export class ConwaysGameOfLife extends Automaton {
     
-    constructor(rows, cols, colors, context, blocksize, numStates, neighbourhood) {
+    constructor(rows: number, cols: number, colors: string, context: RenderingContext, blocksize: number, numStates: number, neighbourhood: Function) {
         super(rows, cols, colors, context, blocksize, numStates, 0 , 0, neighbourhood);
     }
 
-    updateParams(params){
+    public updateParams(params: any): void{
         super.updateParams(params);
     }
 
-    calculateAndDrawNextState() {
-        for(var i = 0; i < this.size.rows; i++) {
-            for(var j = 0; j < this.size.cols; j ++) {
-                var neighbours = this.neighbourhood(i, j, this.state, this.size.rows, this.size.cols);
-                var liveCount = 0;
-                neighbours.forEach(neighbour => {
+    public renderNextFrame(): void {
+        for(let i = 0; i < this.size.rows; i++) {
+            for(let j = 0; j < this.size.cols; j ++) {
+                let neighbours = this.neighbourhood(i, j, this.state, this.size.rows, this.size.cols);
+                let liveCount = 0;
+                neighbours.forEach((neighbour: number) => {
                     if(neighbour) {
                         liveCount ++;
                     }
@@ -38,7 +38,7 @@ export class ConwaysGameOfLife extends Automaton {
                 }
             }
         }
-        var t = this.tempState;
+        let t = this.tempState;
         this.tempState = this.state;
         this.state = t;  
     }

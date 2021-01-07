@@ -1,19 +1,34 @@
-import { drawState, Array2D } from './../libs/uitils'
+import { drawState, Array2D } from '../libs/uitils'
+import { IVisualizer } from '../visualizers/visualizer';
 
-export class Automaton {
+/**
+ * Base class for all the automation visualizers.
+ * Keeps a state matrix and updated each cell accoring to the state of the neighbouring cells.
+ */
+export class Automaton implements IVisualizer {
 
-    size;
-    drawingContext;
-    colors;
-    numStates;
-    range;
-    threshold;
-    blockSize;
-    state;
-    tempState;
-    neighbourhood;
+    /* The size of the state matrix. */
+    protected size: any;
+    /* The 2D context on which the automata has to be visualized. */
+    protected drawingContext: RenderingContext;
+    /* The colors corresponding to the states. */
+    protected colors: string[];
+    /* The number of state which each cell could be. */
+    protected numStates: number;
+    /* The range of the neighbourhood. */
+    protected range: number;
+    /* The threshold used in the calculation of next state. */
+    protected threshold: number;
+    /* The size of each of the colored square to be drawn on the canvas. */
+    protected blockSize: number;
+    /* The state matrix. */
+    protected state: number[][];
+    /* Temporary  state used during calculation of the next state. */
+    protected tempState: number[][];
+    /* The function used to get the  neighbouring cells. */
+    protected neighbourhood: Function;
 
-    constructor(rows, cols, colors, context, blockSize, numStates, range, threshold, neighbourhood) {
+    constructor(rows: number, cols: number, colors: string[], context:RenderingContext, blockSize:number, numStates:number, range:number, threshold:number, neighbourhood: Function) {
         this.size = { rows : Math.round(rows), cols : Math.round(cols) };
         this.drawingContext = context;
         this.colors = colors;
@@ -31,7 +46,7 @@ export class Automaton {
         }
     }
 
-    updateParams(params){
+    public updateParams(params: any): void{
         if(params.rows != undefined){
             this.size.rows = params.rows;
         }
@@ -61,20 +76,13 @@ export class Automaton {
         }
     }
 
-    randomize() {
-        for(var i = 0 ; i < this.size.rows; i ++) {
-            for(var j = 0; j < this.size.cols; j ++) {
-                this.state[i][j] = Math.floor(Math.random() * numStates);
-                this.tempState[i][j] = 0;
-            }
-        }
-    }
-
-    getCurrentState() {
+    public getCurrentState(): number[][] {
         return this.state;
     }
 
-    drawCurrentState() {
+    public initialize(): void {
         drawState(this.drawingContext, this.state, this.size.rows, this.size.cols, this.blockSize, this.colors);
     }
+
+    public renderNextFrame(): void { /* Must be overridden in child classes. */ }
 }
