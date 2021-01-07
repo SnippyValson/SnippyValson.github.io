@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { Style } from "../../common/style.js";
 import { ConwaysGameOfLife } from "../../automata/conwaysGameOfLife.js";
 import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata";
-import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer";
+import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer.ts";
 import { fillBackground, getGradientStops, getMooreNeighbours, getNuemannNeighbours, getCrossNeighbours, } from "../../libs/uitils.js";
 
 export class Home extends React.Component 

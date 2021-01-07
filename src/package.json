@@ -18,5 +18,8 @@
     "three": "^0.120.1",
     "three-orbit-controls": "^82.1.0",
     "three.js": "^0.77.1"
+  },
+  "devDependencies": {
+    "typescript": "^4.1.3"
   }
 }
