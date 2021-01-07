@@ -95,7 +95,7 @@ export class MatrixTraversalVisualizer {
     return this.state;
   }
 
-  private calculateAndDrawNextState() {
+  public calculateAndDrawNextState() {
     switch (this.mode) {
       case "DIAG_TL_BR":
         {
@@ -229,7 +229,7 @@ export class MatrixTraversalVisualizer {
     }
   }
 
-  private drawCurrentState() {
+  public drawCurrentState() {
     drawState(this.drawingContext, this.state, this.size.rows, this.size.cols, this.blockSize, this.colors);
   }
 }
