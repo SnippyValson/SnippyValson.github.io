@@ -3,8 +3,8 @@ import "../../main.css";
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Style } from "../../common/style.js";
-import { ConwaysGameOfLife } from "../../automata/conwaysGameOfLife.js";
-import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata";
+import { ConwaysGameOfLife } from "../../automata/conwaysGameOfLife.ts";
+import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata.ts";
 import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer.ts";
 import { fillBackground, getGradientStops, getMooreNeighbours, getNuemannNeighbours, getCrossNeighbours, } from "../../libs/uitils.js";
 
@@ -154,7 +154,7 @@ export class Home extends React.Component
         } else {
           this.setState({ info : `${this.visualizers[this.automatonIndex].description}` });
         }
-        this.automaton.drawCurrentState();
+        this.automaton.initialize();
         let frameLimiterT1 = performance.now();
         let frameLimiterT2 = performance.now();
         let frameCounterT1 = performance.now();
@@ -170,7 +170,7 @@ export class Home extends React.Component
           if (frameLimiterT2 - frameLimiterT1 >= 1000 / 30) {
             frameLimiterT1 = performance.now() - ((frameLimiterT2 - frameLimiterT1) % (1000 / 30));
             fpsCount++;
-            this.automaton.calculateAndDrawNextState();
+            this.automaton.renderNextFrame();
           }
 
           /*
