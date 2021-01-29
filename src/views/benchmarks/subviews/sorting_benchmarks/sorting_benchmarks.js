@@ -1,324 +1,325 @@
 import "./sorting_benchmarks.css";
 import React from 'react';
 import { Strings } from "./../../localization/strings";
-import { Constants } from "./constants/constants";
-import debounce from 'lodash';
 
 export class SortingBenchmark extends React.Component {
-        localStrings = new Strings();
-        array = [];
-        merged = [];
-        numFinised = 0;
-        populationWorker;
-        startTime;
-        endTime;
-        dialogOkAction;
-        dialogClosedAction;
-        dialogCanceledAction;
-        sortWorker;
-        sortWorkers = [];
+    
+    localStrings = new Strings();
+    /* The array that stores the unsorted liat of numbers. */
+    array = [];
+    /* The array that is used to merege sorted segments of arrays in case of multi threaded sorting. */
+    merged = [];
+    /* The number of sorting threads taht completed. */
+    numFinised = 0;
+    /* The worker thread that poulates the array. */
+    populationWorker;
+    startTime;
+    endTime;
+    dialogOkAction;
+    dialogClosedAction;
+    dialogCanceledAction;
+    sortWorker;
+    sortWorkers = [];
 
-        constructor(props) {
-            super();
-            this.dialogOkAction = undefined;
-            this.dialogClosedAction = undefined;
-            this.dialogCanceledAction = undefined;
-            this.state = {
-                arraySize: 10000,
-                populated: false,
-                bubbleSortResult: "",
-                bubbleSortDone: false,
-                insertionSortResult: "",
-                insertionSortDone: false,
-                selectionSortResult: "",
-                selectionSortDone: false,
-                showMessage: false,
-                message: "",
-                showDialog: false,
-                quickSortDone: false,
-                quickSortResult: "",
-                mergeSortDone: false,
-                mergeSortResult: "",
-                radixSortDone: false,
-                radixSortResult: "",
-                heapSortDone: false,
-                heapSortResult: "",
-                multiBubbleSortDone: false,
-                multiBubbleSortResult: "",
-                multiQuickSortDone: false,
-                multiQuickSortResult: ""
-            };
-            this.populationWorker = new Worker("workers/population_worker.js");
-            this.populationWorker.onmessage = this.handlePopulationWorkerMessage.bind(this);
-            this.sortWorker = new Worker("workers/sort_worker.js");
-            this.sortWorker.onmessage = this.handleSortWorkerMessage.bind(this);
-            for (let i = 0; i < navigator.hardwareConcurrency; i++) {
-                var sortWorker = new Worker("workers/sort_worker.js");
-                sortWorker.onmessage = (function (e) {
-                    if (this.numFinised == 0) {
-                        this.merged = e.data.array;
-                    } else {
-                        this.merged = this.mergeSortedArrays(this.merged, e.data.array);
-                    }
-                    this.numFinised++;
-                    if (this.numFinised == navigator.hardwareConcurrency) {
-                        this.endTime = performance.now();
-                        this.setIdle();
-                        switch (e.data.sortType) {
-                            case 0: {
-                                this.setState({
-                                    multiQuickSortResult: `${this.endTime - this.startTime} ms`,
-                                    multiQuickSortDone: true
-                                });
-                            }
-                            break;
-                        case 1: {
+    constructor(props) {
+        super(props);
+        this.dialogOkAction = undefined;
+        this.dialogClosedAction = undefined;
+        this.dialogCanceledAction = undefined;
+        this.state = {
+            arraySize: 10000,
+            populated: false,
+            bubbleSortResult: "",
+            bubbleSortDone: false,
+            insertionSortResult: "",
+            insertionSortDone: false,
+            selectionSortResult: "",
+            selectionSortDone: false,
+            showMessage: false,
+            message: "",
+            showDialog: false,
+            quickSortDone: false,
+            quickSortResult: "",
+            mergeSortDone: false,
+            mergeSortResult: "",
+            radixSortDone: false,
+            radixSortResult: "",
+            heapSortDone: false,
+            heapSortResult: "",
+            multiBubbleSortDone: false,
+            multiBubbleSortResult: "",
+            multiQuickSortDone: false,
+            multiQuickSortResult: ""
+        };
+        this.populationWorker = new Worker("workers/population_worker.js");
+        this.populationWorker.onmessage = this.handlePopulationWorkerMessage.bind(this);
+        this.sortWorker = new Worker("workers/sort_worker.js");
+        this.sortWorker.onmessage = this.handleSortWorkerMessage.bind(this);
+        for (let i = 0; i < navigator.hardwareConcurrency; i++) {
+            var sortWorker = new Worker("workers/sort_worker.js");
+            sortWorker.onmessage = (function (e) {
+                if (this.numFinised == 0) {
+                    this.merged = e.data.array;
+                } else {
+                    this.merged = this.mergeSortedArrays(this.merged, e.data.array);
+                }
+                this.numFinised++;
+                if (this.numFinised == navigator.hardwareConcurrency) {
+                    this.endTime = performance.now();
+                    this.setIdle();
+                    switch (e.data.sortType) {
+                        case 0: {
                             this.setState({
-                                multiBubbleSortResult: `${this.endTime - this.startTime} ms`,
-                                multiBubbleSortDone: true
+                                multiQuickSortResult: `${this.endTime - this.startTime} ms`,
+                                multiQuickSortDone: true
                             });
                         }
                         break;
-                        }
-
+                    case 1: {
+                        this.setState({
+                            multiBubbleSortResult: `${this.endTime - this.startTime} ms`,
+                            multiBubbleSortDone: true
+                        });
                     }
-                }).bind(this);
-                this.sortWorkers.push(sortWorker);
-            }
-            this.showMessage.bind(this);
-        }
-
-        handleArraySizeChange = (e) => {
-            this.setState({
-                arraySize: parseInt(e.target.value)
-            });
-        };
-
-        setIdle() {
-            this.props.onStateChanged("idle");
-        }
-
-        setBusy() {
-            this.props.onStateChanged("busy");
-        }
-
-        handlePopulationWorkerMessage(e) {
-            this.array = e.data;
-            this.setIdle();
-            this.setState({
-                populated: true
-            });
-            
-        }
-
-        handleSortWorkerMessage(e) {
-            console.table(e.data.array);
-            this.endTime = performance.now();
-            this.setIdle();
-            switch (e.data.sortType) {
-                case 0: {
-                    this.setState({
-                        quickSortResult: `${this.endTime - this.startTime} ms`,
-                        quickSortDone: true
-                    });
+                    break;
+                    }
                 }
-                break;
-            case 1: {
-                this.setState({
-                    bubbleSortResult: `${this.endTime - this.startTime} ms`,
-                    bubbleSortDone: true
-                });
-            }
-            break;
-            case 2: {
-                this.setState({
-                    insertionSortResult: `${this.endTime - this.startTime} ms`,
-                    insertionSortDone: true
-                });
-            }
-            break;
-            case 3: {
-                this.setState({
-                    selectionSortResult: `${this.endTime - this.startTime} ms`,
-                    selectionSortDone: true
-                });
-            }
-            break;
-            case 4: {
-                this.setState({
-                    mergeSortResult: `${this.endTime - this.startTime} ms`,
-                    mergeSortDone: true
-                });
-            }
-            break;
-            case 5: {
-                this.setState({
-                    radixSortResult: `${this.endTime - this.startTime} ms`,
-                    radixSortDone: true
-                });
-            }
-            break;
-            case 6: {
-                this.setState({
-                    heapSortResult: `${this.endTime - this.startTime} ms`,
-                    heapSortDone: true
-                });
-            }
-            break;
-            }
+            }).bind(this);
+            this.sortWorkers.push(sortWorker);
         }
+        this.showMessage.bind(this);
+    }
 
-        populateArray() {
-            this.setBusy();
+    handleArraySizeChange = (e) => {
+        this.setState({
+            arraySize: parseInt(e.target.value)
+        });
+    };
+
+    setIdle() {
+        this.props.onStateChanged("idle");
+    }
+
+    setBusy() {
+        this.props.onStateChanged("busy");
+    }
+
+    handlePopulationWorkerMessage(e) {
+        this.array = e.data;
+        this.setIdle();
+        this.setState({
+            populated: true
+        });     
+    }
+
+    handleSortWorkerMessage(e) {
+        console.table(e.data.array);
+        this.endTime = performance.now();
+        this.setIdle();
+        switch (e.data.sortType) {
+            case 0: {
+                this.setState({
+                    quickSortResult: `${this.endTime - this.startTime} ms`,
+                    quickSortDone: true
+                });
+            }
+            break;
+        case 1: {
             this.setState({
-                populated: false
+                bubbleSortResult: `${this.endTime - this.startTime} ms`,
+                bubbleSortDone: true
             });
-            this.populationWorker.postMessage(this.state.arraySize);
         }
-
-        sortArray(sortType) {
-            if (this.array == undefined || this.array.length == 0) {
-                this.showMessage(this.localStrings.localized.GenerateDataPrompt);
-                return;
-            } else if (this.array.length > Constants.value.LargeArraySize) {
-                this.dialogOkAction = this.executeSort.bind(this, sortType);
-                this.dialogClosedAction = () => {};
-                this.dialogCanceledAction = () => {};
-                this.setState({
-                    message: this.localStrings.localized.LargeArrayWarning,
-                    showDialog: true
-                });
-                return;
-            }
-            this.executeSort(sortType);
-        }
-
-        executeSort(sortType) {
-            this.setBusy();
+        break;
+        case 2: {
             this.setState({
-                quickSortDone: false
+                insertionSortResult: `${this.endTime - this.startTime} ms`,
+                insertionSortDone: true
             });
-            this.startTime = performance.now();
-            this.sortWorker.postMessage({
-                array: this.array,
+        }
+        break;
+        case 3: {
+            this.setState({
+                selectionSortResult: `${this.endTime - this.startTime} ms`,
+                selectionSortDone: true
+            });
+        }
+        break;
+        case 4: {
+            this.setState({
+                mergeSortResult: `${this.endTime - this.startTime} ms`,
+                mergeSortDone: true
+            });
+        }
+        break;
+        case 5: {
+            this.setState({
+                radixSortResult: `${this.endTime - this.startTime} ms`,
+                radixSortDone: true
+            });
+        }
+        break;
+        case 6: {
+            this.setState({
+                heapSortResult: `${this.endTime - this.startTime} ms`,
+                heapSortDone: true
+            });
+        }
+        break;
+        }
+    }
+
+    populateArray() {
+        this.setBusy();
+        this.setState({
+            populated: false
+        });
+        this.populationWorker.postMessage(this.state.arraySize);
+    }
+
+    sortArray(sortType) {
+        if (this.array == undefined || this.array.length == 0) {
+            this.showMessage(this.localStrings.localized.GenerateDataPrompt);
+            return;
+        } else if (this.array.length > 100000) {
+            this.dialogOkAction = this.executeSort.bind(this, sortType);
+            this.dialogClosedAction = () => {};
+            this.dialogCanceledAction = () => {};
+            this.setState({
+                message: this.localStrings.localized.LargeArrayWarning,
+                showDialog: true
+            });
+            return;
+        }
+        this.executeSort(sortType);
+    }
+    
+    executeSort(sortType) {
+        this.setBusy();
+        this.setState({
+            quickSortDone: false
+        });
+        this.startTime = performance.now();
+        this.sortWorker.postMessage({
+            array: this.array,
+            sortType: sortType
+        });
+    }
+
+    multiSortArray(sortType) {
+        if (this.array == undefined || this.array.length == 0) {
+            this.showMessage(this.localStrings.localized.GenerateDataPrompt);
+            return;
+        } else if (this.array.length > 100000) {
+            this.dialogOkAction = this.executeMultiSort;
+            this.dialogClosedAction = () => {};
+            this.dialogCanceledAction = () => {};
+            this.setState({
+                message: this.localStrings.localized.LargeArrayWarning,
+                showDialog: true
+            })
+            return;
+        }
+        this.executeMultiSort(sortType);
+    }
+    
+    executeMultiSort(sortType) {
+        this.startTime = performance.now();
+        this.numFinised = 0;
+        this.merged = [];
+        this.setBusy();
+        this.setState({
+            multiQuickSortDone: false
+        });
+        let index = 0;
+        let numSlices = navigator.hardwareConcurrency;
+        let sliceLength = Math.floor(this.state.arraySize / navigator.hardwareConcurrency);
+        let remaining = this.state.arraySize % navigator.hardwareConcurrency;
+        if (remaining != 0) {
+            numSlices--;
+        }
+        for (let i = 0; i < numSlices; i++) {
+            this.sortWorkers[i].postMessage({
+                array: this.array.slice(index, index + sliceLength),
                 sortType: sortType
             });
+            index += sliceLength;
         }
-
-        multiSortArray(sortType) {
-            if (this.array == undefined || this.array.length == 0) {
-                this.showMessage(this.localStrings.localized.GenerateDataPrompt);
-                return;
-            } else if (this.array.length > Constants.value.LargeArraySize) {
-                this.dialogOkAction = this.executeMultiSort;
-                this.dialogClosedAction = () => {};
-                this.dialogCanceledAction = () => {};
-                this.setState({
-                    message: this.localStrings.localized.LargeArrayWarning,
-                    showDialog: true
-                })
-                return;
-            }
-            this.executeMultiSort(sortType);
-        }
-
-        executeMultiSort(sortType) {
-            this.startTime = performance.now();
-            this.numFinised = 0;
-            this.merged = [];
-            this.setBusy();
-            this.setState({
-                multiQuickSortDone: false
-            });
-            let index = 0;
-            let numSlices = navigator.hardwareConcurrency;
-            let sliceLength = Math.floor(this.state.arraySize / navigator.hardwareConcurrency);
-            let remaining = this.state.arraySize % navigator.hardwareConcurrency;
-            if (remaining != 0) {
-                numSlices--;
-            }
-            for (let i = 0; i < numSlices; i++) {
-                this.sortWorkers[i].postMessage({
-                    array: this.array.slice(index, index + sliceLength),
-                    sortType: sortType
-                });
-                index += sliceLength;
-            }
-            if (remaining != 0) {
-                this.sortWorkers[navigator.hardwareConcurrency - 1].postMessage({
-                    array: this.array.slice(index, index + sliceLength + remaining),
-                });
-            }
-        }
-
-        showMessage(message) {
-            this.setState({
-                message: message,
-                showMessage: true
+        if (remaining != 0) {
+            this.sortWorkers[navigator.hardwareConcurrency - 1].postMessage({
+                array: this.array.slice(index, index + sliceLength + remaining),
             });
         }
+    }
 
-        messageAcknowledged() {
-            this.setState({
-                showMessage: false
-            })
-        }
+    showMessage(message) {
+        this.setState({
+            message: message,
+            showMessage: true
+        });
+    }
 
-        dialogResult(result) {
-            this.setState({
-                showDialog: false
-            })
-            switch (result) {
-                case "ok": {
-                    if (this.dialogOkAction) {
-                        this.dialogOkAction();
-                    }
-                }
-                break;
-            case "cancel": {
-                if (this.dialogCanceledAction) {
-                    this.dialogCanceledAction();
+    messageAcknowledged() {
+        this.setState({
+            showMessage: false
+        })
+    }
+
+    dialogResult(result) {
+        this.setState({
+            showDialog: false
+        })
+        switch (result) {
+            case "ok": {
+                if (this.dialogOkAction) {
+                    this.dialogOkAction();
                 }
             }
             break;
-            case "closed": {
-                if (this.dialogClosedAction) {
-                    this.dialogClosedAction();
-                }
-            }
-            break;
-            default:
-                break;
+        case "cancel": {
+            if (this.dialogCanceledAction) {
+                this.dialogCanceledAction();
             }
         }
-
-        mergeSortedArrays(leftArray, rightArray) {
-            let leftIndex = 0;
-            let rightIndex = 0;
-            let resultIndex = 0;
-            let result = [];
-            while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
-                if (leftArray[leftIndex] <= rightArray[rightIndex]) {
-                    result[resultIndex] = leftArray[leftIndex];
-                    leftIndex++;
-                } else {
-                    result[resultIndex] = rightArray[rightIndex];
-                    rightIndex++;
-                }
-                resultIndex++;
+        break;
+        case "closed": {
+            if (this.dialogClosedAction) {
+                this.dialogClosedAction();
             }
-            while (leftIndex < leftArray.length) {
+        }
+        break;
+        default:
+            break;
+        }
+    }
+
+    mergeSortedArrays(leftArray, rightArray) {
+        let leftIndex = 0;
+        let rightIndex = 0;
+        let resultIndex = 0;
+        let result = [];
+        while (leftIndex < leftArray.length && rightIndex < rightArray.length) {
+            if (leftArray[leftIndex] <= rightArray[rightIndex]) {
                 result[resultIndex] = leftArray[leftIndex];
                 leftIndex++;
-                resultIndex++;
-            }
-            while (rightIndex < length) {
+            } else {
                 result[resultIndex] = rightArray[rightIndex];
                 rightIndex++;
-                resultIndex++;
             }
-            return result;
+            resultIndex++;
         }
+        while (leftIndex < leftArray.length) {
+            result[resultIndex] = leftArray[leftIndex];
+            leftIndex++;
+            resultIndex++;
+        }
+        while (rightIndex < length) {
+            result[resultIndex] = rightArray[rightIndex];
+            rightIndex++;
+            resultIndex++;
+        }
+        return result;
+    }
 
     render() {
        return (

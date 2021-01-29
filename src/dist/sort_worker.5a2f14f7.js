@@ -171,6 +171,32 @@ function partition(array, low, high) {
 }
 
 function quickSortFast(array, left, right) {
+  function partitionFast(array, left, right) {
+    var pivot = array[Math.floor((right + left) / 2)];
+    var i = left;
+    var j = right;
+
+    while (i <= j) {
+      while (array[i] < pivot) {
+        i++;
+      }
+
+      while (array[j] > pivot) {
+        j--;
+      }
+
+      if (i <= j) {
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+        i++;
+        j--;
+      }
+    }
+
+    return i;
+  }
+
   var pivot;
 
   if (array.length > 1) {
@@ -186,32 +212,6 @@ function quickSortFast(array, left, right) {
   }
 
   return array;
-}
-
-function partitionFast(array, left, right) {
-  var pivot = array[Math.floor((right + left) / 2)];
-  var i = left;
-  var j = right;
-
-  while (i <= j) {
-    while (array[i] < pivot) {
-      i++;
-    }
-
-    while (array[j] > pivot) {
-      j--;
-    }
-
-    if (i <= j) {
-      var temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
-      i++;
-      j--;
-    }
-  }
-
-  return i;
 }
 
 function bubbleSort(array) {
@@ -453,7 +453,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65416" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53812" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -31,6 +31,29 @@ function partition(array, low, high) {
 }
 
 export function quickSortFast(array, left, right) {
+
+    function partitionFast(array, left, right) {
+        let pivot = array[Math.floor((right + left) / 2)];
+        let i = left;
+        let j = right;
+        while (i <= j) {
+            while (array[i] < pivot) {
+                i++;
+            }
+            while (array[j] > pivot) {
+                j--;
+            }
+            if (i <= j) {
+                let temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+                i++;
+                j--;
+            }
+        }
+        return i;
+    }
+
     var pivot;
     if (array.length > 1) {
         pivot = partitionFast(array, left, right);
@@ -44,27 +67,6 @@ export function quickSortFast(array, left, right) {
     return array;
 }
 
-function partitionFast(array, left, right) {
-    let pivot = array[Math.floor((right + left) / 2)];
-    let i = left;
-    let j = right;
-    while (i <= j) {
-        while (array[i] < pivot) {
-            i++;
-        }
-        while (array[j] > pivot) {
-            j--;
-        }
-        if (i <= j) {
-            let temp = array[i];
-            array[i] = array[j];
-            array[j] = temp;
-            i++;
-            j--;
-        }
-    }
-    return i;
-}
 
 export function bubbleSort(array) {
     for (let i = 0; i < array.length; i++) {

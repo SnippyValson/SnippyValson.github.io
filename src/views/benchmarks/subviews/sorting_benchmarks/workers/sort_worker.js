@@ -1,12 +1,4 @@
-import {
-  quickSortFast,
-  bubbleSort,
-  insertionSort,
-  selectionSort,
-  mergeSort,
-  radixSort,
-  heapSort
-} from "./sort_methods"
+import { quickSortFast, bubbleSort, insertionSort, selectionSort, mergeSort, radixSort, heapSort } from "./sort_methods"
 
 onmessage = function (e) {
   var array = e.data.array;
