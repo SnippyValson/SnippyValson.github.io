@@ -63,7 +63,7 @@ export class GpuJsShowCase extends React.Component {
   }
 
   componentDidMount() {
-     this.rendererHeight = this.rendererOutlet.current.clientHeight - 20;
+     this.rendererHeight = this.rendererOutlet.current.clientHeight - 15;
      this.rendererWidth = this.rendererOutlet.current.clientWidth;
      this.gpuAutomataState = Array2D(this.rendererHeight, this.rendererWidth);
      this.gpuTempState = Array2D(this.rendererHeight, this.rendererWidth);
@@ -235,7 +235,7 @@ export class GpuJsShowCase extends React.Component {
 
   render() {
     return (
-      <div style = {{width : '99%', height : '99%', margin : '0px', padding : '0px'}} className = "pixel-app-container">
+      <div style = {{width : '100%', height : '99%', margin : '0px', padding : '0px'}} className = "pixel-app-container">
         <div className="pixel-app-header">
           <TopBar>
             <button className="pixel-button" style ={{ marginLeft : '5px'  }} id="start-button" onClick={this.onStartClicked}>{this.state.buttonLabel}</button>

@@ -1,6 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
+/**
+ * To hide the side panel I have chosen 1370px as the break point since there won't be much space left for the content,
+ * this is mostly because of the font that I have chosen. 
+ */
 
+
+/**
+ * Show the side panel if the width is above or equal to 1370px.
+ */
 @media screen and (min-width: 1370px ){
+
   .pixel-app-container {
     display: grid;
     grid-template-columns: repeat(24, 1fr);
@@ -40,10 +49,13 @@
   .pixel-slide-out {
 
   }
-  
 }
 
+/**
+ * Hide the side panel if the width is below 1370px
+ */
 @media screen and (max-width: 1369px) {
+
   .pixel-app-container {
     display: grid;
     grid-template-columns: repeat(24, 1fr);

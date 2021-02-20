@@ -29,7 +29,6 @@ export class Home extends React.Component
         this.animationRequest = undefined;
         this.numDivs = 150;
         this.state = { info : "*", fpsInfo : "*", showWorks : false }; 
-        console.log('Home created');
     }
 
     componentDidMount() {
@@ -63,6 +62,7 @@ export class Home extends React.Component
         let height = document.body.clientHeight;
         this.background.width = width;
         this.background.height = height;
+
         fillBackground(this.backgroundContext, this.style.getCurrentPallet().background, width, height);
 
         /*
@@ -75,17 +75,17 @@ export class Home extends React.Component
         let rows = 0;
         let cols = 0;
         if (width >= height) {
-          if (width < 1000) {
-            this.numDivs = 100;
-          }
+          // Divide the rows into 21 segments, for the matrix traversal.
+          // Too many squares will cause the animations to take up too much time.
           if (this.automatonIndex == 6) {
             this.numDivs = 21;
           } else {
             this.numDivs = 150;
           }
           cols = this.numDivs;
-          blockSize = width / cols;
-          rows = height / blockSize;
+          // Ciel the number, it's okay even if the squares extend beyond the viewport
+          blockSize = Math.ceil(width / cols);
+          rows = Math.ceil( height / blockSize);
         } else {
           if (height < 1000) {
             this.numDivs = 100;
@@ -174,7 +174,7 @@ export class Home extends React.Component
           }
 
           /*
-           * Display the frame per seconds count every second.
+           * Display the fps count every second.
            */
           if (frameCounterT2 - frameCounterT1 >= 1000) {
             frameCounterT1 = performance.now() - ((frameCounterT2 - frameCounterT1) % 1000);
@@ -187,7 +187,7 @@ export class Home extends React.Component
     } 
 
     /*
-     * Redraw and restart everything when the user re-sized the window.
+     * Redraw and restart everything when the user re-sizes the window.
      */
     handleResize() {
         this.initBackgroundAnimation();

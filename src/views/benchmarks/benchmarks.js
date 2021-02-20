@@ -2,8 +2,7 @@ import "./../../main.css";
 import "./benchmarks.css";
 import { Style } from "../../common/style";
 import React from "react";
-import ReactDOM from "react-dom";
-import { Switch, HashRouter, Route, Link, withRouter } from "react-router-dom"
+import { Switch, Route} from "react-router-dom"
 import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmarks";
 import { GpuJsBenchmarks } from "./subviews/gpujs_benchmarks/gpujs_benchmarks";
 import { Strings } from "./localization/strings";
