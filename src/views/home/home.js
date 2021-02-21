@@ -6,7 +6,7 @@ import { Style } from "../../common/style.js";
 import { ConwaysGameOfLife } from "../../automata/conwaysGameOfLife.ts";
 import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata.ts";
 import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer.ts";
-import { fillBackground, getGradientStops, getMooreNeighbours, getNuemannNeighbours, getCrossNeighbours, } from "../../libs/uitils.js";
+import { fillBackground, getGradientStops, getMooreNeighbours, getNuemannNeighbours, getCrossNeighbours, debounce } from "../../libs/uitils.js";
 
 export class Home extends React.Component 
 {
@@ -18,7 +18,8 @@ export class Home extends React.Component
     automatonIndex;
     animationRequest;
     backgroundContext;
-    prevAutomatonIndex
+    prevAutomatonIndex;
+    debouncedResizeHandler;
 
     constructor(props){
         super(props);
@@ -38,7 +39,8 @@ export class Home extends React.Component
         this.showWorks = this.showWorks.bind(this);
         this.closeWorks = this.closeWorks.bind(this);
         this.onGreetingClicked = this.onGreetingClicked.bind(this);
-        window.addEventListener("resize", this.handleResize.bind(this));
+        this.debouncedResizeHandler = debounce(this.handleResize.bind(this), 250);
+        window.addEventListener("resize", this.debouncedResizeHandler);
     }
 
     componentWillUnmount()
@@ -46,7 +48,7 @@ export class Home extends React.Component
         if (this.animationRequest != undefined) {
           window.cancelAnimationFrame(this.animationRequest);
         }
-        window.removeEventListener("resize", this.handleResize.bind(this));
+        window.removeEventListener("resize", this.debouncedResizeHandler);
     }
 
     initBackgroundAnimation() {

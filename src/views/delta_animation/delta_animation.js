@@ -3,7 +3,8 @@ import "./delta_animation.css";
 import { Style } from "../../common/style";
 import * as THREE from "three";
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { TopBar }  from './../../common/common_components/top_bar';
+import { ButtonList } from './../../common/common_components/button_list';
 
 export class DeltaAnimation extends React.Component {
   far;
@@ -20,6 +21,7 @@ export class DeltaAnimation extends React.Component {
   sceneWidth;
   sceneHeight;
   animationHandle;
+  list_items;
 
   constructor(props) {
     super(props);
@@ -36,6 +38,8 @@ export class DeltaAnimation extends React.Component {
     this.animationHandle = 'undefinded';
     this.onUpdateClicked = this.onUpdateClicked.bind(this);
     this.frameRateInputChanged = this.frameRateInputChanged.bind(this);
+    this.list_items= [];
+    this.list_items.push({ tag : 'animation', displayText : 'Time vs Frame based animation' });
     console.log('Delta animation created.');
   }
 
@@ -146,19 +150,23 @@ export class DeltaAnimation extends React.Component {
 
   render() {
     return( 
-      <div>
-        <div className="top-bar">
-        <Link className="pixel-button" to="/">Home</Link>
-        <label className="pixel-text-medium" id="fps-label">FPS : </label>
-        <input className="pixel-input pixel-text-medium" onChange = {this.frameRateInputChanged} value = {this.state.newFrameRate}/>
-        <button className="pixel-button" id="update-button" onClick = {this.onUpdateClicked}>Update</button>
-        <label className="pixel-text-small" id="info-label">Time contolled animation [right] v/s frame controlled animation.</label>
+      <div style = {{width : '100%', height : '99%', margin : '0px', padding : '0px'}} className = "pixel-app-container">
+        <div className="pixel-app-header">
+          <TopBar>
+            <label className="pixel-text-medium" id="fps-label">FPS : </label>
+            <input className="pixel-input pixel-text-medium" onChange = {this.frameRateInputChanged} value = {this.state.newFrameRate}/>
+            <button className="pixel-button" id="update-button" onClick = {this.onUpdateClicked}>Update</button>
+            <label className="pixel-text-small" id="info-label">Time contolled animation [right] v/s frame controlled animation.</label>
+          </TopBar>
         </div>
-        <div className="center-div pixel-div">
+        <div className = "pixel-app-side-panel pixel-slide-out">
+            <ButtonList items = { this.list_items }></ButtonList>
+        </div>
+        <div className = "pixel-app-content">
           <div ref = "threeView" className="threeview"></div>
-        </div>
-        <div className="bottom-right unselectable pixel-div pixel-text-medium">
-          {this.state.fps}    
+          <div className="bottom-right unselectable pixel-div pixel-text-medium">
+            {this.state.fps}    
+          </div>
         </div>
       </div>
     );
