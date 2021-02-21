@@ -1,6 +1,7 @@
 import "./sorting_benchmarks.css";
 import React from 'react';
-import { Strings } from "./../../localization/strings";
+import { Strings } from "../../localization/strings";
+import { debounce } from '../../../../libs/uitils'
 
 export class SortingBenchmark extends React.Component {
     
@@ -87,7 +88,7 @@ export class SortingBenchmark extends React.Component {
             }).bind(this);
             this.sortWorkers.push(sortWorker);
         }
-        this.showMessage.bind(this);
+        this.showMessage = this.showMessage.bind(this);
     }
 
     handleArraySizeChange = (e) => {
@@ -119,49 +120,49 @@ export class SortingBenchmark extends React.Component {
         switch (e.data.sortType) {
             case 0: {
                 this.setState({
-                    quickSortResult: `${this.endTime - this.startTime} ms`,
+                    quickSortResult: `${(this.endTime - this.startTime).toFixed(2)} ms`,
                     quickSortDone: true
                 });
             }
             break;
         case 1: {
             this.setState({
-                bubbleSortResult: `${this.endTime - this.startTime} ms`,
+                bubbleSortResult: `${(this.endTime - this.startTime).toFixed(2)} ms`,
                 bubbleSortDone: true
             });
         }
         break;
         case 2: {
             this.setState({
-                insertionSortResult: `${this.endTime - this.startTime} ms`,
+                insertionSortResult: `${(this.endTime - this.startTime).toFixed(2)} ms`,
                 insertionSortDone: true
             });
         }
         break;
         case 3: {
             this.setState({
-                selectionSortResult: `${this.endTime - this.startTime} ms`,
+                selectionSortResult: `${(this.endTime - this.startTime).toFixed(2)} ms`,
                 selectionSortDone: true
             });
         }
         break;
         case 4: {
             this.setState({
-                mergeSortResult: `${this.endTime - this.startTime} ms`,
+                mergeSortResult: `${(this.endTime - this.startTime).toFixed(2)} ms`,
                 mergeSortDone: true
             });
         }
         break;
         case 5: {
             this.setState({
-                radixSortResult: `${this.endTime - this.startTime} ms`,
+                radixSortResult: `${(this.endTime - this.startTime).toFixed(2)} ms`,
                 radixSortDone: true
             });
         }
         break;
         case 6: {
             this.setState({
-                heapSortResult: `${this.endTime - this.startTime} ms`,
+                heapSortResult: `${(this.endTime - this.startTime).toFixed(2)} ms`,
                 heapSortDone: true
             });
         }
@@ -169,7 +170,8 @@ export class SortingBenchmark extends React.Component {
         }
     }
 
-    populateArray() {
+    populateArray(dummyArg) {
+        console.log(`Argument to populateArray ${dummyArg}`);
         this.setBusy();
         this.setState({
             populated: false
@@ -323,7 +325,7 @@ export class SortingBenchmark extends React.Component {
 
     render() {
        return (
-        <div className = "pixel-div">
+        <div className = "pixel-div sort-container">
             <div className={`pixel-div center-div pixel-dialog unselectable ${this.state.showMessage ? 'fade-in' : 'fade-out'}`}>
                 <button className="pixel-button top-right" onClick={this.messageAcknowledged.bind(this)}>x</button>
                 <p className="pixel-text-medium">Message</p>
@@ -350,7 +352,7 @@ export class SortingBenchmark extends React.Component {
                         <input className="pixel-text-medium pixel-input" id="count" value = {this.state.value} onChange={this.handleArraySizeChange.bind(this)} placeholder= {this.state.arraySize}/>
                     </div>
                     <label className={`pixel-text-big check-box ${this.state.populated ? 'visible' : 'hidden' }`} id="populate-array-done">☑</label>
-                    <button className="pixel-button section-button" onClick={this.populateArray.bind(this)}>Generate</button>
+                    <button className="pixel-button section-button" onClick={ debounce(this.populateArray.bind(this, "DummyArg"), 500) }>Generate</button>
                 </div>
                 <div className="pixel-div section">
                     <p className="pixel-text-medium">Bubble sort.</p>

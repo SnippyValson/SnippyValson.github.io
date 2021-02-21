@@ -1,5 +1,5 @@
-import './home.css';
 import "../../main.css";
+import './home.css';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Style } from "../../common/style.js";
@@ -74,6 +74,7 @@ export class Home extends React.Component
         let blockSize = 0;
         let rows = 0;
         let cols = 0;
+        // Divide the largest dimension into predefined number of segements.
         if (width >= height) {
           // Divide the rows into 21 segments, for the matrix traversal.
           // Too many squares will cause the animations to take up too much time.
@@ -96,8 +97,8 @@ export class Home extends React.Component
             this.numDivs = 150;
           }
           rows = this.numDivs;
-          blockSize = height / rows;
-          cols = width / blockSize;
+          blockSize = Math.ceil(height / rows);
+          cols = Math.ceil(width / blockSize);
         }
         blockSize = Math.round(blockSize);
         this.visualizers = [];
@@ -211,32 +212,34 @@ export class Home extends React.Component
     render()
         {   
             return(
-                <div style = {{ width : "100%", height : "100%" }}>    
+                <div className="home">    
                     <canvas ref="backgroundCanvas"></canvas>
-                    <div className="center-div unselectable pixel-div pixel-text-big" id="greeting" onClick={this.onGreetingClicked}>
+                    <div className="center-div unselectable pixel-div pixel-text-big" id="greeting" onClick={ this.onGreetingClicked }>
                         <p>
-                            Hi! I'm Snippy Valson. <br/> <br/> Welcome to my webpage!
+                          Hi! I'm Snippy Valson.
+                        </p>
+                        <p><br/></p>
+                        <p>
+                          Welcome to my webpage!
                         </p>
                         <div className="center-h-container">
-                            <button className="pixel-button" onClick={this.showWorks}>My Works!</button>
+                            <button className="pixel-button works-button" onClick={ this.showWorks }>My Works!</button>
                         </div>
                     </div>
-                    <div className= { `center-div unselectable pixel-div pixel-text-big ${this.state.showWorks ? 'fade-in' : 'fade-out' } pixel-dialog` }>
-                        <button className="pixel-button top-right" onClick={this.closeWorks}>x</button>
+                    <div className= { `center-div unselectable pixel-div pixel-text-big ${ this.state.showWorks ? 'fade-in' : 'fade-out' } pixel-dialog` }>
+                        <button className="pixel-button top-right" onClick={ this.closeWorks }>x</button>
                         <p className="pixel-text-medium">Click the buttons to navigate.</p>
-                        <div style={{ marginTop: '90px' }}>
+                        <div className="home-links">
                             <Link className="pixel-button nav-button" to = "/time-based-animation" >Time based animation (3D)</Link>
                             <Link className="pixel-button nav-button" to = "/gpu-js-showcase">Gpu.js Showcase</Link>
                             <Link className="pixel-button nav-button" to = "/benchmarks">Benchmarks</Link>
-                            <a className="pixel-button nav-button" href="./views/code_bits/code_bits.html">Code Bits</a>
-                            <a className="pixel-button nav-button" href="./views/neo_command/neo_command.html">Neo Command</a>
                         </div>
                     </div>
-                    <div className="bottom-left unselectable pixel-div pixel-text-medium"> 
-                    {this.state.info} 
+                    <div className="algorithm-info unselectable pixel-div pixel-text-medium"> 
+                      { this.state.info } 
                     </div>
-                    <div className="bottom-right unselectable pixel-div pixel-text-medium">    
-                    {this.state.fpsInfo} 
+                    <div className="fps-info unselectable pixel-div pixel-text-medium">    
+                      { this.state.fpsInfo } 
                     </div>
                 </div>
         );

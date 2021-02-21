@@ -207,3 +207,18 @@ export function rgbToInt(rgb) {
   rgbInt = (rgbInt << 8) + rgb.b;
   return rgbInt;
 }
+
+export function debounce(func, timeoutInterval, ...args) {
+  let timeoutHandle;
+  console.log(args);
+  return function debouncedFunction(...args) {
+      console.log(args);
+      const later = () => {
+          clearTimeout(timeoutHandle);
+          func(...args);
+      } ;
+
+      clearTimeout(timeoutHandle);
+      timeoutHandle = setTimeout(later, timeoutInterval);
+  }; 
+}
