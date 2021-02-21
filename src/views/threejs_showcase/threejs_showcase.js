@@ -1,12 +1,12 @@
 import "./../../main.css";
-import "./delta_animation.css";
+import "./threejs_showcase.css";
 import { Style } from "../../common/style";
 import * as THREE from "three";
 import React from 'react';
-import { TopBar }  from './../../common/common_components/top_bar';
-import { ButtonList } from './../../common/common_components/button_list';
+import { TopBar }  from '../../common/common_components/top_bar';
+import { ButtonList } from '../../common/common_components/button_list';
 
-export class DeltaAnimation extends React.Component {
+export class ThreeJSShowCase extends React.Component {
   far;
   near;
   style;

@@ -11,9 +11,15 @@ export class ButtonList extends React.Component {
         this.referenceList = [];
     }
 
+    componentDidMount(){
+        if(this.referenceList.length > 0) {
+            this.setSelectedButton(this.referenceList[0].current);
+        }
+    }
+
     setSelectedButton(selectedButton) {
         for (let listButtonRef of this.referenceList) {
-            if(!listButtonRef || !listButtonRef.current){
+            if(!listButtonRef || !listButtonRef.current) {
                 return;
             }
           listButtonRef.current.classList.add(GlobalConstants.class.PixelButton);
@@ -25,11 +31,13 @@ export class ButtonList extends React.Component {
 
     onButtonClicked(event, tag) {
         this.setSelectedButton(event.target);
-        this.props.onItemClicked(event, tag);
+        if(this.props.onItemClicked) 
+        {
+            this.props.onItemClicked(event, tag);
+        }
     }
 
     render() {
-
         // Clear the list of references each time.
         this.referenceList = [];
         return (

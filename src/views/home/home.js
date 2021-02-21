@@ -232,7 +232,7 @@ export class Home extends React.Component
                         <button className="pixel-button top-right" onClick={ this.closeWorks }>x</button>
                         <p className="pixel-text-medium">Click the buttons to navigate.</p>
                         <div className="home-links">
-                            <Link className="pixel-button nav-button" to = "/time-based-animation" >Time based animation (3D)</Link>
+                            <Link className="pixel-button nav-button" to = "/threejs-showcase" >Time based animation (3D)</Link>
                             <Link className="pixel-button nav-button" to = "/gpu-js-showcase">Gpu.js Showcase</Link>
                             <Link className="pixel-button nav-button" to = "/benchmarks">Benchmarks</Link>
                         </div>
