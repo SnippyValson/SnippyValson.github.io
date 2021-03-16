@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom';
 import { Home } from './views/home/home';
 import { ThreeJSShowCase } from './views/threejs_showcase/threejs_showcase';
-import { GpuJsShowCase } from './views/gpujs_showcase/gpujs_showcase';
+import { GpuJsShowCase } from './views/gpujs_showcase/gpujs_showcase.tsx';
 import { Benchmarks } from './views/benchmarks/benchmarks';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 
