@@ -1,93 +1,103 @@
-export function getNuemannNeighbours(x: number, y: number, matrix:number, r: number, c: number) {
-  var i = x;
-  var j = y;
-  var neigbours = [];
-  if (i - 1 >= 0) {
-    neigbours.push(matrix[i - 1][j]);
+export function checkCrossNeighbourhood(stateMatrix: number[][], i: number, j: number, r: number, c: number,
+  nextState: number, maxRange: number) {
+  let count = 0;
+  for (let range = 1; range <= maxRange; range++) {
+    for (let k = 1; k <= range; k++) {
+      if (i + k < r && j + k < c) {
+        if (stateMatrix[i + k][j + k] == nextState) {
+          count++;
+        }
+      }
+    }
+    for (let k = 1; k <= range; k++) {
+      if (i + k < r && j - k >= 0) {
+        if (stateMatrix[i + k][j - k] == nextState) {
+          count++;
+        }
+      }
+    }
+    for (let k = 1; k <= range; k++) {
+      if (i - k >= 0 && j + k < c) {
+        if (stateMatrix[i - k][j + k] == nextState) {
+          count++;
+        }
+      }
+    }
+    for (let k = 1; k <= range; k++) {
+      if (i - k >= 0 && j - k >= 0) {
+        if (stateMatrix[i - k][j - k] == nextState) {
+          count++;
+        }
+      }
+    }
   }
-  if (j + 1 < c) {
-    neigbours.push(matrix[i][j + 1]);
-  }
-  if (i + 1 < r) {
-    neigbours.push(matrix[i + 1][j]);
-  }
-  if (j - 1 >= 0) {
-    neigbours.push(matrix[i][j - 1]);
-  }
-  return neigbours;
+  return count;
 }
 
-export function getCrossNeighbours(x: number, y: number, matrix: number, r: number, c: number) {
-  var i = x;
-  var j = y;
-  var neigbours = [];
-  if (i - 1 >= 0 && j - 1 >= 0) {
-    neigbours.push(matrix[i - 1][j - 1]);
+export function checkMooreNeighbourhood(stateMatrix: number[][], i: number, j: number, r: number, c: number,
+  nextState: number, range: number) {
+  let count = 0;
+  for (let offset = 1; offset <= range; offset++) {
+    if (j + offset < c) {
+      if (stateMatrix[i][j + offset] == nextState) {
+        count++;
+      }
+    }
+    if (j - offset >= 0) {
+      if (stateMatrix[i][j - offset] == nextState) {
+        count++;
+      }
+    }
   }
-  if (i - 1 >= 0 && j + 1 < c) {
-    neigbours.push(matrix[i - 1][j + 1]);
+  for (let iOffset = 1; iOffset <= range; iOffset++) {
+    for (let jOffset = -range; jOffset <= range; jOffset++) {
+      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+    }
   }
-  if (i + 1 < r && j + 1 < c) {
-    neigbours.push(matrix[i + 1][j + 1]);
-  }
-  if (i + 1 < r && j - 1 >= 0) {
-    neigbours.push(matrix[i + 1][j - 1]);
-  }
-  return neigbours;
+  return count;
 }
 
-export function getMooreNeighbours(x: number, y: number, matrix: number, r: number, c: number) {
-  var i = x;
-  var j = y;
-  var neigbours = [];
-  try {
-    if (i - 1 >= 0 && j - 1 >= 0) {
-      neigbours.push(matrix[i - 1][j - 1]);
+export function checkNuemannNeighbourhood(stateMatrix: number[][], i: number, j: number, r: number, c: number,
+  nextState: number, range: number) {
+  let count = 0;
+  for (let offset = 1; offset <= range; offset++) {
+    if (j + offset < c) {
+      if (stateMatrix[i][j + offset] == nextState) {
+        count++;
+      }
     }
-    if (i - 1 >= 0) {
-      neigbours.push(matrix[i - 1][j]);
+    if (j - offset >= 0) {
+      if (stateMatrix[i][j - offset] == nextState) {
+        count++;
+      }
     }
-    if (i - 1 >= 0 && j + 1 < c) {
-      neigbours.push(matrix[i - 1][j + 1]);
-    }
-    if (j + 1 < c) {
-      neigbours.push(matrix[i][j + 1]);
-    }
-    if (i + 1 < r && j + 1 < c) {
-      neigbours.push(matrix[i + 1][j + 1]);
-    }
-    if (i + 1 < r) {
-      neigbours.push(matrix[i + 1][j]);
-    }
-    if (i + 1 < r && j - 1 >= 0) {
-      neigbours.push(matrix[i + 1][j - 1]);
-    }
-    if (j - 1 >= 0) {
-      neigbours.push(matrix[i][j - 1]);
-    }
-  } catch (e) {
-
   }
-  return neigbours;
-}
-
-export function getMooreNeighboursWrap(x: number, y: number, matrix: number, r: number, c: number) {
-  var i = x;
-  var j = y;
-  var neigbours = [];
-  try {
-    neigbours.push(matrix[(i - 1 + r) % r][(j - 1 + c) % c]);
-    neigbours.push(matrix[(i - 1 + r) % r][j]);
-    neigbours.push(matrix[(i - 1 + r) % r][(j + 1 + c) % c]);
-    neigbours.push(matrix[i][(j + 1 + c) % c]);
-    neigbours.push(matrix[(i + 1 + r) % r][(j + 1 + c) % c]);
-    neigbours.push(matrix[(i + 1 + r) % r][j]);
-    neigbours.push(matrix[(i + 1 + r) % r][(j - 1 + c) % c]);
-    neigbours.push(matrix[i][(j - 1 + c) % c]);
-  } catch (e) {
-
+  var bias = 1;
+  for (let iOffset = 1; iOffset <= range; iOffset++) {
+    for (let jOffset = -(range - bias); jOffset <= range - bias; jOffset++) {
+      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
+        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
+          count++;
+        }
+      }
+    }
+    bias++;
   }
-  return neigbours;
+  return count;
 }
 
 export function getRandomColor() {
@@ -120,7 +130,7 @@ export function fillBackground(context: CanvasRenderingContext2D, color: string 
   context.fill();
 }
 
-export function drawState(context: RenderingContext, automataState: number[][], r: number, c: number, bsize: number, colors: string[]) {
+export function drawState(context: CanvasRenderingContext2D, automataState: number[][], r: number, c: number, bsize: number, colors: string[]) {
   for (var i = 0; i < r; i++) {
     for (var j = 0; j < c; j++) {
       drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
@@ -128,7 +138,7 @@ export function drawState(context: RenderingContext, automataState: number[][], 
   }
 }
 
-export function drawBlock(context: RenderingContext, x: number, y: number, blockSize: number, color: string | CanvasGradient | CanvasPattern) {
+export function drawBlock(context: CanvasRenderingContext2D, x: number, y: number, blockSize: number, color: string | CanvasGradient | CanvasPattern) {
   context.beginPath();
   context.fillStyle = color;
   context.lineWidth = 0;
@@ -205,12 +215,12 @@ export function debounce(func: Function, timeoutInterval: number, ...args: any[]
   let timeoutHandle: NodeJS.Timeout;
   console.log(args);
   return function debouncedFunction(...args) {
-      console.log(args);
-      const later = () => {
-          clearTimeout(timeoutHandle);
-          func(...args);
-      } ;
+    console.log(args);
+    const later = () => {
       clearTimeout(timeoutHandle);
-      timeoutHandle = setTimeout(later, timeoutInterval);
-  }; 
+      func(...args);
+    };
+    clearTimeout(timeoutHandle);
+    timeoutHandle = setTimeout(later, timeoutInterval);
+  };
 }

@@ -1,6 +1,8 @@
 import { GPU } from "gpu.js";
 import { StateColors } from "../utils";
 import { AutomataConstants, AutomataThis, DimensionConstants, GameOfLifeThis, RendererThis } from "./kernels";
+import { checkCrossNeighbourhood, checkMooreNeighbourhood, checkNuemannNeighbourhood } from "../../../shared/utilities"
+
 const gpu = new GPU();
 
 export function getCrossProcess(rendererWidth: number, rendererHeight: number, automatonThreshold: number,
@@ -234,106 +236,4 @@ function rendererKernel(this: RendererThis, stateMatrix: number[][]) {
       this.constants.color15b
     );
   }
-}
-
-function checkCrossNeighbourhood(stateMatrix: number[][], i: number, j: number, r: number, c: number,
-  nextState: number, maxRange: number) {
-  let count = 0;
-  for (let range = 1; range <= maxRange; range++) {
-    for (let k = 1; k <= range; k++) {
-      if (i + k < r && j + k < c) {
-        if (stateMatrix[i + k][j + k] == nextState) {
-          count++;
-        }
-      }
-    }
-    for (let k = 1; k <= range; k++) {
-      if (i + k < r && j - k >= 0) {
-        if (stateMatrix[i + k][j - k] == nextState) {
-          count++;
-        }
-      }
-    }
-    for (let k = 1; k <= range; k++) {
-      if (i - k >= 0 && j + k < c) {
-        if (stateMatrix[i - k][j + k] == nextState) {
-          count++;
-        }
-      }
-    }
-    for (let k = 1; k <= range; k++) {
-      if (i - k >= 0 && j - k >= 0) {
-        if (stateMatrix[i - k][j - k] == nextState) {
-          count++;
-        }
-      }
-    }
-  }
-  return count;
-}
-
-function checkMooreNeighbourhood(stateMatrix: number[][], i: number, j: number, r: number, c: number,
-  nextState: number, range: number) {
-  let count = 0;
-  for (let offset = 1; offset <= range; offset++) {
-    if (j + offset < c) {
-      if (stateMatrix[i][j + offset] == nextState) {
-        count++;
-      }
-    }
-    if (j - offset >= 0) {
-      if (stateMatrix[i][j - offset] == nextState) {
-        count++;
-      }
-    }
-  }
-  for (let iOffset = 1; iOffset <= range; iOffset++) {
-    for (let jOffset = -range; jOffset <= range; jOffset++) {
-      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
-        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
-          count++;
-        }
-      }
-      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
-        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
-          count++;
-        }
-      }
-    }
-  }
-  return count;
-}
-
-function checkNuemannNeighbourhood(stateMatrix: number[][], i: number, j: number, r: number, c: number,
-  nextState: number, range: number) {
-  let count = 0;
-  for (let offset = 1; offset <= range; offset++) {
-    if (j + offset < c) {
-      if (stateMatrix[i][j + offset] == nextState) {
-        count++;
-      }
-    }
-    if (j - offset >= 0) {
-      if (stateMatrix[i][j - offset] == nextState) {
-        count++;
-      }
-    }
-  }
-  var bias = 1;
-  for (let iOffset = 1; iOffset <= range; iOffset++) {
-    for (let jOffset = -(range - bias); jOffset <= range - bias; jOffset++) {
-      if (i - iOffset >= 0 && j + jOffset >= 0 && j + jOffset < c) {
-        if (stateMatrix[i - iOffset][j + jOffset] == nextState) {
-          count++;
-        }
-      }
-      if (i + iOffset < r && j + jOffset >= 0 && j + jOffset < c) {
-        if (stateMatrix[i + iOffset][j + jOffset] == nextState) {
-          count++;
-        }
-      }
-    }
-    bias++;
-  }
-  return count;
 }

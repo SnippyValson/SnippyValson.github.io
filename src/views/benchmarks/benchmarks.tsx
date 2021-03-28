@@ -1,12 +1,12 @@
 import "./../../main.css";
 import "./benchmarks.css";
-import { Style } from "../../common/style";
+import { Style } from "../../shared/style";
 import * as React from "react";
 import { Switch, Route} from "react-router-dom"
 import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmarks";
 import { GpuJsBenchmarks } from "./subviews/gpujs_benchmarks/gpujs_benchmarks";
-import { TopBar } from '../../common/common_components/top_bar';
-import { ButtonList } from './../../common/common_components/button_list';
+import { TopBar } from '../../shared/components/TopBar';
+import { ButtonList } from '../../shared/components/NavgationPanel';
 
 
 export class Benchmarks extends React.Component {

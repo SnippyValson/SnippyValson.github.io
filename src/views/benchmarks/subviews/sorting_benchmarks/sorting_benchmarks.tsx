@@ -1,6 +1,6 @@
 import "./sorting_benchmarks.css";
 import * as React from 'react';
-import { debounce } from '../../../../libs/uitils'
+import { debounce } from '../../../../shared/utilities'
 
 export class SortingBenchmark extends React.Component {
     

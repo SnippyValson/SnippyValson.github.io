@@ -1,4 +1,4 @@
-import { getGradientStopsRgb } from "./../../libs/uitils";
+import { getGradientStopsRgb } from "../../shared/utilities";
 
 export type StateColors = {
   color0r: number,

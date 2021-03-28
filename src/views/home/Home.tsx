@@ -2,11 +2,11 @@ import "../../main.css";
 import './Home.module.css';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Style } from "../../common/style";
+import { Style } from "../../shared/style";
 import { ConwaysGameOfLife } from "../../automata/conwaysGameOfLife";
 import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata";
 import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer";
-import { fillBackground, getGradientStops, getMooreNeighbours, getNuemannNeighbours, getCrossNeighbours, debounce } from "../../libs/uitils";
+import { fillBackground, getGradientStops, checkCrossNeighbourhood, checkMooreNeighbourhood, checkNuemannNeighbourhood, debounce } from "../../shared/utilities";
 
 export class Home extends React.Component 
 {
@@ -108,37 +108,37 @@ export class Home extends React.Component
           description: "Conway's game of life",
           rule: undefined,
           automaton: new ConwaysGameOfLife(rows, cols, [this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground],
-                                           this.backgroundContext, blockSize, 2, getMooreNeighbours),
+                                           this.backgroundContext, blockSize, 2, checkMooreNeighbourhood),
         });
         this.visualizers.push({
           description: "Cyclic cellular automaton",
           rule: "R1/T1/C16/NM",
           automaton: new CyclicCellularAutomata(rows, cols, getGradientStops(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14),
-                                                this.backgroundContext, blockSize, 16, 1, 1, getMooreNeighbours),
+                                                this.backgroundContext, blockSize, 16, 1, 1, checkMooreNeighbourhood),
         });
         this.visualizers.push({
           description: "Cyclic cellular automaton",
           rule: "R1/T1/C16/NN",
           automaton: new CyclicCellularAutomata(rows, cols, getGradientStops(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14),
-                                                this.backgroundContext, blockSize, 16, 1, 1, getNuemannNeighbours),
+                                                this.backgroundContext, blockSize, 16, 1, 1, checkNuemannNeighbourhood),
         });
         this.visualizers.push({
           description: "Cyclic cellular automaton",
           rule: "R1/T1/C16/NC",
           automaton: new CyclicCellularAutomata(rows, cols, getGradientStops(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14),
-                                                this.backgroundContext, blockSize, 16, 1, 1, getCrossNeighbours),
+                                                this.backgroundContext, blockSize, 16, 1, 1, checkCrossNeighbourhood),
         });
         this.visualizers.push({
           description: "Cyclic cellular automaton",
           rule: "R1/T3/C4/NM",
           automaton: new CyclicCellularAutomata(rows, cols, getGradientStops(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 2),
-                                                this.backgroundContext, blockSize, 4, 1, 3, getMooreNeighbours ),
+                                                this.backgroundContext, blockSize, 4, 1, 3, checkMooreNeighbourhood ),
         });
         this.visualizers.push({
           description: "Cyclic cellular automaton",
           rule: "R1/T3/C3/NM",
           automaton: new CyclicCellularAutomata(rows, cols, getGradientStops(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 1),
-                                                this.backgroundContext, blockSize, 3, 1, 3, getMooreNeighbours),
+                                                this.backgroundContext, blockSize, 3, 1, 3, checkMooreNeighbourhood),
         });
         this.visualizers.push({
           description: "Matrix Traversal",

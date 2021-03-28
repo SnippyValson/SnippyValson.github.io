@@ -1,4 +1,4 @@
-import { drawBlock, getGradientStops } from "./../libs/uitils";
+import { drawBlock, getGradientStops } from "../shared/utilities";
 import { IVisualizer } from "./visualizer";
 
 enum Mode { Spiral,  DIAG_TL_BR, DIAG_BL_TR }
@@ -13,7 +13,7 @@ export class MatrixTraversalVisualizer implements IVisualizer {
   /* The size of the matrix. */
   private size: any; 
   /* The 2D context on which the traversal is going to be visualized. */
-  private drawingContext : RenderingContext;
+  private drawingContext : CanvasRenderingContext2D;
   /* The foreground and background colors as part of the theme. */
   private colors: string[];
   /* The size of each colored block to be drawn. */
@@ -41,7 +41,7 @@ export class MatrixTraversalVisualizer implements IVisualizer {
    * @param {RenderingContext} context  - The 2D rendering context on which the matrix is to be visualized.
    * @param {number} blockSize - The size of the colored block to be drawn. 
    */
-  constructor(rows: number, cols: number, colors: string[], context: RenderingContext, blockSize: number) {
+  constructor(rows: number, cols: number, colors: string[], context: CanvasRenderingContext2D, blockSize: number) {
     this.size = { rows: Math.round(rows), cols: Math.round(cols) };
     this.drawingContext = context;
     this.colors = colors;

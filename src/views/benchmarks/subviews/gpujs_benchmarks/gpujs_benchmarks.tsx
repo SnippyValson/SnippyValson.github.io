@@ -3,8 +3,8 @@ import "../../../../main.css";
 import "./gpujs_benchmarks.css";
 import { getRenderer } from "../../../gpujs_showcase/kernels/kernel";
 import { getColors, StateColors } from "../../../gpujs_showcase/utils";
-import { Style } from "../../../../common/style";
-import { Array2D } from "../../../../libs/uitils";
+import { Style } from "../../../../shared/style";
+import { Array2D } from "../../../../shared/utilities";
 import { getMooreProcess } from "../../../gpujs_showcase/kernels/kernel";
 
 type IProps = {}

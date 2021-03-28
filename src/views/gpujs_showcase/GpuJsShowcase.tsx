@@ -1,7 +1,7 @@
 import "./../../main.css";
 import "./GpuJsShowcase.module.css";
-import { Style } from "../../common/style";
-import { Array2D } from "../../libs/uitils";
+import { Style } from "../../shared/style";
+import { Array2D } from "../../shared/utilities";
 import { getMooreProcess } from "./kernels/kernel";
 import { getGameOfLifeProcess } from "./kernels/kernel";
 import { getNueMannProcess } from "./kernels/kernel";
@@ -9,8 +9,8 @@ import { getCrossProcess } from "./kernels/kernel";
 import { getRenderer } from "./kernels/kernel";
 import { getColors } from "./utils";
 import * as React from 'react';
-import { ButtonList, IButtonListItem } from '../../common/common_components/button_list';
-import { TopBar } from '../../common/common_components/top_bar';
+import { ButtonList, IButtonListItem } from '../../shared/components/NavgationPanel';
+import { TopBar } from '../../shared/components/TopBar';
 import { IKernelRunShortcut } from "gpu.js";
 
 type IProps = {

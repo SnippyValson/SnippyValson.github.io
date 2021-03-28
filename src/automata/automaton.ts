@@ -1,4 +1,4 @@
-import { drawState, Array2D } from '../libs/uitils'
+import { drawState, Array2D } from '../shared/utilities'
 import { IVisualizer } from '../visualizers/visualizer';
 
 /**
@@ -10,7 +10,7 @@ export class Automaton implements IVisualizer {
     /* The size of the state matrix. */
     protected size: any;
     /* The 2D context on which the automata has to be visualized. */
-    protected drawingContext: RenderingContext;
+    protected drawingContext: CanvasRenderingContext2D;
     /* The colors corresponding to the states. */
     protected colors: string[];
     /* The number of state which each cell could be. */
@@ -26,52 +26,56 @@ export class Automaton implements IVisualizer {
     /* Temporary  state used during calculation of the next state. */
     protected tempState: number[][];
     /* The function used to get the  neighbouring cells. */
-    protected neighbourhood: Function;
+    protected neighbourhood: (state: number[][], i: number, j: number, r: number, c: number,
+        nextState: number, range: number) => number;
 
-    constructor(rows: number, cols: number, colors: string[], context:RenderingContext, blockSize:number, numStates:number, range:number, threshold:number, neighbourhood: Function) {
-        this.size = { rows : Math.round(rows), cols : Math.round(cols) };
+    constructor(rows: number, cols: number, colors: string[], context: CanvasRenderingContext2D,
+        blockSize: number, numStates: number, range: number, threshold: number,
+        neighbourhood: (state: number[][], i: number, j: number, r: number, c: number, nextState: number, range: number) => number) {
+
+        this.size = { rows: Math.round(rows), cols: Math.round(cols) };
         this.drawingContext = context;
         this.colors = colors;
         this.numStates = numStates;
         this.range = range;
         this.threshold = threshold;
         this.blockSize = blockSize;
-        this.state =  Array2D(this.size.rows, this.size.cols);
+        this.state = Array2D(this.size.rows, this.size.cols);
         this.tempState = Array2D(this.size.rows, this.size.cols);
         this.neighbourhood = neighbourhood;
-        for(var i = 0 ; i < this.size.rows; i ++) {
-            for(var j = 0; j < this.size.cols; j ++) {
+        for (var i = 0; i < this.size.rows; i++) {
+            for (var j = 0; j < this.size.cols; j++) {
                 this.state[i][j] = Math.floor(Math.random() * numStates);
             }
         }
     }
 
-    public updateParams(params: any): void{
-        if(params.rows != undefined){
+    public updateParams(params: any): void {
+        if (params.rows != undefined) {
             this.size.rows = params.rows;
         }
-        if(params.cols != undefined){
+        if (params.cols != undefined) {
             this.size.cols = params.cols;
         }
-        if(params.colors != undefined){
+        if (params.colors != undefined) {
             this.colors = params.colors;
         }
-        if(params.numStates != undefined){
+        if (params.numStates != undefined) {
             this.numStates = params.numStates;
         }
-        if(params.range != undefined){
+        if (params.range != undefined) {
             this.range = params.range;
         }
-        if(params.numStates != undefined){
+        if (params.numStates != undefined) {
             this.threshold = params.threshold;
         }
-        if(params.blockSize != undefined){
+        if (params.blockSize != undefined) {
             this.blockSize = params.blockSize;
         }
-        if(params.state != undefined){
+        if (params.state != undefined) {
             this.state = params.state;
         }
-        if(params.neighbourhood != undefined){
+        if (params.neighbourhood != undefined) {
             this.neighbourhood = params.neighbourhood;
         }
     }

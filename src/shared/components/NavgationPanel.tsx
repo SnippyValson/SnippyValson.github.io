@@ -1,4 +1,3 @@
-import { Constants as GlobalConstants } from "../constants";
 import "../../main.css";
 import * as React from "react";
 
@@ -32,11 +31,11 @@ export class ButtonList extends React.Component<IProps> {
             if (!listButtonRef || !listButtonRef.current) {
                 return;
             }
-            listButtonRef.current.classList.add(GlobalConstants.class.PixelButton);
-            listButtonRef.current.classList.remove(GlobalConstants.class.PixelButtonInverted);
+            listButtonRef.current.classList.add('pixel-button');
+            listButtonRef.current.classList.remove('pixel-button-inverted');
         }
-        selectedButton.classList.add(GlobalConstants.class.PixelButtonInverted);
-        selectedButton.classList.remove(GlobalConstants.class.PixelButton);
+        selectedButton.classList.add('pixel-button-inverted');
+        selectedButton.classList.remove('pixel-button');
     }
 
     onButtonClicked(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, tag: string) {

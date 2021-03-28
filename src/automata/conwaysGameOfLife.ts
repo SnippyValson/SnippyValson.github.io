@@ -1,9 +1,9 @@
-import { drawBlock } from '../libs/uitils'
+import { drawBlock } from '../shared/utilities'
 import { Automaton } from './automaton';
 
 export class ConwaysGameOfLife extends Automaton {
     
-    constructor(rows: number, cols: number, colors: string, context: RenderingContext, blocksize: number, numStates: number, neighbourhood: Function) {
+    constructor(rows: number, cols: number, colors: string[], context: CanvasRenderingContext2D, blocksize: number, numStates: number, neighbourhood: Function) {
         super(rows, cols, colors, context, blocksize, numStates, 0 , 0, neighbourhood);
     }
 

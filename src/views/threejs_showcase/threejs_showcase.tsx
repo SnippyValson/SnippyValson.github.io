@@ -1,10 +1,10 @@
 import "./../../main.css";
 import "./threejs_showcase.css";
-import { Style } from "../../common/style";
+import { Style } from "../../shared/style";
 import * as THREE from "three";
 import * as React from 'react';
-import { TopBar } from '../../common/common_components/top_bar';
-import { ButtonList, IButtonListItem } from '../../common/common_components/button_list';
+import { TopBar } from '../../shared/components/TopBar';
+import { ButtonList, IButtonListItem } from '../../shared/components/NavgationPanel';
 
 type IProps = {
 
