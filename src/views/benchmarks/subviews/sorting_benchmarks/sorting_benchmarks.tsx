@@ -1,11 +1,9 @@
 import "./sorting_benchmarks.css";
 import * as React from 'react';
-import { Strings } from "../../localization/strings";
 import { debounce } from '../../../../libs/uitils'
 
 export class SortingBenchmark extends React.Component {
     
-    localStrings = new Strings();
     /* The array that stores the unsorted list of numbers. */
     array: number[] = [];
     /* The array that is used to merege sorted segments of arrays in case of multi threaded sorting. */
@@ -181,14 +179,14 @@ export class SortingBenchmark extends React.Component {
 
     sortArray(sortType) {
         if (this.array == undefined || this.array.length == 0) {
-            this.showMessage(this.localStrings.localized.GenerateDataPrompt);
+            this.showMessage("Please generate data.");
             return;
         } else if (this.array.length > 100000) {
             this.dialogOkAction = this.executeSort.bind(this, sortType);
             this.dialogClosedAction = () => {};
             this.dialogCanceledAction = () => {};
             this.setState({
-                message: this.localStrings.localized.LargeArrayWarning,
+                message: "You are going to process a large array, this may cause your browswer to hang.",
                 showDialog: true
             });
             return;
@@ -210,14 +208,14 @@ export class SortingBenchmark extends React.Component {
 
     multiSortArray(sortType) {
         if (this.array == undefined || this.array.length == 0) {
-            this.showMessage(this.localStrings.localized.GenerateDataPrompt);
+            this.showMessage("Please generate data.");
             return;
         } else if (this.array.length > 100000) {
             this.dialogOkAction = this.executeMultiSort;
             this.dialogClosedAction = () => {};
             this.dialogCanceledAction = () => {};
             this.setState({
-                message: this.localStrings.localized.LargeArrayWarning,
+                message: "You are going to process a large array, this may cause your browswer to hang.",
                 showDialog: true
             })
             return;

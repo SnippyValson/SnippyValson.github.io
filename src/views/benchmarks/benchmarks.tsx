@@ -5,7 +5,6 @@ import * as React from "react";
 import { Switch, Route} from "react-router-dom"
 import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmarks";
 import { GpuJsBenchmarks } from "./subviews/gpujs_benchmarks/gpujs_benchmarks";
-import { Strings } from "./localization/strings";
 import { TopBar } from '../../common/common_components/top_bar';
 import { ButtonList } from './../../common/common_components/button_list';
 
@@ -13,13 +12,11 @@ import { ButtonList } from './../../common/common_components/button_list';
 export class Benchmarks extends React.Component {
     
     list_items;
-    localStrings;
     style;
 
     constructor(props) {
         super(props);
         this.style = new Style();
-        this.localStrings = new Strings();
         this.list_items = [];
         this.list_items.push({ tag : 'sorting-benchmarks', displayText : 'Sorting' });
         this.list_items.push({ tag : 'matrix-benchmarks', displayText : 'Matrix'});
@@ -64,11 +61,11 @@ export class Benchmarks extends React.Component {
     }
 
     setIdle() {
-        this.setState({ status : this.localStrings.localized.Idle });
+        this.setState({ status : "Idle" });
     }
     
     setBusy() {
-        this.setState({ status : this.localStrings.localized.BusyIndicator});
+        this.setState({ status : "Busy" });
     }
 
     render(){
