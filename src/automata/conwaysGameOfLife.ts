@@ -14,13 +14,7 @@ export class ConwaysGameOfLife extends Automaton {
     public renderNextFrame(): void {
         for(let i = 0; i < this.size.rows; i++) {
             for(let j = 0; j < this.size.cols; j ++) {
-                let neighbours = this.neighbourhood(i, j, this.state, this.size.rows, this.size.cols);
-                let liveCount = 0;
-                neighbours.forEach((neighbour: number) => {
-                    if(neighbour) {
-                        liveCount ++;
-                    }
-                });
+                let liveCount = this.neighbourhood(this.state, i, j, this.size.rows, this.size.cols, 1, 1);
                 this.tempState[i][j] = this.state[i][j];
                 if(liveCount < 2 || liveCount > 3){
                     if(this.state[i][j] == 1) {
