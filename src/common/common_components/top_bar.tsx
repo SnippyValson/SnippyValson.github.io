@@ -10,7 +10,6 @@ export class TopBar extends React.Component {
 
     onToggleDrawer() {
         let panel = document.querySelector('.pixel-app-side-panel');
-        console.log(panel);
         panel.classList.toggle('pixel-slide-out');
         panel.classList.toggle('pixel-slide-in');
     }

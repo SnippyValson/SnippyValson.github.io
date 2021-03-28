@@ -1,24 +1,65 @@
-import {
-    getGradientStopsRgb
-  } from "./../../libs/uitils.js";
+import { getGradientStopsRgb } from "./../../libs/uitils";
 
-export function getColors(color1, color2, numStops) {
-    let colors = getGradientStopsRgb(
-      color1,
-      color2,
-      numStops
-    );
+export type StateColors = {
+  color0r: number,
+  color0g: number,
+  color0b: number,
+  color1r: number,
+  color1g: number,
+  color1b: number,
+  color2r: number,
+  color2g: number,
+  color2b: number,
+  color3r: number,
+  color3g: number,
+  color3b: number,
+  color4r: number,
+  color4g: number,
+  color4b: number,
+  color5r: number,
+  color5g: number,
+  color5b: number,
+  color6r: number,
+  color6g: number,
+  color6b: number,
+  color7r: number,
+  color7g: number,
+  color7b: number,
+  color8r: number,
+  color8g: number,
+  color8b: number,
+  color9r: number,
+  color9g: number,
+  color9b: number,
+  color10r: number,
+  color10g: number,
+  color10b: number,
+  color11r: number,
+  color11g: number,
+  color11b: number,
+  color12r: number,
+  color12g: number,
+  color12b: number,
+  color13r: number,
+  color13g: number,
+  color13b: number,
+  color14r: number,
+  color14g: number,
+  color14b: number,
+  color15r: number,
+  color15g: number,
+  color15b: number
+}
+
+export function getColors(color1: string, color2: string, numStops: number): StateColors {
+    let colors = getGradientStopsRgb(color1, color2, numStops);
     if (colors.length < 16) {
       let length = colors.length;
       for (let i = 0; i < 16 - length; i++) {
-        colors.push({
-          r: 0,
-          g: 0,
-          b: 0,
-        });
+        colors.push({ r: 0, g: 0, b: 0});
       }
     }
-    let colorsRgb = {
+    return <StateColors>{
       color0r: colors[0].r / 255,
       color0g: colors[0].g / 255,
       color0b: colors[0].b / 255,
@@ -68,5 +109,4 @@ export function getColors(color1, color2, numStops) {
       color15g: colors[15].g / 255,
       color15b: colors[15].b / 255,
     };
-    return colorsRgb;
   }

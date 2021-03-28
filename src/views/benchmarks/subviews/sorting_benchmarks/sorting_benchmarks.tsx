@@ -1,21 +1,21 @@
 import "./sorting_benchmarks.css";
-import React from 'react';
+import * as React from 'react';
 import { Strings } from "../../localization/strings";
 import { debounce } from '../../../../libs/uitils'
 
 export class SortingBenchmark extends React.Component {
     
     localStrings = new Strings();
-    /* The array that stores the unsorted liat of numbers. */
-    array = [];
+    /* The array that stores the unsorted list of numbers. */
+    array: number[] = [];
     /* The array that is used to merege sorted segments of arrays in case of multi threaded sorting. */
-    merged = [];
+    merged: number[] = [];
     /* The number of sorting threads taht completed. */
-    numFinised = 0;
+    numFinised: number = 0;
     /* The worker thread that poulates the array. */
     populationWorker;
-    startTime;
-    endTime;
+    startTime: number;
+    endTime: number;
     dialogOkAction;
     dialogClosedAction;
     dialogCanceledAction;
@@ -52,12 +52,12 @@ export class SortingBenchmark extends React.Component {
             multiQuickSortDone: false,
             multiQuickSortResult: ""
         };
-        this.populationWorker = new Worker("workers/population_worker.js");
+        this.populationWorker = new Worker("workers/population_worker.ts");
         this.populationWorker.onmessage = this.handlePopulationWorkerMessage.bind(this);
-        this.sortWorker = new Worker("workers/sort_worker.js");
+        this.sortWorker = new Worker("workers/sort_worker.ts");
         this.sortWorker.onmessage = this.handleSortWorkerMessage.bind(this);
         for (let i = 0; i < navigator.hardwareConcurrency; i++) {
-            var sortWorker = new Worker("workers/sort_worker.js");
+            var sortWorker = new Worker("workers/sort_worker.ts");
             sortWorker.onmessage = (function (e) {
                 if (this.numFinised == 0) {
                     this.merged = e.data.array;

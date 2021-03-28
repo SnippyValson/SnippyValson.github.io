@@ -1,12 +1,12 @@
 import "./../../main.css";
 import "./benchmarks.css";
 import { Style } from "../../common/style";
-import React from "react";
+import * as React from "react";
 import { Switch, Route} from "react-router-dom"
-import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmarks.jsx";
+import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmarks";
 import { GpuJsBenchmarks } from "./subviews/gpujs_benchmarks/gpujs_benchmarks";
 import { Strings } from "./localization/strings";
-import { TopBar } from './../../common/common_components/top_bar';
+import { TopBar } from '../../common/common_components/top_bar';
 import { ButtonList } from './../../common/common_components/button_list';
 
 

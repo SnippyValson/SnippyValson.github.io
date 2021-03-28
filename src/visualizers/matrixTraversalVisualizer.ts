@@ -1,5 +1,5 @@
 import { drawBlock, getGradientStops } from "./../libs/uitils";
-import { IVisualizer } from "./visualizer.ts";
+import { IVisualizer } from "./visualizer";
 
 enum Mode { Spiral,  DIAG_TL_BR, DIAG_BL_TR }
 

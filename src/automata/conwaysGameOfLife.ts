@@ -1,5 +1,5 @@
-import { drawBlock } from '../libs/uitils.js'
-import { Automaton } from './automaton.ts';
+import { drawBlock } from '../libs/uitils'
+import { Automaton } from './automaton';
 
 export class ConwaysGameOfLife extends Automaton {
     

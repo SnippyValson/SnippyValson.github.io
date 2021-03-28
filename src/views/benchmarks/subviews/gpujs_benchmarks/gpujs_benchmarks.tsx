@@ -1,11 +1,11 @@
-import React from "react";
+import * as React from "react";
 import "../../../../main.css";
 import "./gpujs_benchmarks.css";
-import { getRenderer } from "./../../../gpujs_showcase/kernels/render_kernel";
+import { getRenderer } from "../../../gpujs_showcase/kernels/kernel";
 import { getColors } from "../../../gpujs_showcase/utils";
 import { Style } from "../../../../common/style";
-import { Array2D } from "./../../../../libs/uitils";
-import { getMooreProcess } from "../../../gpujs_showcase/kernels/moore_kernel";
+import { Array2D } from "../../../../libs/uitils";
+import { getMooreProcess } from "../../../gpujs_showcase/kernels/kernel";
 
 export class GpuJsBenchmarks extends React.Component {
   style;
@@ -65,7 +65,7 @@ export class GpuJsBenchmarks extends React.Component {
 
   createGpuWorkers() {
     for (let i = 0; i < navigator.hardwareConcurrency; i++) {
-      let gpuW = new Worker("workers/gpu_worker.js");
+      let gpuW = new Worker("workers/gpu_worker.ts");
       gpuW.onmessage = (function (e) {
         this.numFinished++;
         this.temp[i] = e.data;

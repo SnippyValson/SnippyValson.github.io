@@ -1,12 +1,12 @@
 import "../../main.css";
-import './home.css';
-import React from 'react';
+import './Home.module.css';
+import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { Style } from "../../common/style.js";
-import { ConwaysGameOfLife } from "../../automata/conwaysGameOfLife.ts";
-import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata.ts";
-import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer.ts";
-import { fillBackground, getGradientStops, getMooreNeighbours, getNuemannNeighbours, getCrossNeighbours, debounce } from "../../libs/uitils.js";
+import { Style } from "../../common/style";
+import { ConwaysGameOfLife } from "../../automata/conwaysGameOfLife";
+import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata";
+import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer";
+import { fillBackground, getGradientStops, getMooreNeighbours, getNuemannNeighbours, getCrossNeighbours, debounce } from "../../libs/uitils";
 
 export class Home extends React.Component 
 {

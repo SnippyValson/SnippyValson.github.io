@@ -1,8 +1,8 @@
-import React from 'react'
-import ReactDOM from 'react-dom';
-import { Home } from './views/home/home';
+import * as React from 'react'
+import * as ReactDOM from 'react-dom';
+import { Home } from './views/home/Home';
 import { ThreeJSShowCase } from './views/threejs_showcase/threejs_showcase';
-import { GpuJsShowCase } from './views/gpujs_showcase/gpujs_showcase.tsx';
+import { GpuJsShowCase } from './views/gpujs_showcase/GpuJsShowcase';
 import { Benchmarks } from './views/benchmarks/benchmarks';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 

@@ -1,4 +1,4 @@
-export function getNuemannNeighbours(x, y, matrix, r, c) {
+export function getNuemannNeighbours(x: number, y: number, matrix:number, r: number, c: number) {
   var i = x;
   var j = y;
   var neigbours = [];
@@ -17,7 +17,7 @@ export function getNuemannNeighbours(x, y, matrix, r, c) {
   return neigbours;
 }
 
-export function getCrossNeighbours(x, y, matrix, r, c) {
+export function getCrossNeighbours(x: number, y: number, matrix: number, r: number, c: number) {
   var i = x;
   var j = y;
   var neigbours = [];
@@ -36,7 +36,7 @@ export function getCrossNeighbours(x, y, matrix, r, c) {
   return neigbours;
 }
 
-export function getMooreNeighbours(x, y, matrix, r, c) {
+export function getMooreNeighbours(x: number, y: number, matrix: number, r: number, c: number) {
   var i = x;
   var j = y;
   var neigbours = [];
@@ -71,7 +71,7 @@ export function getMooreNeighbours(x, y, matrix, r, c) {
   return neigbours;
 }
 
-export function getMooreNeighboursWrap(x, y, matrix, r, c) {
+export function getMooreNeighboursWrap(x: number, y: number, matrix: number, r: number, c: number) {
   var i = x;
   var j = y;
   var neigbours = [];
@@ -99,9 +99,9 @@ export function getRandomColor() {
   return color;
 }
 
-export let Array2D = (r, c) => [...Array(r)].map((x) => Array(c).fill(0));
+export let Array2D = (r: number, c: number) => [...Array(r)].map((x) => Array(c).fill(0));
 
-export function rand(min, max) {
+export function rand(min: number, max: number) {
   return (
     (Math.floor(Math.pow(10, 14) * Math.random() * Math.random()) %
       (max - min + 1)) +
@@ -109,18 +109,18 @@ export function rand(min, max) {
   );
 }
 
-export function getNextState(state, numStates) {
+export function getNextState(state: number, numStates: number): number {
   return (state + 1) % numStates;
 }
 
-export function fillBackground(context, color, width, height) {
+export function fillBackground(context: CanvasRenderingContext2D, color: string | CanvasGradient | CanvasPattern, width: number, height: number) {
   context.beginPath();
   context.fillStyle = color;
   context.rect(0, 0, width, height);
   context.fill();
 }
 
-export function drawState(context, automataState, r, c, bsize, colors) {
+export function drawState(context: RenderingContext, automataState: number[][], r: number, c: number, bsize: number, colors: string[]) {
   for (var i = 0; i < r; i++) {
     for (var j = 0; j < c; j++) {
       drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
@@ -128,7 +128,7 @@ export function drawState(context, automataState, r, c, bsize, colors) {
   }
 }
 
-export function drawBlock(context, x, y, blockSize, color) {
+export function drawBlock(context: RenderingContext, x: number, y: number, blockSize: number, color: string | CanvasGradient | CanvasPattern) {
   context.beginPath();
   context.fillStyle = color;
   context.lineWidth = 0;
@@ -136,16 +136,16 @@ export function drawBlock(context, x, y, blockSize, color) {
   context.fill();
 }
 
-function componentToHex(c) {
+function componentToHex(c: number) {
   var hex = c.toString(16);
   return hex.length == 1 ? "0" + hex : hex;
 }
 
-function rgbToHex(r, g, b) {
+function rgbToHex(r: number, g: number, b: number) {
   return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
-function hexToRgb(hex) {
+function hexToRgb(hex: string) {
   var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
     r: parseInt(result[1], 16),
@@ -154,7 +154,7 @@ function hexToRgb(hex) {
   } : null;
 }
 
-export function getGradientStops(startColor, endColor, numStops) {
+export function getGradientStops(startColor: string, endColor: string, numStops: number) {
   var startRGB = hexToRgb(startColor);
   var endRGB = hexToRgb(endColor);
   var rStep = Math.floor(Math.abs(startRGB.r - endRGB.r) / numStops);
@@ -177,7 +177,7 @@ export function getGradientStops(startColor, endColor, numStops) {
   return colors;
 }
 
-export function getGradientStopsRgb(startColor, endColor, numStops) {
+export function getGradientStopsRgb(startColor: string, endColor: string, numStops: number) {
   numStops = numStops + 1;
   var startRGB = hexToRgb(startColor);
   var endRGB = hexToRgb(endColor);
@@ -201,15 +201,8 @@ export function getGradientStopsRgb(startColor, endColor, numStops) {
   return colors;
 }
 
-export function rgbToInt(rgb) {
-  var rgbInt = rgb.r;
-  rgbInt = (rgbInt << 8) + rgb.g;
-  rgbInt = (rgbInt << 8) + rgb.b;
-  return rgbInt;
-}
-
-export function debounce(func, timeoutInterval, ...args) {
-  let timeoutHandle;
+export function debounce(func: Function, timeoutInterval: number, ...args: any[]) {
+  let timeoutHandle: NodeJS.Timeout;
   console.log(args);
   return function debouncedFunction(...args) {
       console.log(args);
@@ -217,7 +210,6 @@ export function debounce(func, timeoutInterval, ...args) {
           clearTimeout(timeoutHandle);
           func(...args);
       } ;
-
       clearTimeout(timeoutHandle);
       timeoutHandle = setTimeout(later, timeoutInterval);
   }; 

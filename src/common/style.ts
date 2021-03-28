@@ -1,6 +1,7 @@
-import { ColorPalletes } from "./colors.js";
+import { ColorPalletes } from "./colors";
 
 export class Style {
+  
   colorIndex;
   prevColorIndex;
 

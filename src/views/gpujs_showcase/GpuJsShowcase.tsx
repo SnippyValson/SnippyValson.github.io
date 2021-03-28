@@ -1,16 +1,17 @@
 import "./../../main.css";
-import "./gpujs_showcase.css";
+import "./GpuJsShowcase.module.css";
 import { Style } from "../../common/style";
-import { Array2D } from "../../libs/uitils.js";
-import { getMooreProcess } from "./kernels/moore_kernel";
-import { getGameOfLifeProcess } from "./kernels/game_of_life_kernel";
-import { getNueMannProcess } from "./kernels/neumann_kernel";
-import { getCrossProcess } from "./kernels/cross_kernel";
-import { getRenderer } from "./kernels/render_kernel";
+import { Array2D } from "../../libs/uitils";
+import { getMooreProcess } from "./kernels/kernel";
+import { getGameOfLifeProcess } from "./kernels/kernel";
+import { getNueMannProcess } from "./kernels/kernel";
+import { getCrossProcess } from "./kernels/kernel";
+import { getRenderer } from "./kernels/kernel";
 import { getColors } from "./utils";
 import * as React from 'react';
-import { ButtonList } from '../../common/common_components/button_list';
+import { ButtonList, IButtonListItem } from '../../common/common_components/button_list';
 import { TopBar } from '../../common/common_components/top_bar';
+import { IKernelRunShortcut } from "gpu.js";
 
 type IProps = {
 
@@ -25,20 +26,19 @@ export class GpuJsShowCase extends React.Component<IProps, IState> {
 
   private t1: number;
   private t2: number;
-  private style;
+  private style: Style;
   private delay: number;
   private fps_t1: number;
   private fps_t2: number;
-  private list_items;
-  private process;
-  private renderer;
-  private gpuTempState;
+  private listItems: IButtonListItem[];
+  private process: any;
+  private renderer: IKernelRunShortcut;
+  private gpuTempState:number[][];
   private rendererWidth: number;
-  private rendererOutlet;
+  private rendererOutlet: React.RefObject<HTMLDivElement>;
   private rendererHeight: number;
-  private animationHandle;
-  private gpuAutomataState;
-  private Constants = {};
+  private animationHandle: number;
+  private gpuAutomataState: number[][];
 
   state: Readonly<IState> = {
     message: "*",
@@ -60,34 +60,19 @@ export class GpuJsShowCase extends React.Component<IProps, IState> {
     this.animate = this.animate.bind(this);
     this.updateRenderer = this.updateRenderer.bind(this);
     this.renderAndSwap = this.renderAndSwap.bind(this);
-    this.list_items = [];
-    this.list_items.push({ tag: 'square-cycles', displayText: 'CCA - R1/T1/C16/NM' });
-    this.list_items.push({ tag: 'nuemann-cycles', displayText: 'CCA - R1/T1/C16/NN' });
-    this.list_items.push({ tag: 'cross-cycles', displayText: 'CCA - R1/T1/C16/NC' });
-    this.list_items.push({ tag: 'cca-r1t3c4nm', displayText: 'CCA - R1/T3/C4/NM' });
-    this.list_items.push({ tag: 'cca-r1t3c3nm', displayText: 'CCA - R1/T3/C3/NM' });
-    this.list_items.push({ tag: 'cca-r2t11c3nm', displayText: 'CCA - R2/T11/C3/NM' });
-    this.list_items.push({ tag: 'cca-r2t5c8nm', displayText: 'CCA - R2/T5/C8/NM' });
-    this.list_items.push({ tag: 'cca-r3t15c3nm', displayText: 'CCA - R3/T15/C3/NM' });
-    this.list_items.push({ tag: 'cca-r2t9c4nm', displayText: 'CCA - R2/T9/C4/NM' });
-    this.list_items.push({ tag: 'cca-r3t10c2nn', displayText: 'CCA - R3/T10/C2/NN' });
-    this.list_items.push({ tag: 'cca-r2t5c3nn', displayText: 'CCA - R2/T5/C3/NN' });
-    this.list_items.push({ tag: 'game-of-life', displayText: 'Game Of Life' });
-    this.Constants.id = {};
-    this.Constants.id.r1t1c16nm = "square-cycles";
-    this.Constants.id.r1t1c16nn = "nuemann-cycles";
-    this.Constants.id.r1t1c16nc = "cross-cycles";
-    this.Constants.id.r1t3c4nm = "cca-r1t3c4nm";
-    this.Constants.id.r1t3c3nm = "cca-r1t3c3nm";
-    this.Constants.id.r2t11c3nm = "cca-r2t11c3nm";
-    this.Constants.id.r2t5c8nm = "cca-r2t5c8nm";
-    this.Constants.id.r3t15c3nm = "cca-r3t15c3nm";
-    this.Constants.id.r2t9c4nm = "cca-r2t9c4nm";
-    this.Constants.id.r3t10c2nn = "cca-r3t10c2nn";
-    this.Constants.id.r2t5c3nn = "cca-r2t5c3nn";
-    this.Constants.id.gameoflife = "game-of-life";
-    this.Constants.id.RendererPanel = "renderer-panel";
-    this.Constants.id.InfoLabel = "info-label";
+    this.listItems = [];
+    this.listItems.push({ tag: 'square-cycles', displayText: 'CCA - R1/T1/C16/NM' });
+    this.listItems.push({ tag: 'nuemann-cycles', displayText: 'CCA - R1/T1/C16/NN' });
+    this.listItems.push({ tag: 'cross-cycles', displayText: 'CCA - R1/T1/C16/NC' });
+    this.listItems.push({ tag: 'cca-r1t3c4nm', displayText: 'CCA - R1/T3/C4/NM' });
+    this.listItems.push({ tag: 'cca-r1t3c3nm', displayText: 'CCA - R1/T3/C3/NM' });
+    this.listItems.push({ tag: 'cca-r2t11c3nm', displayText: 'CCA - R2/T11/C3/NM' });
+    this.listItems.push({ tag: 'cca-r2t5c8nm', displayText: 'CCA - R2/T5/C8/NM' });
+    this.listItems.push({ tag: 'cca-r3t15c3nm', displayText: 'CCA - R3/T15/C3/NM' });
+    this.listItems.push({ tag: 'cca-r2t9c4nm', displayText: 'CCA - R2/T9/C4/NM' });
+    this.listItems.push({ tag: 'cca-r3t10c2nn', displayText: 'CCA - R3/T10/C2/NN' });
+    this.listItems.push({ tag: 'cca-r2t5c3nn', displayText: 'CCA - R2/T5/C3/NN' });
+    this.listItems.push({ tag: 'game-of-life', displayText: 'Game Of Life' });
   }
 
   componentDidMount() {
@@ -165,28 +150,24 @@ export class GpuJsShowCase extends React.Component<IProps, IState> {
   /*
    * Specifes what process should be done on the automata state between renders.
    */
-  setProcess(processName, width, height, threshold, numStates, range) {
+  setProcess(processName: string, width: number, height: number, threshold: number, numStates: number, range: number) {
     switch (processName) {
       case "moore": {
         this.process = getMooreProcess(width, height, threshold, numStates, range);
         this.reset(width, height, numStates);
-      }
-        break;
+      } break;
       case "cross": {
         this.process = getCrossProcess(width, height, threshold, numStates, range);
         this.reset(width, height, numStates);
-      };
-        break;
+      } break;
       case "neumann": {
         this.process = getNueMannProcess(width, height, threshold, numStates, range);
         this.reset(width, height, numStates);
-      }
-        break;
+      } break;
       case "gol": {
         this.process = getGameOfLifeProcess(width, height);
         this.reset(width, height, numStates);
-      }
-        break;
+      } break;
     }
   }
 
@@ -199,46 +180,46 @@ export class GpuJsShowCase extends React.Component<IProps, IState> {
     this.renderer(this.gpuAutomataState);
   }
 
-  onItemClicked(button, item) {
+  onItemClicked(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, tag: string) {
     this.setState({ buttonLabel: "Start" });
     if (this.animationHandle) {
       cancelAnimationFrame(this.animationHandle);
     }
-    switch (item) {
-      case this.Constants.id.r1t1c16nm:
+    switch (tag) {
+      case "square-cycles":
         this.setProcess("moore", this.rendererWidth, this.rendererHeight, 1, 16, 1);
         break;
-      case this.Constants.id.r1t1c16nn:
+      case "nuemann-cycles":
         this.setProcess("neumann", this.rendererWidth, this.rendererHeight, 1, 16, 1);
         break;
-      case this.Constants.id.r1t1c16nc:
+      case "cross-cycles":
         this.setProcess("cross", this.rendererWidth, this.rendererHeight, 1, 16, 1);
         break;
-      case this.Constants.id.r1t3c4nm:
+      case "cca-r1t3c4nm":
         this.setProcess("moore", this.rendererWidth, this.rendererHeight, 3, 4, 1);
         break;
-      case this.Constants.id.r1t3c3nm:
+      case "cca-r1t3c3nm":
         this.setProcess("moore", this.rendererWidth, this.rendererHeight, 3, 3, 1);
         break;
-      case this.Constants.id.gameoflife:
+      case "game-of-life":
         this.setProcess("gol", this.rendererWidth, this.rendererHeight, -1, 2, -1);
         break;
-      case this.Constants.id.r2t11c3nm:
+      case "cca-r2t11c3nm":
         this.setProcess("moore", this.rendererWidth, this.rendererHeight, 11, 3, 2);
         break;
-      case this.Constants.id.r2t5c8nm:
+      case "cca-r2t5c8nm":
         this.setProcess("moore", this.rendererWidth, this.rendererHeight, 5, 8, 2);
         break;
-      case this.Constants.id.r3t15c3nm:
+      case "cca-r3t15c3nm":
         this.setProcess("moore", this.rendererWidth, this.rendererHeight, 15, 3, 3);
         break;
-      case this.Constants.id.r2t9c4nm:
+      case "cca-r2t9c4nm":
         this.setProcess("moore", this.rendererWidth, this.rendererHeight, 9, 4, 2);
         break;
-      case this.Constants.id.r3t10c2nn:
+      case "cca-r3t10c2nn":
         this.setProcess("neumann", this.rendererWidth, this.rendererHeight, 10, 2, 3);
         break;
-      case this.Constants.id.r2t5c3nn:
+      case "cca-r2t5c3nn":
         this.setProcess("neumann", this.rendererWidth, this.rendererHeight, 1, 5, 1);
         break;
       default:
@@ -271,7 +252,7 @@ export class GpuJsShowCase extends React.Component<IProps, IState> {
           </TopBar>
         </div>
         <div className="pixel-app-side-panel pixel-slide-out">
-          <ButtonList onItemClicked={this.onItemClicked} items={this.list_items}></ButtonList>
+          <ButtonList onItemClicked={this.onItemClicked} items={this.listItems}></ButtonList>
         </div>
         <div className="pixel-app-content" ref={this.rendererOutlet}>
         </div>

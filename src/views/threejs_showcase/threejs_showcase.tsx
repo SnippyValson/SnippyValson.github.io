@@ -2,30 +2,43 @@ import "./../../main.css";
 import "./threejs_showcase.css";
 import { Style } from "../../common/style";
 import * as THREE from "three";
-import React from 'react';
-import { TopBar }  from '../../common/common_components/top_bar';
-import { ButtonList } from '../../common/common_components/button_list';
+import * as React from 'react';
+import { TopBar } from '../../common/common_components/top_bar';
+import { ButtonList, IButtonListItem } from '../../common/common_components/button_list';
 
-export class ThreeJSShowCase extends React.Component {
-  far;
-  near;
+type IProps = {
+
+}
+
+type IState = {
+  fps: string;
+  newFrameRate: number;
+}
+
+export class ThreeJSShowCase extends React.Component<IProps, IState> {
+  far: number;
+  near: number;
   style;
-  speed;
-  mount;
-  aspect;
-  renderer; 
-  threeView;
-  viewAngle;
-  frameRate;
-  frameSpeed;
-  sceneWidth;
-  sceneHeight;
-  animationHandle;
-  list_items;
+  speed: number;
+  aspect: number;
+  renderer: THREE.WebGLRenderer;
+  threeView: any;
+  threeViewRef: React.RefObject<HTMLDivElement>;
+  viewAngle: number;
+  frameRate: number;
+  frameSpeed: number;
+  sceneWidth: number;
+  sceneHeight: number;
+  animationHandle: number;
+  list_items: IButtonListItem[];
+  state: Readonly<IState> = {
+    fps: "*",
+    newFrameRate: 60
+  }
 
   constructor(props) {
     super(props);
-    this.state = { fps : "*", newFrameRate : 60 };
+    this.state = { fps: "*", newFrameRate: 60 };
     this.style = new Style();
     this.speed = 0.001;
     this.frameRate = 60;
@@ -35,17 +48,18 @@ export class ThreeJSShowCase extends React.Component {
     this.near = 0.1;
     this.far = 10000;
     this.renderer = new THREE.WebGLRenderer({ alpha: true });
-    this.animationHandle = 'undefinded';
+    this.animationHandle = 0;
     this.onUpdateClicked = this.onUpdateClicked.bind(this);
     this.frameRateInputChanged = this.frameRateInputChanged.bind(this);
-    this.list_items= [];
-    this.list_items.push({ tag : 'animation', displayText : 'Time vs Frame based animation' });
+    this.threeViewRef = React.createRef();
+    this.list_items = [];
+    this.list_items.push({ tag: 'animation', displayText: 'Time vs Frame based animation' });
     console.log('Delta animation created.');
   }
 
   componentDidMount() {
+    this.threeView = this.threeViewRef.current;
     this.style.applyStyle();
-    this.threeView = this.refs.threeView;
     this.sceneWidth = this.threeView.clientWidth;
     this.sceneHeight = this.threeView.clientHeight;
     this.aspect = this.sceneWidth / this.sceneHeight;
@@ -131,41 +145,45 @@ export class ThreeJSShowCase extends React.Component {
       }
       if (fpsCounterDelta >= 1000) {
         frameCounterT1 = performance.now() - ((frameCounterT2 - frameCounterT1) % 1000);
-        this.setState( { fps : `${fps} FPS` } )
+        this.setState({ fps: `${fps} FPS` })
         fps = 0;
       }
-      requestAnimationFrame(emulatedFpsanimate.bind(this));
+      this.animationHandle = requestAnimationFrame(emulatedFpsanimate.bind(this));
     }
-    emulatedFpsanimate.bind(this).call();  
+    emulatedFpsanimate.bind(this).call();
   }
 
   onUpdateClicked() {
-    this.frameRate = parseFloat(this.state.newFrameRate);
+    this.frameRate = this.state.newFrameRate;
     console.log('Update Clicked!');
   }
 
-  frameRateInputChanged(event) {
-    this.setState({ newFrameRate : event.target.value });
+  frameRateInputChanged(event: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({ newFrameRate: parseFloat(event.target.value) });
+  }
+
+  onItemClicked(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, tag: string) {
+
   }
 
   render() {
-    return( 
-      <div style = {{width : '100%', height : '99%', margin : '0px', padding : '0px'}} className = "pixel-app-container">
+    return (
+      <div style={{ width: '100%', height: '99%', margin: '0px', padding: '0px' }} className="pixel-app-container">
         <div className="pixel-app-header">
           <TopBar>
             <label className="pixel-text-medium" id="fps-label">FPS : </label>
-            <input className="pixel-input pixel-text-medium" onChange = {this.frameRateInputChanged} value = {this.state.newFrameRate}/>
-            <button className="pixel-button" id="update-button" onClick = {this.onUpdateClicked}>Update</button>
+            <input className="pixel-input pixel-text-medium" onChange={this.frameRateInputChanged} value={this.state.newFrameRate} />
+            <button className="pixel-button" id="update-button" onClick={this.onUpdateClicked}>Update</button>
             <label className="pixel-text-small" id="info-label">Time contolled animation [right] v/s frame controlled animation.</label>
           </TopBar>
         </div>
-        <div className = "pixel-app-side-panel pixel-slide-out">
-            <ButtonList items = { this.list_items }></ButtonList>
+        <div className="pixel-app-side-panel pixel-slide-out">
+          <ButtonList onItemClicked={this.onItemClicked} items={this.list_items}></ButtonList>
         </div>
-        <div className = "pixel-app-content">
-          <div ref = "threeView" className="threeview"></div>
+        <div className="pixel-app-content">
+          <div ref={this.threeViewRef} className="threeview"></div>
           <div className="bottom-right unselectable pixel-div pixel-text-medium">
-            {this.state.fps}    
+            {this.state.fps}
           </div>
         </div>
       </div>

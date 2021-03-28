@@ -1,4 +1,4 @@
-export function quickSort(array, low, high) {
+export function quickSort(array: number[], low: number, high: number) {
     if (low < high) {
         let pivot = partition(array, low, high);
         if (low < pivot - 1) {
@@ -11,7 +11,7 @@ export function quickSort(array, low, high) {
     return array;
 }
 
-function partition(array, low, high) {
+function partition(array: number[], low: number, high: number) {
     let pivot = array[high];
     let i = low - 1;
     for (let j = low; j < high; j++) {
@@ -30,9 +30,9 @@ function partition(array, low, high) {
     return i + 1;
 }
 
-export function quickSortFast(array, left, right) {
+export function quickSortFast(array: number[], left: number, right: number) {
 
-    function partitionFast(array, left, right) {
+    function partitionFast(array: number[], left: number, right: number) {
         let pivot = array[Math.floor((right + left) / 2)];
         let i = left;
         let j = right;
@@ -54,7 +54,7 @@ export function quickSortFast(array, left, right) {
         return i;
     }
 
-    var pivot;
+    let pivot: number = 0;;
     if (array.length > 1) {
         pivot = partitionFast(array, left, right);
         if (left < pivot - 1) {
@@ -68,7 +68,7 @@ export function quickSortFast(array, left, right) {
 }
 
 
-export function bubbleSort(array) {
+export function bubbleSort(array: number[]) {
     for (let i = 0; i < array.length; i++) {
         for (let j = 0; j < array.length - i - 1; j++) {
             if (array[j] > array[j + 1]) {
@@ -80,7 +80,7 @@ export function bubbleSort(array) {
     }
 }
 
-export function insertionSort(array) {
+export function insertionSort(array: number[]) {
     for (let i = 1; i < array.length; i++) {
         let key = array[i];
         let j = i - 1;
@@ -92,7 +92,7 @@ export function insertionSort(array) {
     }
 }
 
-export function selectionSort(array) {
+export function selectionSort(array: number[]) {
     for (let i = 0; i < array.length - 1; i++) {
         let minIndex = i;
         for (let j = i + 1; j < array.length; j++) {
@@ -108,7 +108,7 @@ export function selectionSort(array) {
     }
 }
 
-function merge(array1, array2) {
+function merge(array1: number[], array2: number[]) {
     let sorted = [];
     while (array1.length && array2.length) {
         if (array1[0] < array2[0]) {
@@ -120,17 +120,17 @@ function merge(array1, array2) {
     return sorted.concat(array1.slice().concat(array2.slice()));
 }
 
-export function mergeSort(array, l, r) {
+export function mergeSort(array: number[], l: number, r: number) {
     if (array.length <= 1) {
         return array;
     }
     let middle = Math.floor(array.length / 2),
-        left = mergeSort(array.slice(0, middle)),
-        right = mergeSort(array.slice(middle));
+        left = mergeSort(array.slice(0, middle), l , middle),
+        right = mergeSort(array.slice(middle), middle + 1, r);
     return merge(left, right);
 }
 
-export function radixSort(array) {
+export function radixSort(array: number[]) {
     console.log(`Radix sort`);
     let maxLength = largestNum(array);
     for (let i = 0; i < maxLength; i++) {
@@ -146,7 +146,7 @@ export function radixSort(array) {
     return array;
 }
 
-function getNum(num, index) {
+function getNum(num: number, index: number) {
     const strNum = String(num);
     let end = strNum.length - 1;
     const foundNum = strNum[end - index];
@@ -157,7 +157,7 @@ function getNum(num, index) {
     }
 }
 
-function largestNum(array) {
+function largestNum(array: number[]) {
     let largest = "0";
     array.forEach(num => {
         const strNum = String(num);
@@ -168,7 +168,7 @@ function largestNum(array) {
     return largest.length;
 }
 
-function heapify(array, index, arrayLength) {
+function heapify(array: number[], index: number, arrayLength: number) {
     var left = 2 * index + 1;
     var right = 2 * index + 2;
     var max = index;
@@ -180,17 +180,17 @@ function heapify(array, index, arrayLength) {
     }
     if (max != index) {
         swap(array, index, max);
-        heapify(array, max);
+        heapify(array, max, arrayLength);
     }
 }
 
-function swap(array, a, b) {
+function swap(array: number[], a: number, b: number) {
     let temp = array[a];
     array[a] = array[b];
     array[b] = temp;
 }
 
-export function heapSort(array) {
+export function heapSort(array: number[]) {
     let arrayLength = array.length;
     for (let i = Math.floor(array.length / 2); i >= 0; i--) {
         heapify(array, i, arrayLength);

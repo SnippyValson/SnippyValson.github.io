@@ -1,5 +1,5 @@
-import { drawBlock, getNextState } from './../libs/uitils.js'
-import { Automaton } from './automaton.ts';
+import { drawBlock, getNextState } from './../libs/uitils'
+import { Automaton } from './automaton';
 
 export class CyclicCellularAutomata extends Automaton {
 
