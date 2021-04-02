@@ -8,20 +8,28 @@ import { CyclicCellularAutomata } from "../../automata/cyclicCellularAutomata";
 import { MatrixTraversalVisualizer } from "../../visualizers/matrixTraversalVisualizer";
 import { fillBackground, getGradientStops, checkCrossNeighbourhood, checkMooreNeighbourhood, checkNuemannNeighbourhood, debounce } from "../../shared/utilities";
 
-export class Home extends React.Component 
-{
-    style;
-    automaton;
-    numDivs;
-    background;
-    visualizers;
-    automatonIndex;
-    animationRequest;
-    backgroundContext;
-    prevAutomatonIndex;
-    debouncedResizeHandler;
+type IProps = {}
 
-    constructor(props){
+type IState = {
+  info : string, 
+  fpsInfo : string, 
+  showWorks : boolean
+}
+
+export class Home extends React.Component<IProps> {
+    style: any;
+    automaton: any;
+    numDivs: number;
+    background: any;
+    visualizers: any;
+    automatonIndex: number;
+    animationRequest: number;
+    backgroundContext: CanvasRenderingContext2D;
+    prevAutomatonIndex: number;
+    debouncedResizeHandler: any;
+    state: Readonly<IState>;
+
+    constructor(props: IProps){
         super(props);
         this.style = new Style();
         this.visualizers = [];
@@ -201,12 +209,12 @@ export class Home extends React.Component
         this.initBackgroundAnimation();
     }
 
-    showWorks(event) {
+    showWorks(event: any) {
         this.setState({ showWorks : true });
         event.stopPropagation();
     }
 
-    closeWorks(event) {
+    closeWorks(event: any) {
         this.setState({ showWorks : false });
         event.stopPropagation();
     }      

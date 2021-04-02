@@ -7,20 +7,28 @@ import { SortingBenchmark } from "./subviews/sorting_benchmarks/sorting_benchmar
 import { GpuJsBenchmarks } from "./subviews/gpujs_benchmarks/gpujs_benchmarks";
 import { TopBar } from '../../shared/components/TopBar';
 import { ButtonList } from '../../shared/components/NavgationPanel';
+import { RouteComponentProps } from 'react-router';
 
+type IProps = { } & RouteComponentProps
 
-export class Benchmarks extends React.Component {
+type IState = { 
+    status: string
+ }
+
+export class Benchmarks extends React.Component<IProps, IState> {
     
-    list_items;
-    style;
+    list_items: any;
+    style: any;
+    state: Readonly<IState>={
+        status : "Idle" 
+    }
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.style = new Style();
         this.list_items = [];
         this.list_items.push({ tag : 'sorting-benchmarks', displayText : 'Sorting' });
         this.list_items.push({ tag : 'matrix-benchmarks', displayText : 'Matrix'});
-        this.state = { status : "Idle" };
         this.onItemClicked = this.onItemClicked.bind(this);
         this.handleStateChange = this.handleStateChange.bind(this);
     }
@@ -34,7 +42,7 @@ export class Benchmarks extends React.Component {
 
     }
 
-    onItemClicked(button, item) {
+    onItemClicked(button: any, item: string) {
         let {match} = this.props;
         switch (item) {
             case "sorting-benchmarks": {
@@ -48,7 +56,7 @@ export class Benchmarks extends React.Component {
         }
     }
 
-    handleStateChange(state){
+    handleStateChange(state: string){
         switch(state) {
             case "busy": {
                 this.setBusy();
@@ -69,7 +77,7 @@ export class Benchmarks extends React.Component {
     }
 
     render(){
-        let {match} = this.props;
+        let { match } = this.props;
         return (
             <div style = {{width : '99%', height : '99%', margin : '0px', padding : '0px'}} className = "pixel-app-container">
                 <div className = "pixel-app-header">
@@ -86,7 +94,7 @@ export class Benchmarks extends React.Component {
                             <SortingBenchmark onStateChanged = {this.handleStateChange} />
                         </Route>
                         <Route path={`${match.url}/matrix-benchmarks`} >
-                            <GpuJsBenchmarks onStateChanged = {this.handleStateChange} />
+                            <GpuJsBenchmarks />
                         </Route>
                     </Switch>
                  </div> 

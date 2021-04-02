@@ -101,7 +101,7 @@ export class GpuJsShowCase extends React.Component<IProps, IState> {
   /*
    * Update the GpuJs canvas renderer with the new dimensions and colors. 
    */
-  updateRenderer(width: number, height: number, colors) {
+  updateRenderer(width: number, height: number, colors: any) {
     let renderer = getRenderer(width, height, colors);
     this.rendererOutlet.current.appendChild(renderer.canvas);
     return renderer;

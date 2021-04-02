@@ -214,7 +214,7 @@ export function getGradientStopsRgb(startColor: string, endColor: string, numSto
 export function debounce(func: Function, timeoutInterval: number, ...args: any[]) {
   let timeoutHandle: NodeJS.Timeout;
   console.log(args);
-  return function debouncedFunction(...args) {
+  return function debouncedFunction(...args: any[]) {
     console.log(args);
     const later = () => {
       clearTimeout(timeoutHandle);

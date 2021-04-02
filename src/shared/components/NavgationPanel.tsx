@@ -56,9 +56,9 @@ export class ButtonList extends React.Component<IProps> {
                     this.props.items.map(
                         item => {
                             // Keep a reference to all the buttons thats being created.
-                            let ref = React.createRef();
+                            let ref:React.RefObject<HTMLButtonElement> = React.createRef();
                             // Assign a unique key to all the buttons as well. 
-                            let button = (<button className="pixel-button pixel-list-button" style={{ marginBottom: '7.5px' }} ref={ref} key={item.tag} onClick={(e) => { this.onButtonClicked(e, item.tag); }}> {item.displayText} </button>);
+                            let button = (<button className="pixel-button pixel-list-button" style={{ marginBottom: '7.5px' }} ref={ ref } key={item.tag} onClick={(e) => { this.onButtonClicked(e, item.tag); }}> {item.displayText} </button>);
                             // Push the ref to a list, after the re has been assigned.
                             this.referenceList.push(ref);
                             return button;

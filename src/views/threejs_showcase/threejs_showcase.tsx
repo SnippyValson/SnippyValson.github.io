@@ -16,9 +16,10 @@ type IState = {
 }
 
 export class ThreeJSShowCase extends React.Component<IProps, IState> {
+  
   far: number;
   near: number;
-  style;
+  style: any;
   speed: number;
   aspect: number;
   renderer: THREE.WebGLRenderer;
@@ -36,7 +37,7 @@ export class ThreeJSShowCase extends React.Component<IProps, IState> {
     newFrameRate: 60
   }
 
-  constructor(props) {
+  constructor(props: IProps) {
     super(props);
     this.state = { fps: "*", newFrameRate: 60 };
     this.style = new Style();
@@ -97,7 +98,7 @@ export class ThreeJSShowCase extends React.Component<IProps, IState> {
     frameControlledCube.position.x += -1.5;
     this.renderer.setSize(this.sceneWidth, this.sceneHeight);
     let domElement = this.renderer.domElement;
-    domElement.style.margin = 0;
+    domElement.style.margin = "0px";
     this.threeView.appendChild(domElement);
     scene.add(camera);
     const ambientLight = new THREE.AmbientLight("#ff00ff", 0.1);

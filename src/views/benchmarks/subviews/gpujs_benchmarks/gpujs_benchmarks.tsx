@@ -67,7 +67,7 @@ export class GpuJsBenchmarks extends React.Component<IProps, IState> {
     this.gpuAutomataState = [];
     this.gpuTempState = [];
     this.gpuRenderer = undefined;
-    this.gpuWorkers.forEach(gpuWorkers => {
+    this.gpuWorkers.forEach((gpuWorkers: any) => {
       gpuWorkers.terminate();
     });
     this.gpuWorkers = [];
@@ -77,7 +77,7 @@ export class GpuJsBenchmarks extends React.Component<IProps, IState> {
   createGpuWorkers() {
     for (let i = 0; i < navigator.hardwareConcurrency; i++) {
       let gpuW = new Worker("workers/gpu_worker.ts");
-      gpuW.onmessage = (function (e) {
+      gpuW.onmessage = (function (e: any) {
         this.numFinished++;
         this.temp[i] = e.data;
         if (this.numFinished == navigator.hardwareConcurrency) {
@@ -194,7 +194,7 @@ export class GpuJsBenchmarks extends React.Component<IProps, IState> {
           if (this.gpuWorkers.length === 0) {
             this.createGpuWorkers();
           }
-          this.gpuWorkers.forEach(gpuWorkers => {
+          this.gpuWorkers.forEach((gpuWorkers: any) => {
             gpuWorkers.postMessage({ mode: "create", state: this.gpuAutomataState, rendererHeight: 2 + this.gridHeight / navigator.hardwareConcurrency, rendererWidth: this.gridWidth, automatonNumStates: 16, automatonRange: 1, automatonThreshold: 1 });
           });
           this.gpuTempState = [];
@@ -202,7 +202,7 @@ export class GpuJsBenchmarks extends React.Component<IProps, IState> {
           this.setState({ mGpuButtonText: "Stop" });
           this.processRunning = true;
         } else {
-          this.gpuWorkers.forEach(gpuWorkers => {
+          this.gpuWorkers.forEach((gpuWorkers: any) => {
             gpuWorkers.terminate();
           });
           this.gpuWorkers = [];

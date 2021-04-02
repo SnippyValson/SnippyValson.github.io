@@ -63,7 +63,7 @@ export class MatrixTraversalVisualizer implements IVisualizer {
    * @param {RenderingContext} context  - The 2D rendering context on which the matrix is to be visualized.
    * @param {number} blockSize - The size of the colored block to be drawn. 
    */
-  public upate(rows: number, cols: number, colors: string[], context: RenderingContext, blockSize: number) : void {
+  public upate(rows: number, cols: number, colors: string[], context: CanvasRenderingContext2D, blockSize: number) : void {
     this.size = { rows: Math.round(rows), cols: Math.round(cols) };
     this.drawingContext = context;
     this.colors = colors;

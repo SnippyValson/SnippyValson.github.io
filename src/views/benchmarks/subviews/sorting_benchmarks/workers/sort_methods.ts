@@ -120,14 +120,14 @@ function merge(array1: number[], array2: number[]) {
     return sorted.concat(array1.slice().concat(array2.slice()));
 }
 
-export function mergeSort(array: number[], l: number, r: number) {
+export function mergeSort(array: number[], l: number, r: number): number[] {
     if (array.length <= 1) {
         return array;
     }
-    let middle = Math.floor(array.length / 2),
-        left = mergeSort(array.slice(0, middle), l , middle),
-        right = mergeSort(array.slice(middle), middle + 1, r);
-    return merge(left, right);
+    let middle = Math.floor(array.length / 2);
+    let left = mergeSort(array.slice(0, middle), l , middle);
+    let right = mergeSort(array.slice(middle), middle + 1, r);
+    merge(left, right);
 }
 
 export function radixSort(array: number[]) {
@@ -139,19 +139,19 @@ export function radixSort(array: number[]) {
         }, () => []);
         for (let j = 0; j < array.length; j++) {
             let num = getNum(array[j], i);
-            if (num != undefined) buckets[num].push(array[j]);
+            if (num != undefined) buckets[parseInt(num)].push(array[j]);
         }
         array = buckets.flat();
     }
     return array;
 }
 
-function getNum(num: number, index: number) {
+function getNum(num: number, index: number): string {
     const strNum = String(num);
     let end = strNum.length - 1;
     const foundNum = strNum[end - index];
     if (foundNum === undefined) {
-        return 0;
+        return "0";
     } else {
         return foundNum;
     }

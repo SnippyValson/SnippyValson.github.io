@@ -3,7 +3,7 @@ import { Automaton } from './automaton';
 
 export class ConwaysGameOfLife extends Automaton {
     
-    constructor(rows: number, cols: number, colors: string[], context: CanvasRenderingContext2D, blocksize: number, numStates: number, neighbourhood: Function) {
+    constructor(rows: number, cols: number, colors: string[], context: CanvasRenderingContext2D, blocksize: number, numStates: number, neighbourhood: any) {
         super(rows, cols, colors, context, blocksize, numStates, 0 , 0, neighbourhood);
     }
 

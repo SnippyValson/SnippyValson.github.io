@@ -2,9 +2,13 @@ import './../../main.css'
 import * as React from 'react'
 import { Link } from 'react-router-dom'
 
-export class TopBar extends React.Component {
+type IProps = {
+
+}
+
+export class TopBar extends React.Component<IProps> {
     
-    constructor(props){
+    constructor(props: IProps){
         super(props);
     }
 

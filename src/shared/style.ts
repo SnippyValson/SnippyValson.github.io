@@ -2,8 +2,8 @@ import { ColorPalletes } from "./colors";
 
 export class Style {
   
-  colorIndex;
-  prevColorIndex;
+  colorIndex: number;
+  prevColorIndex: number;
 
   constructor() {
     this.colorIndex = Math.floor(Math.random() * ColorPalletes.length) + 0;

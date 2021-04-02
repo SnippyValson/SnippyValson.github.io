@@ -2,7 +2,38 @@ import "./sorting_benchmarks.css";
 import * as React from 'react';
 import { debounce } from '../../../../shared/utilities'
 
-export class SortingBenchmark extends React.Component {
+type IProps ={
+    onStateChanged: any
+}
+
+type IState = {
+            arraySize: number,
+            populated: boolean,
+            bubbleSortResult: string,
+            bubbleSortDone: boolean,
+            insertionSortResult: string,
+            insertionSortDone: boolean,
+            selectionSortResult: string,
+            selectionSortDone: boolean,
+            showMessage: boolean,
+            message: string,
+            showDialog: boolean,
+            quickSortDone: boolean,
+            quickSortResult: string,
+            mergeSortDone: boolean,
+            mergeSortResult: string,
+            radixSortDone: boolean,
+            radixSortResult: string,
+            heapSortDone: boolean,
+            heapSortResult: string,
+            multiBubbleSortDone: boolean,
+            multiBubbleSortResult: string,
+            multiQuickSortDone: boolean,
+            multiQuickSortResult: string,
+            value: number
+}
+
+export class SortingBenchmark extends React.Component<IProps, IState> {
     
     /* The array that stores the unsorted list of numbers. */
     array: number[] = [];
@@ -14,49 +45,52 @@ export class SortingBenchmark extends React.Component {
     populationWorker;
     startTime: number;
     endTime: number;
-    dialogOkAction;
-    dialogClosedAction;
-    dialogCanceledAction;
-    sortWorker;
-    sortWorkers = [];
+    dialogOkAction: any;
+    dialogClosedAction: any;
+    dialogCanceledAction: any;
+    sortWorker: any;
+    sortWorkers: any = [];
+    
+    state: Readonly<IState> = {
+        arraySize: 10000,
+        populated: false,
+        bubbleSortResult: "",
+        bubbleSortDone: false,
+        insertionSortResult: "",
+        insertionSortDone: false,
+        selectionSortResult: "",
+        selectionSortDone: false,
+        showMessage: false,
+        message: "",
+        showDialog: false,
+        quickSortDone: false,
+        quickSortResult: "",
+        mergeSortDone: false,
+        mergeSortResult: "",
+        radixSortDone: false,
+        radixSortResult: "",
+        heapSortDone: false,
+        heapSortResult: "",
+        multiBubbleSortDone: false,
+        multiBubbleSortResult: "",
+        multiQuickSortDone: false,
+        multiQuickSortResult: "",
+        value: 0
+    };
 
-    constructor(props) {
+    constructor(props: IProps) {
         super(props);
         this.dialogOkAction = undefined;
         this.dialogClosedAction = undefined;
         this.dialogCanceledAction = undefined;
-        this.state = {
-            arraySize: 10000,
-            populated: false,
-            bubbleSortResult: "",
-            bubbleSortDone: false,
-            insertionSortResult: "",
-            insertionSortDone: false,
-            selectionSortResult: "",
-            selectionSortDone: false,
-            showMessage: false,
-            message: "",
-            showDialog: false,
-            quickSortDone: false,
-            quickSortResult: "",
-            mergeSortDone: false,
-            mergeSortResult: "",
-            radixSortDone: false,
-            radixSortResult: "",
-            heapSortDone: false,
-            heapSortResult: "",
-            multiBubbleSortDone: false,
-            multiBubbleSortResult: "",
-            multiQuickSortDone: false,
-            multiQuickSortResult: ""
-        };
+        
         this.populationWorker = new Worker("workers/population_worker.ts");
         this.populationWorker.onmessage = this.handlePopulationWorkerMessage.bind(this);
         this.sortWorker = new Worker("workers/sort_worker.ts");
         this.sortWorker.onmessage = this.handleSortWorkerMessage.bind(this);
         for (let i = 0; i < navigator.hardwareConcurrency; i++) {
             var sortWorker = new Worker("workers/sort_worker.ts");
-            sortWorker.onmessage = (function (e) {
+            sortWorker.onmessage = (function (e: any) {
                 if (this.numFinised == 0) {
                     this.merged = e.data.array;
                 } else {
@@ -89,7 +123,7 @@ export class SortingBenchmark extends React.Component {
         this.showMessage = this.showMessage.bind(this);
     }
 
-    handleArraySizeChange = (e) => {
+    handleArraySizeChange = (e: any) => {
         this.setState({
             arraySize: parseInt(e.target.value)
         });
@@ -103,7 +137,7 @@ export class SortingBenchmark extends React.Component {
         this.props.onStateChanged("busy");
     }
 
-    handlePopulationWorkerMessage(e) {
+    handlePopulationWorkerMessage(e: any) {
         this.array = e.data;
         this.setIdle();
         this.setState({
@@ -111,7 +145,7 @@ export class SortingBenchmark extends React.Component {
         });     
     }
 
-    handleSortWorkerMessage(e) {
+    handleSortWorkerMessage(e: any) {
         console.table(e.data.array);
         this.endTime = performance.now();
         this.setIdle();
@@ -168,7 +202,7 @@ export class SortingBenchmark extends React.Component {
         }
     }
 
-    populateArray(dummyArg) {
+    populateArray(dummyArg: any) {
         console.log(`Argument to populateArray ${dummyArg}`);
         this.setBusy();
         this.setState({
@@ -177,7 +211,7 @@ export class SortingBenchmark extends React.Component {
         this.populationWorker.postMessage(this.state.arraySize);
     }
 
-    sortArray(sortType) {
+    sortArray(sortType: string) {
         if (this.array == undefined || this.array.length == 0) {
             this.showMessage("Please generate data.");
             return;
@@ -194,7 +228,7 @@ export class SortingBenchmark extends React.Component {
         this.executeSort(sortType);
     }
     
-    executeSort(sortType) {
+    executeSort(sortType: string) {
         this.setBusy();
         this.setState({
             quickSortDone: false
@@ -206,7 +240,7 @@ export class SortingBenchmark extends React.Component {
         });
     }
 
-    multiSortArray(sortType) {
+    multiSortArray(sortType: any) {
         if (this.array == undefined || this.array.length == 0) {
             this.showMessage("Please generate data.");
             return;
@@ -223,7 +257,7 @@ export class SortingBenchmark extends React.Component {
         this.executeMultiSort(sortType);
     }
     
-    executeMultiSort(sortType) {
+    executeMultiSort(sortType: any) {
         this.startTime = performance.now();
         this.numFinised = 0;
         this.merged = [];
@@ -252,7 +286,7 @@ export class SortingBenchmark extends React.Component {
         }
     }
 
-    showMessage(message) {
+    showMessage(message: string) {
         this.setState({
             message: message,
             showMessage: true
@@ -265,7 +299,7 @@ export class SortingBenchmark extends React.Component {
         })
     }
 
-    dialogResult(result) {
+    dialogResult(result: string) {
         this.setState({
             showDialog: false
         })
@@ -293,7 +327,7 @@ export class SortingBenchmark extends React.Component {
         }
     }
 
-    mergeSortedArrays(leftArray, rightArray) {
+    mergeSortedArrays(leftArray: number[], rightArray: number[]) {
         let leftIndex = 0;
         let rightIndex = 0;
         let resultIndex = 0;
@@ -347,7 +381,7 @@ export class SortingBenchmark extends React.Component {
                     <label className="pixel-text-medium">Populate the array. Click start to populate the array with random values.</label>
                     <div className="top-offset">
                         <label className="pixel-text-medium unselectable">Count : </label>
-                        <input className="pixel-text-medium pixel-input" id="count" value = {this.state.value} onChange={this.handleArraySizeChange.bind(this)} placeholder= {this.state.arraySize}/>
+                        <input className="pixel-text-medium pixel-input" id="count" value = {this.state.value} onChange={this.handleArraySizeChange.bind(this)} placeholder= {this.state.arraySize.toString()}/>
                     </div>
                     <label className={`pixel-text-big check-box ${this.state.populated ? 'visible' : 'hidden' }`} id="populate-array-done">☑</label>
                     <button className="pixel-button section-button" onClick={ debounce(this.populateArray.bind(this, "DummyArg"), 500) }>Generate</button>

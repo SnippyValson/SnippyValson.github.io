@@ -1,4 +1,4 @@
-export var ColorPalletes = [];
+export var ColorPalletes: any = [];
 ColorPalletes.push( { background : '#263862' , foreground : '#96b0fc' });
 ColorPalletes.push( { background : '#030f2d' , foreground : '#00bcf9' });
 ColorPalletes.push( { background : '#131314' , foreground : '#91b5a4' });
