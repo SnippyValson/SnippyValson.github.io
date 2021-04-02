@@ -1,6 +1,6 @@
 import "./sorting_benchmarks.css";
 import * as React from 'react';
-import { debounce } from '../../../../shared/utilities'
+import { debounce } from '../../../shared/utilities'
 
 type IProps ={
     onStateChanged: any

@@ -1,5 +1,5 @@
 import { IKernelFunctionThis } from "gpu.js";
-import { StateColors } from "../utils";
+import { StateColors } from "../../views/gpujs_showcase/utils";
 
 export type DimensionConstants = {
     rendererWidth: number,

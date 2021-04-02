@@ -1,11 +1,11 @@
 import * as React from "react";
 import "../../../../main.css";
 import "./gpujs_benchmarks.css";
-import { getRenderer } from "../../../gpujs_showcase/kernels/kernel";
-import { getColors, StateColors } from "../../../gpujs_showcase/utils";
-import { Style } from "../../../../shared/style";
-import { Array2D } from "../../../../shared/utilities";
-import { getMooreProcess } from "../../../gpujs_showcase/kernels/kernel";
+import { getRenderer } from "shared/kernels/kernel";
+import { getGradientStops16, StateColors } from "shared/utilities";
+import { Style } from "shared/style";
+import { Array2D } from "shared/utilities";
+import { getMooreProcess } from "shared/kernels/kernel";
 
 type IProps = {}
 
@@ -55,7 +55,7 @@ export class GpuJsBenchmarks extends React.Component<IProps, IState> {
     this.gpuTempState = Array2D(this.gridWidth, this.gridHeight);
     this.process = getMooreProcess(this.gridWidth, this.gridHeight, 1, 16, 1);
     this.createGpuWorkers();
-    let colors = getColors(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14);
+    let colors = getGradientStops16(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 14);
     this.gpuRenderer = this.UpdateRenderer(this.gridWidth, this.gridHeight, colors, this.gpuCanvasHolderRef);
     this.resetState(16, this.gpuRenderer);
   }

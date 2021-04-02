@@ -1,16 +1,16 @@
 import "./../../main.css";
 import "./GpuJsShowcase.module.css";
-import { Style } from "../../shared/style";
-import { Array2D } from "../../shared/utilities";
-import { getMooreProcess } from "./kernels/kernel";
-import { getGameOfLifeProcess } from "./kernels/kernel";
-import { getNueMannProcess } from "./kernels/kernel";
-import { getCrossProcess } from "./kernels/kernel";
-import { getRenderer } from "./kernels/kernel";
-import { getColors } from "./utils";
+import { Style } from "shared/style";
+import { Array2D } from "shared/utilities";
+import { getMooreProcess } from "shared/kernels/kernel";
+import { getGameOfLifeProcess } from "shared/kernels/kernel";
+import { getNueMannProcess } from "shared/kernels/kernel";
+import { getCrossProcess } from "shared/kernels/kernel";
+import { getRenderer } from "shared/kernels/kernel";
+import { getGradientStops16 } from "shared/utilities";
 import * as React from 'react';
 import { ButtonList, IButtonListItem } from '../../shared/components/NavgationPanel';
-import { TopBar } from '../../shared/components/TopBar';
+import { TopBar } from 'shared/components/TopBar';
 import { IKernelRunShortcut } from "gpu.js";
 
 type IProps = {
@@ -81,11 +81,11 @@ export class GpuJsShowCase extends React.Component<IProps, IState> {
     this.gpuAutomataState = Array2D(this.rendererHeight, this.rendererWidth);
     this.gpuTempState = Array2D(this.rendererHeight, this.rendererWidth);
     this.style.applyStyle();
-    this.renderer = this.updateRenderer(this.rendererWidth, this.rendererHeight, getColors(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 16 - 2));
+    this.renderer = this.updateRenderer(this.rendererWidth, this.rendererHeight, getGradientStops16(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 16 - 2));
     this.resetState(16);
     this.renderer(this.gpuAutomataState);
     /* Reposition the renderer canvas after rendring it once. */
-    this.renderer = this.updateRenderer(this.rendererWidth, this.rendererHeight, getColors(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 16 - 2));
+    this.renderer = this.updateRenderer(this.rendererWidth, this.rendererHeight, getGradientStops16(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, 16 - 2));
     this.t1 = performance.now();
     this.setProcess("moore", this.rendererWidth, this.rendererHeight, 1, 16, 1);
   }
@@ -175,7 +175,7 @@ export class GpuJsShowCase extends React.Component<IProps, IState> {
    * Reset the automata states and re-render it on the canvas.
    */
   reset(width: number, height: number, numStates: number) {
-    this.renderer = this.updateRenderer(width, height, getColors(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, numStates - 2));
+    this.renderer = this.updateRenderer(width, height, getGradientStops16(this.style.getCurrentPallet().background, this.style.getCurrentPallet().foreground, numStates - 2));
     this.resetState(numStates);
     this.renderer(this.gpuAutomataState);
   }

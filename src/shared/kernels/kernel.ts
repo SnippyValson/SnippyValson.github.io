@@ -1,7 +1,7 @@
 import { GPU } from "gpu.js";
-import { StateColors } from "../utils";
+import { StateColors } from "../utilities";
 import { AutomataConstants, AutomataThis, DimensionConstants, GameOfLifeThis, RendererThis } from "./kernels";
-import { checkCrossNeighbourhood, checkMooreNeighbourhood, checkNuemannNeighbourhood } from "../../../shared/utilities"
+import { checkCrossNeighbourhood, checkMooreNeighbourhood, checkNuemannNeighbourhood } from "../utilities"
 
 const gpu = new GPU();
 
