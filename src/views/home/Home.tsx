@@ -75,25 +75,28 @@ export class Home extends React.Component<IProps> {
 
     fillBackground(this.backgroundContext, this.style.getCurrentPallet().background, width, height);
 
-    /*
-     * Making sure that the new random index is not same as the previous one.
-     */
+    
+    // Making sure that the new random index is not same as the previous one.
     while (this.automatonIndex == this.prevAutomatonIndex) {
-      this.automatonIndex = Math.floor(Math.random() * 7);
+      this.automatonIndex = Math.floor(Math.random() * 8);
     }
+
     let blockSize = 0;
     let rows = 0;
     let cols = 0;
+    
     // Divide the largest dimension into predefined number of segements.
     if (width >= height) {
+      
       // Divide the rows into 21 segments, for the matrix traversal.
       // Too many squares will cause the animations to take up too much time.
-      if (this.automatonIndex == 6) {
+      if (this.automatonIndex == 7) {
         this.numDivs = 21;
       } else {
         this.numDivs = 150;
       }
       cols = this.numDivs;
+      
       // Ciel the number, it's okay even if the squares extend beyond the viewport
       blockSize = Math.ceil(width / cols);
       rows = Math.ceil(height / blockSize);
@@ -251,7 +254,7 @@ export class Home extends React.Component<IProps> {
             <Link className="pixel-button nav-button" to="/benchmarks">Benchmarks</Link>
           </div>
         </div>
-        <div className= {`${componentStyles["algorithm-info"]} unselectable pixel-div pixel-text-medium`}>
+        <div className={`${componentStyles["algorithm-info"]} unselectable pixel-div pixel-text-medium`}>
           {this.state.info}
         </div>
         <div className="fps-info unselectable pixel-div pixel-text-medium">
