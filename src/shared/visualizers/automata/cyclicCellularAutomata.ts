@@ -11,10 +11,10 @@ export class CyclicCellularAutomata extends Automaton {
     }
 
     public renderNextFrame(): void {
-        for (let i = 0; i < this.size.rows; i++) {
-            for (let j = 0; j < this.size.cols; j++) {
+        for (let i = 0; i < this.rowCount; i++) {
+            for (let j = 0; j < this.columnCount; j++) {
 
-                let liveCount = this.countValidNeighbors(this.state, i, j, this.size.rows, this.size.cols, getNextState(this.state[i][j], this.numStates), 1);
+                let liveCount = this.countValidNeighbors(this.state, i, j, this.rowCount, this.columnCount, getNextState(this.state[i][j], this.numStates), 1);
 
                 if (liveCount >= this.threshold) {
                     this.tempState[i][j] = getNextState(this.state[i][j], this.numStates);

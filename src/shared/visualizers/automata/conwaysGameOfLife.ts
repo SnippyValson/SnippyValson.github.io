@@ -3,17 +3,17 @@ import { Automaton, CountValidNeighorsDelegate } from './automaton';
 
 export class ConwaysGameOfLife extends Automaton {
 
-    constructor(rows: number, cols: number, colors: string[], context: CanvasRenderingContext2D,
+    constructor(rowCount: number, columnCount: number, colors: string[], context: CanvasRenderingContext2D,
         blocksize: number, numStates: number, countValidneighbors: CountValidNeighorsDelegate) {
 
-        super(rows, cols, colors, context, blocksize, numStates, 0, 0, countValidneighbors);
+        super(rowCount, columnCount, colors, context, blocksize, numStates, 0, 0, countValidneighbors);
     }
 
     public renderNextFrame(): void {
-        for (let i = 0; i < this.size.rows; i++) {
-            for (let j = 0; j < this.size.cols; j++) {
+        for (let i = 0; i < this.rowCount; i++) {
+            for (let j = 0; j < this.columnCount; j++) {
 
-                let liveCount = this.countValidNeighbors(this.state, i, j, this.size.rows, this.size.cols, 1, 1);
+                let liveCount = this.countValidNeighbors(this.state, i, j, this.rowCount, this.columnCount, 1, 1);
 
                 this.tempState[i][j] = this.state[i][j];
 

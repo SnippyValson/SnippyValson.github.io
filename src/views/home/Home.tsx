@@ -113,6 +113,8 @@ export class Home extends React.Component<IProps> {
       blockSize = Math.ceil(height / rows);
       cols = Math.ceil(width / blockSize);
     }
+    rows = Math.round(rows);
+    cols = Math.round(cols);
     blockSize = Math.round(blockSize);
     this.visualizers = [];
     this.visualizers.push({
