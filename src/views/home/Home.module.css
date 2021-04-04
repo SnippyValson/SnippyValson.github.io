@@ -1,11 +1,7 @@
 @media screen and (min-width: 322px) and (max-width: 760px) and (min-height: 650px)
 {
     .algorithm-info {
-        position: fixed;
-        left: 10px;
         top: 10px;
-        padding: 25px;
-        max-width: 500px;
         margin-right: 10px;
     }
 }
@@ -13,12 +9,15 @@
 @media screen and (min-width: 761px)
 {
     .algorithm-info {
-        position: fixed;
-        left: 10px;
         bottom: 10px;
-        padding: 25px;
-        max-width: 500px;
     }
+}
+
+.algorithm-info {
+    padding: 25px;
+    max-width: 500px;
+    position: fixed;
+    left: 10px;
 }
 
 .works-button {

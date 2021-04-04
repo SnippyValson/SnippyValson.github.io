@@ -130,10 +130,10 @@ export function fillBackground(context: CanvasRenderingContext2D, color: string 
   context.fill();
 }
 
-export function drawState(context: CanvasRenderingContext2D, automataState: number[][], r: number, c: number, bsize: number, colors: string[]) {
-  for (var i = 0; i < r; i++) {
-    for (var j = 0; j < c; j++) {
-      drawBlock(context, i, j, bsize, colors[automataState[i][j]]);
+export function drawMatrix(context: CanvasRenderingContext2D, matrix: number[][], rowCount: number, columnCount: number, blockSize: number, colors: string[]) {
+  for (var i = 0; i < rowCount; i++) {
+    for (var j = 0; j < columnCount; j++) {
+      drawBlock(context, i, j, blockSize, colors[matrix[i][j]]);
     }
   }
 }

@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     mode: 'none',
@@ -11,7 +12,7 @@ module.exports = {
     target: 'web',
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.css'],
-        plugins: [new TsconfigPathsPlugin({/* options: see below */})]
+        plugins: [new TsconfigPathsPlugin({/* options: see below */ })]
     },
     module: {
         rules: [
@@ -22,23 +23,7 @@ module.exports = {
             },
             {
                 test: /\.css$/i,
-                use: ["style-loader", {
-                    loader: 'css-loader',
-                    options: {
-                        importLoaders: 1,
-                        modules: true
-                    }
-                }
-                ],
-                include: /\.module\.css$/
-            },
-            {
-                test: /\.css$/i,
-                use: [
-                    "style-loader", 
-                    "css-loader"
-                ],
-                exclude: /\.module\.css$/
+                use: [MiniCssExtractPlugin.loader, "css-loader"]
             }
         ]
     },
@@ -52,6 +37,9 @@ module.exports = {
         }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
+        }),
+        new MiniCssExtractPlugin({
+            filename: "[name].[contenthash].css",
         })
     ]
 }

@@ -1,4 +1,4 @@
-import { drawBlock, getGradientStops } from "../shared/utilities";
+import { drawBlock, getGradientStops } from "../utilities";
 import { IVisualizer } from "./visualizer";
 
 enum Mode { Spiral,  DIAG_TL_BR, DIAG_BL_TR }
