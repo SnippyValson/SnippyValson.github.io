@@ -28,7 +28,7 @@
     "react-router-dom": "^5.2.0",
     "rimraf": "^3.0.2",
     "style-loader": "^2.0.0",
-    "three": "^0.120.1",
+    "three": "^0.125.0",
     "three-orbit-controls": "^82.1.0",
     "three.js": "^0.77.1",
     "tsconfig-paths-webpack-plugin": "^3.5.1"
