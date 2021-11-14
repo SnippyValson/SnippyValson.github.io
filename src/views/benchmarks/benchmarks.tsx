@@ -1,6 +1,6 @@
 import "./../../main.css";
 import "./benchmarks.css";
-import { Style } from "../../shared/style";
+import { Style } from "@shared/style";
 import * as React from "react";
 import { Switch, Route} from "react-router-dom"
 import { SortingBenchmark } from "./sorting_benchmarks/sorting_benchmarks";

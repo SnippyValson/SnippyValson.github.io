@@ -12,7 +12,7 @@ type MooreThis = {
   constants: IMooreConstants
 } & IKernelFunctionThis;
 
-var gpu: GPU<ThreadKernelVariable[]> = new GPU();
+var gpu: GPU = new GPU();
 var processMoore: any;
 var rendererHeight: number = 0;
 var rendererWidth: number = 0;

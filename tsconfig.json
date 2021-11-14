@@ -5,13 +5,19 @@
             "DOM",
             "webworker"
         ],
-        "baseUrl": "./src",
+        "baseUrl": "src",
         "paths": {
-            "@shared" : ["/shared"]
+            "@shared/*": [
+                "./shared/*"
+            ],
+            "@views/*": [
+                "./views/*"
+            ]
         },
         "outDir": "../dist/",
         "noImplicitAny": true,
         "moduleResolution": "node",
+        "removeComments": true,
         "module": "es6",
         "target": "es5",
         "jsx": "react",

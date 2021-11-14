@@ -5,7 +5,6 @@ const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-    mode: 'none',
     entry: {
         app: path.join(__dirname, 'src', 'main.tsx')
     },
@@ -33,10 +32,8 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'index.html')
-        }),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify('production')
+            template: path.join(__dirname, 'src', 'index.html'),
+            title: "Development"
         }),
         new MiniCssExtractPlugin({
             filename: "[name].[contenthash].css",

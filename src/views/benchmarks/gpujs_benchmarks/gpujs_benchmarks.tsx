@@ -1,5 +1,5 @@
 import * as React from "react";
-import "../../../../main.css";
+import "../../../main.css";
 import "./gpujs_benchmarks.css";
 import { getRenderer } from "shared/kernels/kernel";
 import { getGradientStops16, StateColors } from "shared/utilities";
