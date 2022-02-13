@@ -6,19 +6,21 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {
-        app: path.join(__dirname, 'src', 'main.tsx')
+        app: path.join(__dirname, 'app-ui/src', 'main.tsx')
     },
     target: 'web',
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.css'],
-        plugins: [new TsconfigPathsPlugin({/* options: see below */ })]
+        plugins: [new TsconfigPathsPlugin({
+            configFile: "app-ui/tsconfig.json"
+         })]
     },
     module: {
         rules: [
             {
                 test: /\.tsx?$/,
                 use: 'ts-loader',
-                exclude: path.join(__dirname, 'node_modules/*')
+                exclude: [path.join(__dirname, 'node_modules/*'), path.join(__dirname, 'app-ui/node_modules/*')]
             },
             {
                 test: /\.css$/i,
@@ -32,7 +34,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: path.join(__dirname, 'src', 'index.html'),
+            template: path.join(__dirname, 'app-ui/src', 'index.html'),
             title: "Development"
         }),
         new MiniCssExtractPlugin({
