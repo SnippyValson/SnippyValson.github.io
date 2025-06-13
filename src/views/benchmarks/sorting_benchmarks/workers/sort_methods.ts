@@ -1,4 +1,4 @@
-export function quickSort(array: number[], low: number, high: number) {
+export function quickSort(array: number[], low: number, high: number): number[] {
     if (low < high) {
         let pivot = partition(array, low, high);
         if (low < pivot - 1) {
@@ -11,7 +11,7 @@ export function quickSort(array: number[], low: number, high: number) {
     return array;
 }
 
-function partition(array: number[], low: number, high: number) {
+function partition(array: number[], low: number, high: number): number {
     let pivot = array[high];
     let i = low - 1;
     for (let j = low; j < high; j++) {
@@ -30,9 +30,9 @@ function partition(array: number[], low: number, high: number) {
     return i + 1;
 }
 
-export function quickSortFast(array: number[], left: number, right: number) {
+export function quickSortFast(array: number[], left: number, right: number): number[] {
 
-    function partitionFast(array: number[], left: number, right: number) {
+    function partitionFast(array: number[], left: number, right: number): number {
         let pivot = array[Math.floor((right + left) / 2)];
         let i = left;
         let j = right;
@@ -68,7 +68,7 @@ export function quickSortFast(array: number[], left: number, right: number) {
 }
 
 
-export function bubbleSort(array: number[]) {
+export function bubbleSort(array: number[]): void {
     for (let i = 0; i < array.length; i++) {
         for (let j = 0; j < array.length - i - 1; j++) {
             if (array[j] > array[j + 1]) {
@@ -80,7 +80,7 @@ export function bubbleSort(array: number[]) {
     }
 }
 
-export function insertionSort(array: number[]) {
+export function insertionSort(array: number[]): void {
     for (let i = 1; i < array.length; i++) {
         let key = array[i];
         let j = i - 1;
@@ -92,7 +92,7 @@ export function insertionSort(array: number[]) {
     }
 }
 
-export function selectionSort(array: number[]) {
+export function selectionSort(array: number[]): void {
     for (let i = 0; i < array.length - 1; i++) {
         let minIndex = i;
         for (let j = i + 1; j < array.length; j++) {
@@ -108,13 +108,13 @@ export function selectionSort(array: number[]) {
     }
 }
 
-function merge(array1: number[], array2: number[]) {
-    let sorted = [];
+function merge(array1: number[], array2: number[]): number[] {
+    let sorted: number[] = [];
     while (array1.length && array2.length) {
         if (array1[0] < array2[0]) {
-            sorted.push(array1.shift());
+            sorted.push(array1.shift()!);
         } else {
-            sorted.push(array2.shift());
+            sorted.push(array2.shift()!);
         }
     }
     return sorted.concat(array1.slice().concat(array2.slice()));
@@ -125,18 +125,18 @@ export function mergeSort(array: number[], l: number, r: number): number[] {
         return array;
     }
     let middle = Math.floor(array.length / 2);
-    let left = mergeSort(array.slice(0, middle), l , middle);
+    let left = mergeSort(array.slice(0, middle), l, middle);
     let right = mergeSort(array.slice(middle), middle + 1, r);
-    merge(left, right);
+    return merge(left, right);
 }
 
-export function radixSort(array: number[]) {
+export function radixSort(array: number[]): number[] {
     console.log(`Radix sort`);
     let maxLength = largestNum(array);
     for (let i = 0; i < maxLength; i++) {
         let buckets = Array.from({
             length: 10
-        }, () => []);
+        }, (): number[] => []);
         for (let j = 0; j < array.length; j++) {
             let num = getNum(array[j], i);
             if (num != undefined) buckets[parseInt(num)].push(array[j]);
@@ -157,7 +157,7 @@ function getNum(num: number, index: number): string {
     }
 }
 
-function largestNum(array: number[]) {
+function largestNum(array: number[]): number {
     let largest = "0";
     array.forEach(num => {
         const strNum = String(num);
@@ -168,7 +168,7 @@ function largestNum(array: number[]) {
     return largest.length;
 }
 
-function heapify(array: number[], index: number, arrayLength: number) {
+function heapify(array: number[], index: number, arrayLength: number): void {
     var left = 2 * index + 1;
     var right = 2 * index + 2;
     var max = index;
@@ -184,13 +184,13 @@ function heapify(array: number[], index: number, arrayLength: number) {
     }
 }
 
-function swap(array: number[], a: number, b: number) {
+function swap(array: number[], a: number, b: number): void {
     let temp = array[a];
     array[a] = array[b];
     array[b] = temp;
 }
 
-export function heapSort(array: number[]) {
+export function heapSort(array: number[]): void {
     let arrayLength = array.length;
     for (let i = Math.floor(array.length / 2); i >= 0; i--) {
         heapify(array, i, arrayLength);

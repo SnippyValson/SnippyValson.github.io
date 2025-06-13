@@ -1,5 +1,5 @@
 import "../../main.css";
-import componentStyles from './Home.module.css'
+import * as componentStyles from './Home.module.css';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Style } from "../../shared/style";
@@ -29,6 +29,7 @@ export class Home extends React.Component<IProps> {
   prevAutomatonIndex: number;
   debouncedResizeHandler: any;
   state: Readonly<IState>;
+  private backgroundCanvasRef: React.RefObject<HTMLCanvasElement>;
 
   constructor(props: IProps) {
     super(props);
@@ -39,10 +40,11 @@ export class Home extends React.Component<IProps> {
     this.animationRequest = undefined;
     this.numDivs = 150;
     this.state = { info: "*", fpsInfo: "*", showWorks: false };
+    this.backgroundCanvasRef = React.createRef<HTMLCanvasElement>();
   }
 
   componentDidMount() {
-    this.background = this.refs.backgroundCanvas;
+    this.background = this.backgroundCanvasRef.current;
     this.backgroundContext = this.background.getContext("2d");
     this.initBackgroundAnimation();
     this.showWorks = this.showWorks.bind(this);
@@ -234,7 +236,7 @@ export class Home extends React.Component<IProps> {
   render() {
     return (
       <div className="home">
-        <canvas ref="backgroundCanvas"></canvas>
+        <canvas ref={this.backgroundCanvasRef}></canvas>
         <div className="center-div unselectable pixel-div pixel-text-big" id="greeting" onClick={this.onGreetingClicked}>
           <p>
             Hi! I'm Snippy Valson.
